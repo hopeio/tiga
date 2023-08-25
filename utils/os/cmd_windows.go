@@ -1,0 +1,29 @@
+//go:build windows
+
+package osi
+
+import (
+	stringsi "github.com/hopeio/lemon/utils/strings"
+	"os/exec"
+	"syscall"
+)
+
+func ContainQuotedCMD(s string) (string, error) {
+	exe := s
+	for i, c := range s {
+		if c == ' ' {
+			exe = s[:i]
+			break
+		}
+	}
+	cmd := exec.Command(exe)
+	cmd.SysProcAttr = &syscall.SysProcAttr{CmdLine: s[len(exe):], HideWindow: true}
+	buf, err := cmd.CombinedOutput()
+	if err != nil {
+		return stringsi.BytesToString(buf), err
+	}
+	if len(buf) == 0 {
+		return "", nil
+	}
+	return stringsi.BytesToString(buf), nil
+}

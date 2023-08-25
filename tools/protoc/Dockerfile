@@ -1,0 +1,21 @@
+FROM golang:1.20
+
+ENV PATH /protoc/bin:$PATH
+
+ADD ./protoc-gen-enum /bin/
+ADD ./protoc-gen-go /bin/
+ADD ./protoc-gen-go-grpc /bin/
+ADD ./protoc-gen-go-patch /bin/
+ADD ./protoc-gen-govalidators /bin/
+ADD ./protoc-gen-grpc-gateway /bin/
+ADD ./protoc-gen-grpc-gin /bin/
+ADD ./protoc-gen-openapiv2 /bin/
+ADD ./protoc-gen-gql /bin/
+ADD ./protoc-gen-gogql /bin/
+ADD ./gqlgen /bin/
+ADD ./protogen /bin/
+ADD ./_proto/ /proto/
+ADD ./protoc/ /protoc/
+
+WORKDIR /work
+
