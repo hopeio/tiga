@@ -21,9 +21,9 @@ func ImgToWebp(filePath, dst string) error {
 	return ffmpegCmd(fmt.Sprintf(ImgToWebpCmd, filePath, dst))
 }
 
-const ImgToWebpWithOptionsCmd = CommonCmd + `-c:v libwebp -quality %d %s.webp`
+const ImgToWebpWithOptionsCmd = CommonCmd + `-c:v libwebp -quality %d -method 4 %s.webp`
 
-// 图片带选项转webp格式,选项目前支持质量
+// 图片带选项转webp格式,选项目前支持质量(0-100),推荐75
 func ImgToWebpWithOptions(filePath, dst string, quality int) error {
 	if strings.HasSuffix(dst, ".webp") {
 		dst = dst[:len(dst)-5]
