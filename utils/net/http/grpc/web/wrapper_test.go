@@ -10,6 +10,8 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"fmt"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"io"
 	"io/ioutil"
 	"log"
@@ -22,9 +24,6 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-	"github.com/golang/protobuf/proto"
-	google_protobuf "github.com/golang/protobuf/ptypes/empty"
 
 	testproto "github.com/hopeio/lemon/utils/net/http/grpc/web/test"
 	"github.com/mwitkow/go-conntrack/connhelpers"
@@ -245,7 +244,7 @@ func (s *GrpcWebWrapperTestSuite) TestPingEmpty() {
 	headers, trailers, responses, err := s.makeGrpcRequest(
 		"/improbable.test.TestService/PingEmpty",
 		headerWithFlag(),
-		serializeProtoMessages([]proto.Message{&google_protobuf.Empty{}}),
+		serializeProtoMessages([]proto.Message{&emptypb.Empty{}}),
 		false)
 	require.NoError(s.T(), err, "No error on making request")
 
@@ -281,7 +280,7 @@ func (s *GrpcWebWrapperTestSuite) TestPingError_WithTrailersInData() {
 	headers, trailers, responses, err := s.makeGrpcRequest(
 		"/improbable.test.TestService/PingError",
 		headerWithFlag(useFlushForHeaders),
-		serializeProtoMessages([]proto.Message{&google_protobuf.Empty{}}),
+		serializeProtoMessages([]proto.Message{&emptypb.Empty{}}),
 		false)
 	require.NoError(s.T(), err, "No error on making request")
 
@@ -299,7 +298,7 @@ func (s *GrpcWebWrapperTestSuite) TestPingError_WithTrailersInHeaders() {
 	headers, _, responses, err := s.makeGrpcRequest(
 		"/improbable.test.TestService/PingError",
 		http.Header{},
-		serializeProtoMessages([]proto.Message{&google_protobuf.Empty{}}),
+		serializeProtoMessages([]proto.Message{&emptypb.Empty{}}),
 		false)
 	require.NoError(s.T(), err, "No error on making request")
 
@@ -594,7 +593,7 @@ type testServiceImpl struct {
 	testproto.UnimplementedTestServiceServer
 }
 
-func (s *testServiceImpl) PingEmpty(ctx context.Context, _ *google_protobuf.Empty) (*testproto.PingResponse, error) {
+func (s *testServiceImpl) PingEmpty(ctx context.Context, _ *emptypb.Empty) (*testproto.PingResponse, error) {
 	grpc.SendHeader(ctx, expectedHeaders)
 	grpclog.Printf("Handling PingEmpty")
 	grpc.SetTrailer(ctx, expectedTrailers)
@@ -608,7 +607,7 @@ func (s *testServiceImpl) Ping(ctx context.Context, ping *testproto.PingRequest)
 	return &testproto.PingResponse{Value: ping.Value}, nil
 }
 
-func (s *testServiceImpl) PingError(ctx context.Context, ping *testproto.PingRequest) (*google_protobuf.Empty, error) {
+func (s *testServiceImpl) PingError(ctx context.Context, ping *testproto.PingRequest) (*emptypb.Empty, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
 	if _, exists := md[useFlushForHeaders]; exists {
 		grpc.SendHeader(ctx, expectedHeaders)

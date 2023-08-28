@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/golang/protobuf/ptypes/wrappers"
+	"google.golang.org/protobuf/types/known/wrapperspb"
+
 	"github.com/hopeio/lemon/_example/protobuf/user"
 	"github.com/hopeio/lemon/_example/user/conf"
 	"github.com/hopeio/lemon/context/http_context"
@@ -13,7 +14,7 @@ type UserService struct {
 	user.UnimplementedUserServiceServer
 }
 
-func (u *UserService) Signup(ctx context.Context, req *user.SignupReq) (*wrappers.StringValue, error) {
+func (u *UserService) Signup(ctx context.Context, req *user.SignupReq) (*wrapperspb.StringValue, error) {
 	ctxi, span := http_context.ContextFromContext(ctx).StartSpan("")
 	defer span.End()
 	ctx = ctxi.Context
@@ -39,5 +40,5 @@ func (u *UserService) Signup(ctx context.Context, req *user.SignupReq) (*wrapper
 	if err != nil {
 		return nil, ctxi.ErrorLog(errorcode.DBError.Message("新建出错"), err, "UserService.Creat")
 	}
-	return &wrappers.StringValue{Value: "注册成功"}, nil
+	return &wrapperspb.StringValue{Value: "注册成功"}, nil
 }

@@ -127,7 +127,8 @@ func (e *Engine[KEY, T, W]) ErrHandler(errHandler func(task *Task[KEY, T])) *Eng
 
 func (e *Engine[KEY, T, W]) ErrHandlerUtilSuccess() *Engine[KEY, T, W] {
 	return e.ErrHandler(func(task *Task[KEY, T]) {
-		e.AddNoPriorityTask(task)
+		task.errs = task.errs[:0]
+		e.AsyncAddTask(task.Priority, task)
 	})
 }
 

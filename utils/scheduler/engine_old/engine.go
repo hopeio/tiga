@@ -213,7 +213,8 @@ func (e *Engine[KEY, T, W]) BaseTask(task *Task[KEY, T]) *BaseTask[KEY, T] {
 				task.errTimes++
 				task.errs = append(task.errs, err)
 				if task.errTimes < 5 {
-					log.Warn(task.Key, "执行失败:", err, ",将重新执行")
+					task.reDoTimes++
+					log.Warnf("%v执行失败:%v,将第%d次执行", task.Key, err, task.reDoTimes+1)
 					e.AsyncAddTask(task.Priority+1, task)
 				}
 				if task.errTimes == 5 {
