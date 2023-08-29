@@ -110,7 +110,9 @@ func (e *Engine[KEY, T, W]) newWorker(readyTask *Task[KEY, T]) {
 			}
 			atomic.AddUint64(&e.currentWorkerCount, ^uint64(0))
 		}()
-		e.ExecTask(e.ctx, readyTask)
+		if readyTask != nil {
+			e.ExecTask(e.ctx, readyTask)
+		}
 		for {
 			select {
 			case e.workerChan <- worker:
