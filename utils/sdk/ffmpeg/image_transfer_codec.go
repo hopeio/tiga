@@ -8,15 +8,11 @@ import (
 )
 
 const ImgToWebpCmd = CommonCmd + `-c:v libwebp -lossless 1 -quality 100 -compression_level 6 %s.webp`
-const GifToWebpCmd = CommonCmd + `-c:v libwebp -lossless 1 -quality 100 -compression_level 6 %s.webp`
 
 // 图片转webp格式
 func ImgToWebp(filePath, dst string) error {
 	if strings.HasSuffix(dst, ".webp") {
 		dst = dst[:len(dst)-5]
-	}
-	if strings.HasSuffix(dst, ".gif") {
-		return ffmpegCmd(fmt.Sprintf(GifToWebpCmd, filePath, dst))
 	}
 	return ffmpegCmd(fmt.Sprintf(ImgToWebpCmd, filePath, dst))
 }
@@ -27,9 +23,6 @@ const ImgToWebpWithOptionsCmd = CommonCmd + `-c:v libwebp -quality %d -method 4 
 func ImgToWebpWithOptions(filePath, dst string, quality int) error {
 	if strings.HasSuffix(dst, ".webp") {
 		dst = dst[:len(dst)-5]
-	}
-	if strings.HasSuffix(dst, ".gif") {
-		// TODO
 	}
 	return ffmpegCmd(fmt.Sprintf(ImgToWebpWithOptionsCmd, filePath, quality, dst))
 }
@@ -48,8 +41,8 @@ const ImgToHeifCmd2 = `ffmpeg -hide_banner -r 1 -i %s -vf "scale=trunc(iw/2)*2:t
 const ImgToHeifCmd3 = `ffmpeg -hide_banner -r 1 -i %s -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m:aq-strength=1.2 -deblock -2:-2 %s.hevc
 `
 
-func ImgToHeif(filePath, dst string) error {
-	if strings.HasSuffix(dst, ".heif") {
+func ImgToHeic(filePath, dst string) error {
+	if strings.HasSuffix(dst, ".heic") {
 		dst = dst[:len(dst)-5]
 	}
 	_, err := osi.ContainQuotedCMD(fmt.Sprintf(ImgToHeifCmd, filePath, dst))
@@ -64,15 +57,11 @@ const ImgToJxlCmd = CommonCmd + `-c:v libjxl %s.jxl`
 
 // 不可用,没有注明色彩空间的原因。需要显式写明 像素编码格式、色彩空间、转换色彩空间、目标色彩空间、色彩范围
 func ImgToJxl(filePath, dst string) error {
-	if strings.HasSuffix(dst, ".heif") {
-		dst = dst[:len(dst)-5]
-	}
-	_, err := osi.ContainQuotedCMD(fmt.Sprintf(ImgToHeifCmd, filePath, dst))
-	if err != nil {
-		return err
+	if strings.HasSuffix(dst, ".jxl") {
+		dst = dst[:len(dst)-4]
 	}
 
-	return mp4box.Heif(dst+".hevc", dst)
+	return ffmpegCmd(fmt.Sprintf(ImgToJxlCmd, filePath, dst))
 }
 
 // TODO
