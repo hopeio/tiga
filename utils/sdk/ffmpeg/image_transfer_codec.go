@@ -29,6 +29,7 @@ func ImgToWebpWithOptions(filePath, dst string, quality int) error {
 
 const ImgTAvifCmd = CommonCmd + `-c:v libaom-av1 -still-picture 1 %s.avif`
 
+// More encoding options are available: -b 700k -tile-columns 600 -tile-rows 800 - example for the bitrate and tales.
 func ImgToAvif(filePath, dst string) error {
 	if strings.HasSuffix(dst, ".avif") {
 		dst = dst[:len(dst)-5]
@@ -56,6 +57,8 @@ func ImgToHeic(filePath, dst string) error {
 const ImgToJxlCmd = CommonCmd + `-c:v libjxl %s.jxl`
 
 // 不可用,没有注明色彩空间的原因。需要显式写明 像素编码格式、色彩空间、转换色彩空间、目标色彩空间、色彩范围
+// distance: Butteraugli distance, lower is better, 0.0 - lossless, 15.0 - minimum quality.
+// effort: higher is better, 7 is the best quality, 1 - the worst.
 func ImgToJxl(filePath, dst string) error {
 	if strings.HasSuffix(dst, ".jxl") {
 		dst = dst[:len(dst)-4]

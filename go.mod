@@ -9,7 +9,7 @@ require (
 	github.com/99designs/gqlgen v0.17.36
 	github.com/IBM/sarama v1.41.0
 	github.com/alta/protopatch v0.5.3
-	github.com/aws/aws-sdk-go v1.44.332
+	github.com/aws/aws-sdk-go v1.44.333
 	github.com/boombuler/barcode v1.0.1
 	github.com/cespare/xxhash v1.1.0
 	github.com/cockroachdb/pebble v0.0.0-20230826001808-0b401ee526b8
@@ -24,7 +24,7 @@ require (
 	github.com/go-openapi/swag v0.22.4
 	github.com/go-playground/locales v0.14.1
 	github.com/go-playground/universal-translator v0.18.1
-	github.com/go-playground/validator/v10 v10.15.1
+	github.com/go-playground/validator/v10 v10.15.2
 	github.com/go-redis/redis/v8 v8.11.5
 	github.com/gofiber/fiber/v2 v2.49.0
 	github.com/google/flatbuffers v23.5.26+incompatible // indirect
@@ -271,5 +271,3 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 )
-
-replace github.com/armon/go-metrics v0.4.1 => github.com/hashicorp/go-metrics v0.5.1
