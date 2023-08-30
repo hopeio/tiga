@@ -7,7 +7,6 @@ import (
 	"github.com/pelletier/go-toml"
 	"reflect"
 	"strings"
-	"sync"
 )
 
 /*
@@ -55,8 +54,7 @@ func (gc *globalConfig) UnmarshalAndSet(bytes []byte) {
 
 // 注入配置及生成DAO
 func (gc *globalConfig) inject() {
-	l := sync.Mutex{}
-	l.Lock()
+	gc.Lock()
 	if gc.conf != nil {
 		setConfig(reflect.ValueOf(gc.conf).Elem(), gc.confMap)
 		gc.conf.Init()
@@ -68,7 +66,7 @@ func (gc *globalConfig) inject() {
 		setDao(reflect.ValueOf(gc.dao).Elem(), gc.confMap)
 		gc.dao.Init()
 	}
-	l.Unlock()
+	gc.Unlock()
 	log.Debugf("Configuration:  %#v", gc.conf)
 }
 

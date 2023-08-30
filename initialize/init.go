@@ -9,6 +9,7 @@ import (
 	"os"
 	"reflect"
 	"strings"
+	"sync"
 
 	"github.com/hopeio/lemon/utils/log"
 )
@@ -18,6 +19,7 @@ var (
 	GlobalConfig = &globalConfig{
 		Env: DEVELOPMENT, ConfUrl: "./config.toml",
 		confMap: map[string]interface{}{},
+		RWMutex: sync.RWMutex{},
 	}
 )
 
@@ -101,6 +103,7 @@ type globalConfig struct {
 	//closes     []any
 	deferCalls  []func()
 	initialized bool
+	sync.RWMutex
 }
 
 func Start(conf Config, dao Dao, notinit ...string) func(deferCalls ...func()) {
@@ -118,7 +121,7 @@ func Start(conf Config, dao Dao, notinit ...string) func(deferCalls ...func()) {
 	}
 }
 
-func (gc *globalConfig) LoadConfig(notinject ...string) *globalConfig {
+func (gc *globalConfig) LoadConfig(notinject ...string) {
 	onceConfig := FileConfig{}
 	if _, err := os.Stat(gc.ConfUrl); os.IsNotExist(err) {
 		log.Fatalf("配置错误: 请确保可执行文件和配置文件在同一目录下或在config目录下或指定配置文件")
@@ -179,7 +182,6 @@ func (gc *globalConfig) LoadConfig(notinject ...string) *globalConfig {
 		log.Fatalf("配置错误: %v", err)
 	}
 
-	return gc
 }
 
 func (gc *globalConfig) setConfDao(conf Config, dao Dao) {
