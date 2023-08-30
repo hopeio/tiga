@@ -128,7 +128,7 @@ func (e *Engine[KEY, T, W]) ErrHandler(errHandler func(task *Task[KEY, T])) *Eng
 func (e *Engine[KEY, T, W]) ErrHandlerUtilSuccess() *Engine[KEY, T, W] {
 	return e.ErrHandler(func(task *Task[KEY, T]) {
 		task.errs = task.errs[:0]
-		e.AsyncAddTask(task.Priority, task)
+		e.AsyncAddTasks(task.Priority, task)
 	})
 }
 
@@ -180,24 +180,24 @@ func (e *Engine[KEY, T, W]) kindLimiter(kind Kind, r rate.Limit, b int) {
 }
 
 // TaskSourceChannel 任务源,参数是一个channel,channel关闭时，代表任务源停止发送任务
-func (e *Engine[KEY, T, W]) TaskSourceChannel(source <-chan *Task[KEY, T]) {
+func (e *Engine[KEY, T, W]) TaskSourceChannel(taskSourceChannel <-chan *Task[KEY, T]) {
 	e.wg.Add(1)
 	go func() {
-		for task := range source {
+		for task := range taskSourceChannel {
 			if task == nil || task.TaskFunc == nil {
 				continue
 			}
-			e.AddTask(0, task)
+			e.AddTasks(0, task)
 		}
 		e.wg.Done()
 	}()
 }
 
 // TaskSourceFunc,参数为添加任务的函数，直到该函数运行结束，任务引擎才会检测任务是否结束
-func (e *Engine[KEY, T, W]) TaskSourceFunc(task func(*Engine[KEY, T, W])) {
+func (e *Engine[KEY, T, W]) TaskSourceFunc(taskSourceFunc func(*Engine[KEY, T, W])) {
 	e.wg.Add(1)
 	go func() {
-		task(e)
+		taskSourceFunc(e)
 		e.wg.Done()
 	}()
 }

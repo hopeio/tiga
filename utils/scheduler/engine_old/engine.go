@@ -89,7 +89,7 @@ func (e *Engine[KEY, T, W]) ErrHandler(errHandler func(task *Task[KEY, T])) *Eng
 
 func (e *Engine[KEY, T, W]) ErrHandlerUtilSuccess() *Engine[KEY, T, W] {
 	return e.ErrHandler(func(task *Task[KEY, T]) {
-		e.AddNoPriorityTask(task)
+		e.AddNoPriorityTasks(task)
 	})
 }
 
@@ -215,7 +215,7 @@ func (e *Engine[KEY, T, W]) BaseTask(task *Task[KEY, T]) *BaseTask[KEY, T] {
 				if task.errTimes < 5 {
 					task.reDoTimes++
 					log.Warnf("%v执行失败:%v,将第%d次执行", task.Key, err, task.reDoTimes+1)
-					e.AsyncAddTask(task.Priority+1, task)
+					e.AsyncAddTasks(task.Priority+1, task)
 				}
 				if task.errTimes == 5 {
 					log.Warn(task.Key, "多次执行失败:", err, ",将执行错误处理")
@@ -227,27 +227,11 @@ func (e *Engine[KEY, T, W]) BaseTask(task *Task[KEY, T]) *BaseTask[KEY, T] {
 				e.done.SetWithTTL(task.Key, struct{}{}, 1, time.Hour)
 			}
 			if len(tasks) > 0 {
-				e.AsyncAddTask(task.Priority+1, tasks...)
+				e.AsyncAddTasks(task.Priority+1, tasks...)
 			}
 			return
 		},
 	}
-}
-
-func (e *Engine[KEY, T, W]) AddNoPriorityTask(task *Task[KEY, T]) {
-	if task == nil || task.TaskFunc == nil {
-		return
-	}
-	e.AddTask(0, task)
-}
-
-func (e *Engine[KEY, T, W]) AddTask(generation int, task *Task[KEY, T]) {
-	if task == nil || task.TaskFunc == nil {
-		return
-	}
-	task.Priority += generation
-	e.BaseEngine.AddTask(e.BaseTask(task))
-
 }
 
 func (e *Engine[KEY, T, W]) AddNoPriorityTasks(tasks ...*Task[KEY, T]) {
@@ -264,25 +248,24 @@ func (e *Engine[KEY, T, W]) AddTasks(generation int, tasks ...*Task[KEY, T]) {
 	}
 }
 
-func (e *Engine[KEY, T, W]) AsyncAddTask(generation int, tasks ...*Task[KEY, T]) {
-	go func() {
-		e.AddTasks(generation, tasks...)
-	}()
+func (e *Engine[KEY, T, W]) AsyncAddTasks(generation int, tasks ...*Task[KEY, T]) {
+	if len(tasks) > 0 {
+		go e.AddTasks(generation, tasks...)
+	}
 }
 
-func (e *Engine[KEY, T, W]) AddFixedTask(workerId int, task *Task[KEY, T]) error {
-	if task == nil || task.TaskFunc == nil {
-		return nil
-	}
-	return e.BaseEngine.AddFixedTask(workerId, task.BaseTask(func(tasks []*Task[KEY, T], err error) {
-		if err != nil {
-			e.AddFixedTask(workerId, task)
-		} else {
-			for _, task := range tasks {
-				e.AddFixedTask(workerId, task)
+func (e *Engine[KEY, T, W]) AddFixedTasks(workerId int, tasks ...*Task[KEY, T]) error {
+	var baseTasks []*BaseTask[KEY, T]
+	for _, task := range tasks {
+		baseTasks = append(baseTasks, task.BaseTask(func(tasks []*Task[KEY, T], err error) {
+			if err != nil {
+				e.AddFixedTasks(workerId, task)
+			} else {
+				e.AddFixedTasks(workerId, tasks...)
 			}
-		}
-	}))
+		}))
+	}
+	return e.BaseEngine.AddFixedTasks(workerId, baseTasks...)
 }
 
 func (e *Engine[KEY, T, W]) RunSingleWorker(tasks ...*Task[KEY, T]) {
@@ -313,7 +296,7 @@ func (e *Engine[KEY, T, W]) TaskSourceChannel(source <-chan *Task[KEY, T]) {
 			if task == nil || task.TaskFunc == nil {
 				continue
 			}
-			e.AddTask(0, task)
+			e.AddTasks(0, task)
 		}
 		e.wg.Done()
 	}()

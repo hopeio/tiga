@@ -227,16 +227,6 @@ func (e *Engine[KEY, T, W]) addWorker() {
 
 }
 
-func (e *Engine[KEY, T, W]) AddTask(task *Task[KEY, T]) {
-	if task == nil || task.TaskFunc == nil {
-		return
-	}
-	atomic.AddUint64(&e.taskTotalCount, 1)
-	e.wg.Add(1)
-	task.id = generator.GenOrderID()
-	e.taskChan <- task
-}
-
 func (e *Engine[KEY, T, W]) AddTasks(tasks ...*Task[KEY, T]) {
 	atomic.AddUint64(&e.taskTotalCount, uint64(len(tasks)))
 	e.wg.Add(len(tasks))
@@ -288,18 +278,18 @@ func (e *Engine[KEY, T, W]) newFixedWorker(ch chan *Task[KEY, T], interval time.
 	}()
 }
 
-func (e *Engine[KEY, T, W]) AddFixedTask(workerId int, task *Task[KEY, T]) error {
-	if task == nil || task.TaskFunc == nil {
-		return nil
-	}
+func (e *Engine[KEY, T, W]) AddFixedTasks(workerId int, tasks ...*Task[KEY, T]) error {
 	if workerId > len(e.fixedWorker)-1 {
 		return fmt.Errorf("不存在workId为%d的worker,请调用NewFixedWorker添加", workerId)
 	}
 	ch := e.fixedWorker[workerId]
-	atomic.AddUint64(&e.taskTotalCount, 1)
-	e.wg.Add(1)
-	task.id = generator.GenOrderID()
-	ch <- task
+	l := len(tasks)
+	atomic.AddUint64(&e.taskTotalCount, uint64(l))
+	e.wg.Add(l)
+	for _, task := range tasks {
+		task.id = generator.GenOrderID()
+		ch <- task
+	}
 	return nil
 }
 
@@ -310,7 +300,7 @@ func (e *Engine[KEY, T, W]) SyncRun(tasks ...*Task[KEY, T]) {
 func (e *Engine[KEY, T, W]) RunSingleWorker(tasks ...*Task[KEY, T]) {
 	e.NewFixedWorker(0)
 	for _, task := range tasks {
-		e.AddFixedTask(0, task)
+		e.AddFixedTasks(0, task)
 	}
 }
 

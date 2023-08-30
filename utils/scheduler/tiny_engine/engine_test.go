@@ -27,7 +27,7 @@ func baseTaskGen(id string, engine *Engine[int, int, int]) *Task[int, int] {
 		//log.Println("rand", n)
 		if n < 3 {
 			for i := 0; i < n; i++ {
-				engine.AddTask(baseTaskGen(id+"_"+strconv.Itoa(i), engine))
+				engine.AddTasks(baseTaskGen(id+"_"+strconv.Itoa(i), engine))
 			}
 		}
 		if n == 3 {
@@ -45,7 +45,7 @@ func TestBaseEngineOneTask(t *testing.T) {
 			id := <-ch
 			log.Println("rand", id)
 			for i := 0; i < 3; i++ {
-				engine.AddTask(taskgen2(id+"_"+strconv.Itoa(i), ch))
+				engine.AddTasks(taskgen2(id+"_"+strconv.Itoa(i), ch))
 			}
 		}
 	}()

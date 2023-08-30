@@ -158,27 +158,14 @@ func (e *Engine[KEY, T, W]) ReRun(tasks ...*Task[KEY, T]) {
 	e.Run(tasks...)
 }
 
-func (e *Engine[KEY, T, W]) AddNoPriorityTask(task *Task[KEY, T]) {
-	if task == nil || task.TaskFunc == nil {
-		return
-	}
-	e.AddTask(0, task)
-}
-
-func (e *Engine[KEY, T, W]) AddTask(generation int, task *Task[KEY, T]) {
-	if task == nil || task.TaskFunc == nil {
-		return
-	}
-	task.Priority += generation
-	atomic.AddUint64(&e.taskTotalCount, 1)
-	e.wg.Add(1)
-	task.id = generator.GenOrderID()
-	e.taskChan <- task
+func (e *Engine[KEY, T, W]) AddNoPriorityTasks(tasks ...*Task[KEY, T]) {
+	e.AddTasks(0, tasks...)
 }
 
 func (e *Engine[KEY, T, W]) AddTasks(generation int, tasks ...*Task[KEY, T]) {
-	atomic.AddUint64(&e.taskTotalCount, uint64(len(tasks)))
-	e.wg.Add(len(tasks))
+	l := len(tasks)
+	atomic.AddUint64(&e.taskTotalCount, uint64(l))
+	e.wg.Add(l)
 	for _, task := range tasks {
 		task.Priority += generation
 		task.id = generator.GenOrderID()
@@ -186,12 +173,10 @@ func (e *Engine[KEY, T, W]) AddTasks(generation int, tasks ...*Task[KEY, T]) {
 	}
 }
 
-func (e *Engine[KEY, T, W]) AddNoPriorityTasks(tasks ...*Task[KEY, T]) {
-	e.AddTasks(0, tasks...)
-}
-
-func (e *Engine[KEY, T, W]) AsyncAddTask(generation int, tasks ...*Task[KEY, T]) {
-	go e.AddTasks(generation, tasks...)
+func (e *Engine[KEY, T, W]) AsyncAddTasks(generation int, tasks ...*Task[KEY, T]) {
+	if len(tasks) > 0 {
+		go e.AddTasks(generation, tasks...)
+	}
 }
 
 func (e *Engine[KEY, T, W]) AddWorker(num int) {
@@ -234,19 +219,20 @@ func (e *Engine[KEY, T, W]) newFixedWorker(ch chan *Task[KEY, T], interval time.
 	}()
 }
 
-func (e *Engine[KEY, T, W]) AddFixedTask(workerId int, generation int, task *Task[KEY, T]) error {
-	if task == nil || task.TaskFunc == nil {
-		return nil
-	}
+func (e *Engine[KEY, T, W]) AddFixedTasks(workerId int, generation int, tasks ...*Task[KEY, T]) error {
+
 	if workerId > len(e.fixedWorkers)-1 {
 		return fmt.Errorf("不存在workId为%d的worker,请调用NewFixedWorker添加", workerId)
 	}
 	ch := e.fixedWorkers[workerId]
-	atomic.AddUint64(&e.taskTotalCount, 1)
-	e.wg.Add(1)
-	task.Priority += generation
-	task.id = generator.GenOrderID()
-	ch <- task
+	l := len(tasks)
+	atomic.AddUint64(&e.taskTotalCount, uint64(l))
+	e.wg.Add(l)
+	for _, task := range tasks {
+		task.Priority += generation
+		task.id = generator.GenOrderID()
+		ch <- task
+	}
 	return nil
 }
 
@@ -282,16 +268,14 @@ func (e *Engine[KEY, T, W]) ExecTask(ctx context.Context, task *Task[KEY, T]) {
 
 	if task != nil {
 		if task.TaskFunc != nil {
-			if e.speedLimit != nil {
-				<-e.speedLimit.C
-				e.speedLimit.Reset()
-			}
 			var kindHandler *KindHandler[KEY, T]
 			if e.kindHandler != nil && int(task.Kind) < len(e.kindHandler) {
 				kindHandler = e.kindHandler[task.Kind]
 			}
 
 			if kindHandler != nil && kindHandler.Skip {
+				atomic.AddUint64(&e.taskDoneCount, 1)
+				e.wg.Done()
 				return
 			}
 
@@ -299,6 +283,8 @@ func (e *Engine[KEY, T, W]) ExecTask(ctx context.Context, task *Task[KEY, T]) {
 
 			if task.Key != zeroKey {
 				if _, ok := e.done.Get(task.Key); ok {
+					atomic.AddUint64(&e.taskDoneCount, 1)
+					e.wg.Done()
 					return
 				}
 			}
@@ -310,6 +296,12 @@ func (e *Engine[KEY, T, W]) ExecTask(ctx context.Context, task *Task[KEY, T]) {
 					kindHandler.Limiter.Wait(ctx)
 				}
 			}
+
+			if e.speedLimit != nil {
+				<-e.speedLimit.C
+				e.speedLimit.Reset()
+			}
+
 			tasks, err := task.TaskFunc(ctx)
 			if err != nil {
 				task.errTimes++
@@ -317,19 +309,21 @@ func (e *Engine[KEY, T, W]) ExecTask(ctx context.Context, task *Task[KEY, T]) {
 				if len(task.errs) < 5 {
 					task.reDoTimes++
 					log.Warnf("%v执行失败:%v,将第%d次执行", task.Key, err, task.reDoTimes+1)
-					e.AsyncAddTask(task.Priority+1, task)
+					e.AsyncAddTasks(task.Priority+1, task)
 				}
 				if len(task.errs) == 5 {
 					log.Warn(task.Key, "多次执行失败:", err, ",将执行错误处理")
 					e.errChan <- task
 				}
+				atomic.AddUint64(&e.taskDoneCount, 1)
+				e.wg.Done()
 				return
 			}
 			if task.Key != zeroKey {
 				e.done.SetWithTTL(task.Key, struct{}{}, 1, time.Hour)
 			}
 			if len(tasks) > 0 {
-				e.AsyncAddTask(task.Priority+1, tasks...)
+				e.AsyncAddTasks(task.Priority+1, tasks...)
 			}
 		}
 	}
