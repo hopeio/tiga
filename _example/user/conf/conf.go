@@ -2,14 +2,13 @@ package conf
 
 import (
 	"database/sql"
-	"github.com/hopeio/lemon/initialize/gormdb/postgres"
-	"github.com/hopeio/lemon/initialize/log"
-	"github.com/hopeio/lemon/initialize/mail"
-	"github.com/hopeio/lemon/initialize/pebble"
-	"github.com/hopeio/lemon/initialize/redis"
-	"github.com/hopeio/lemon/initialize/ristretto"
-	"github.com/hopeio/lemon/initialize/server"
-
+	"github.com/hopeio/lemon/initialize/basic_conf/log"
+	"github.com/hopeio/lemon/initialize/basic_conf/server"
+	"github.com/hopeio/lemon/initialize/basic_dao/gormdb/postgres"
+	"github.com/hopeio/lemon/initialize/basic_dao/mail"
+	"github.com/hopeio/lemon/initialize/basic_dao/pebble"
+	"github.com/hopeio/lemon/initialize/basic_dao/redis"
+	"github.com/hopeio/lemon/initialize/basic_dao/ristretto"
 	"github.com/hopeio/lemon/utils/io/fs"
 	"github.com/spf13/viper"
 	"runtime"

@@ -1,10 +1,10 @@
-package sqlite
+package mysql
 
 import (
-	pkdb "github.com/hopeio/lemon/initialize/gormdb"
-	"gorm.io/driver/sqlite"
+	"fmt"
+	pkdb "github.com/hopeio/lemon/initialize/basic_dao/gormdb"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"runtime"
 )
 
 type DatabaseConfig pkdb.DatabaseConfig
@@ -14,11 +14,10 @@ func (conf *DatabaseConfig) Init() {
 }
 
 func (conf *DatabaseConfig) Build() *gorm.DB {
-	url := "/data/db/sqlite/" + conf.Database + ".db"
-	if runtime.GOOS == "windows" {
-		url = ".." + url
-	}
-	return (*pkdb.DatabaseConfig)(conf).Build(sqlite.Open(url))
+	url := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=%s&parseTime=True&loc=Local",
+		conf.User, conf.Password, conf.Host,
+		conf.Port, conf.Database, conf.Charset)
+	return (*pkdb.DatabaseConfig)(conf).Build(mysql.Open(url))
 }
 
 type DB pkdb.DB

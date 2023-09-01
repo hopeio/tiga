@@ -19,14 +19,13 @@ type DaoField interface {
 	io.Closer
 }
 
-type DaoFieldCloser = io.Closer
-type DaoFieldCloser1 interface {
+type DaoFieldCloserWithError = io.Closer
+type DaoFieldCloser interface {
 	Close()
 }
 
 type CloseFunc func() error
 
-// Deprecated
 type Generate interface {
 	Generate() any
 }
@@ -51,7 +50,7 @@ func (d *DaoEntity[C, D]) SetEntity() {
 }
 
 func (d *DaoEntity[C, D]) Close() error {
-	if d.Close != nil {
+	if d.close != nil {
 		return d.close()
 	}
 	return nil

@@ -2,7 +2,7 @@ package db
 
 import (
 	"fmt"
-	pkdb "github.com/hopeio/lemon/initialize/gormdb"
+	pkdb "github.com/hopeio/lemon/initialize/basic_dao/gormdb"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
 	"gorm.io/driver/sqlite"

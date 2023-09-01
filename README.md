@@ -8,7 +8,7 @@
 `go get github.com/hopeio/lemon/tools/protoc@main`
 `go run $(go list -m -f {{.Dir}}  github.com/hopeio/lemon)/tools/protoc/install-env.go`
 #### generate protobuf
-`protogen go -e -w -p $proto_path -g $proto_output_path`
+`protogen go -e -w (-q) (-v) -p $proto_path -g $proto_output_path`
 #### use docker
 `docker run --rm -v $project:/work jybl/goprotoc protogen go -e -w -p $proto_path -g $proto_output_path`
 
@@ -85,8 +85,8 @@ func main() {
 如果还有Dao要初始化
 ```go
 import(
-    "github.com/hopeio/lemon/initialize/gormdb/postgres"
-    initredis "github.com/hopeio/lemon/initialize/redis"
+    "github.com/hopeio/lemon/initialize/basic_dao/gormdb/postgres"
+    initredis "github.com/hopeio/lemon/initialize/basic_dao/redis"
 )
 // dao dao.
 type dao struct {

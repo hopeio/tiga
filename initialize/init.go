@@ -247,10 +247,10 @@ func closeDaoHelper(dao interface{}) (error, bool) {
 	if dao == nil {
 		return nil, true
 	}
-	if closer, ok := dao.(DaoFieldCloser); ok {
+	if closer, ok := dao.(DaoFieldCloserWithError); ok {
 		return closer.Close(), true
 	}
-	if closer, ok := dao.(DaoFieldCloser1); ok {
+	if closer, ok := dao.(DaoFieldCloser); ok {
 		closer.Close()
 		return nil, true
 	}

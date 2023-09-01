@@ -3,7 +3,7 @@ package dbtoentity
 import (
 	"fmt"
 	"github.com/hopeio/lemon/initialize"
-	initmysql "github.com/hopeio/lemon/initialize/gormdb/mysql"
+	initmysql "github.com/hopeio/lemon/initialize/basic_dao/gormdb/mysql"
 	dbi "github.com/hopeio/lemon/utils/dao/db"
 	"go/ast"
 	"go/format"
