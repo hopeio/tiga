@@ -5,6 +5,7 @@ import (
 	"log"
 )
 
+// doc: https://ffmpeg.org/ffmpeg-codecs.html
 // https://ffmpeg.org/download.html
 
 const CommonCmd = `ffmpeg -i %s `
