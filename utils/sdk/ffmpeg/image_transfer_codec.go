@@ -7,39 +7,46 @@ import (
 	"strings"
 )
 
-const ImgToWebpCmd = CommonCmd + `-c:v libwebp -lossless 1 -quality 100 -compression_level 6 %s.webp`
+// webp 无损模式
+const ImgToWebpLosslessCmd = CommonCmd + `-c:v libwebp -lossless 1 -quality 100 -compression_level 6 %s.webp`
 
 // 图片转webp格式
-func ImgToWebp(filePath, dst string) error {
+func ImgToWebpLossless(filePath, dst string) error {
 	if strings.HasSuffix(dst, ".webp") {
 		dst = dst[:len(dst)-5]
 	}
-	return ffmpegCmd(fmt.Sprintf(ImgToWebpCmd, filePath, dst))
+	return ffmpegCmd(fmt.Sprintf(ImgToWebpLosslessCmd, filePath, dst))
 }
 
-const ImgToWebpWithOptionsCmd = CommonCmd + `-c:v libwebp -quality %d %s.webp`
+const ImgToWebpCmd = CommonCmd + `-c:v libwebp -quality %d %s.webp`
 
-// 图片带选项转webp格式,选项目前支持质量(0-100),ffmpeg默认75,这里默认90
-func ImgToWebpWithOptions(filePath, dst string, quality int) error {
+//	JPEG 采用的色彩格式是 YUVJ420P，对应的色彩区间是 0-255，而 WebP 采用的色彩格式是 YUV420P，对应的色彩区间是 16-235，也就是说如果单纯的转码，会丢失 0-15，236-255 的色彩，也就是出现了色差, 颜色空间转移：RGB < - > YUV，这会产生一些舍入误差 多次压缩后webp会出现明显色差,真的会偏绿
+//
+// 图片带选项转webp格式,选项目前支持质量(0-100),ffmpeg默认75
+func ImgToWebp(filePath, dst string, quality int) error {
 	if strings.HasSuffix(dst, ".webp") {
 		dst = dst[:len(dst)-5]
 	}
 	if quality == 0 {
-		quality = 90
+		quality = 75
 	}
-	return ffmpegCmd(fmt.Sprintf(ImgToWebpWithOptionsCmd, filePath, quality, dst))
+	return ffmpegCmd(fmt.Sprintf(ImgToWebpCmd, filePath, quality, dst))
 }
 
-const ImgTAvifCmd = CommonCmd + `-c:v libaom-av1 -crf 28 %s.avif`
+const ImgToTAvifCmd = CommonCmd + `-c:v libaom-av1 -crf %d %s.avif`
 
+// 多次压缩后avif会出现明显色差,比webp略好
 // -cpu-used 4 -threads 8 会加速，但是图片大小会变大,质量变差
 
 // More encoding options are available: -b 700k -tile-columns 600 -tile-rows 800 - example for the bitrate and tales.
-func ImgToAvif(filePath, dst string) error {
+func ImgToAvif(filePath, dst string, crf int) error {
 	if strings.HasSuffix(dst, ".avif") {
 		dst = dst[:len(dst)-5]
 	}
-	return ffmpegCmd(fmt.Sprintf(ImgTAvifCmd, filePath, dst))
+	if crf == 0 {
+		crf = 28
+	}
+	return ffmpegCmd(fmt.Sprintf(ImgToTAvifCmd, filePath, crf, dst))
 }
 
 const ImgToHeifCmd = CommonCmd + `-crf 12 -psy-rd 0.4 -aq-strength 0.4 -deblock 1:1 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -preset veryslow -pix_fmt yuv420p101e -f hevc %s.hevc`
