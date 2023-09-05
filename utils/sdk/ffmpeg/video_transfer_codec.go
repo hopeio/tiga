@@ -15,7 +15,7 @@ func H264ToH265ByIntelGPU(filePath, dst string) error {
 }
 
 // libaom-av1
-const ToAv1Libaomav1Cmd = CommonCmd + "-c:v libaom-av1 -crf 30 -row-mt 1 -tiles 2x2 -y %s"
+const ToAv1Libaomav1Cmd = CommonCmd + "-c:v libaom-av1 -y %s"
 
 func ToAV1ByLibaomav1(filePath, dst string) error {
 	return ffmpegCmd(fmt.Sprintf(ToAv1Libaomav1Cmd, filePath, dst))

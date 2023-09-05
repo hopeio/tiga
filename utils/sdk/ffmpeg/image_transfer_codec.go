@@ -17,19 +17,22 @@ func ImgToWebp(filePath, dst string) error {
 	return ffmpegCmd(fmt.Sprintf(ImgToWebpCmd, filePath, dst))
 }
 
-const ImgToWebpWithOptionsCmd = CommonCmd + `-c:v libwebp -quality %d -method 4 %s.webp`
+const ImgToWebpWithOptionsCmd = CommonCmd + `-c:v libwebp -quality %d %s.webp`
 
 // 图片带选项转webp格式,选项目前支持质量(0-100),推荐75
 func ImgToWebpWithOptions(filePath, dst string, quality int) error {
 	if strings.HasSuffix(dst, ".webp") {
 		dst = dst[:len(dst)-5]
 	}
+	if quality == 0 {
+		quality = 75
+	}
 	return ffmpegCmd(fmt.Sprintf(ImgToWebpWithOptionsCmd, filePath, quality, dst))
 }
 
-const ImgTAvifCmd = CommonCmd + `-c:v libaom-av1 -cpu-used 8 -threads 12 %s.avif`
+const ImgTAvifCmd = CommonCmd + `-c:v libaom-av1 %s.avif`
 
-// -cpu-used 8 -threads 12 会加速，但是图片大小会变大,可以接受
+// -cpu-used 8 会加速，但是图片大小会变大,质量变差
 
 // More encoding options are available: -b 700k -tile-columns 600 -tile-rows 800 - example for the bitrate and tales.
 func ImgToAvif(filePath, dst string) error {
