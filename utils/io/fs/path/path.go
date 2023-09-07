@@ -9,7 +9,7 @@ import (
 
 // windows需要,由于linux的文件也要放到windows看,统一处理
 func FileNameRewrite(filename string) string {
-	filename = stringsi.ReplaceRuneEmpty(filename, '/', '\\', '*', '|')
+	filename = stringsi.ReplaceRunesEmpty(filename, '/', '\\', '*', '|')
 	filename = strings.ReplaceAll(filename, "<", "《")
 	filename = strings.ReplaceAll(filename, ">", "》")
 	filename = strings.ReplaceAll(filename, "?", "？")
@@ -21,9 +21,9 @@ func FileNameRewrite(filename string) string {
 func FileNameClean(filename string) string {
 	// windows
 	filename = strings.Trim(filename, ".")
-	filename = stringsi.ReplaceRuneEmpty(filename, '/', '\\', ':', '*', '?', '"', '<', '>', '|', ' ', '\t', '\n')
+	filename = stringsi.ReplaceRunesEmpty(filename, '/', '\\', ':', '*', '?', '"', '<', '>', '|', ' ', '\t', '\n')
 	// linux
-	//filename = stringsi.ReplaceRuneEmpty(filename, '!', '@', '#', '*', '?', ' ', '$', '&', '(', ')')
+	//filename = stringsi.ReplaceRunesEmpty(filename, '!', '@', '#', '*', '?', ' ', '$', '&', '(', ')')
 	return filename
 }
 
@@ -33,9 +33,9 @@ func DirNameClean(dir string) string { // will be used when save the dir or the 
 	// :unix允许存在，windows需要
 	// windows path
 	if len(dir) > 2 && dir[1] == ':' && ((dir[0] >= 'A' && dir[0] <= 'Z') || (dir[0] >= 'a' && dir[0] <= 'z')) && (dir[2] == '/' || dir[2] == '\\') {
-		return dir[:3] + stringsi.ReplaceRuneEmpty(dir[3:], ':', '*', '?', '"', '<', '>', '|', ',', ' ', '\t', '\n')
+		return dir[:3] + stringsi.ReplaceRunesEmpty(dir[3:], ':', '*', '?', '"', '<', '>', '|', ',', ' ', '\t', '\n')
 	}
-	return stringsi.ReplaceRuneEmpty(dir, ':', '*', '?', '"', '<', '>', '|', ',', ' ', '\t', '\n')
+	return stringsi.ReplaceRunesEmpty(dir, ':', '*', '?', '"', '<', '>', '|', ',', ' ', '\t', '\n')
 }
 
 // 针对带目录的完整文件名

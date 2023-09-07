@@ -51,7 +51,7 @@ func CamelToSnake(name string) string {
 		// Buffer uppercase char, do not output it yet as a delimiter may be required if the
 		// next character is lowercase.
 		if isUpper {
-			multipleUpper = (lastUpper != 0)
+			multipleUpper = lastUpper != 0
 			lastUpper = c
 			continue
 		}
@@ -144,7 +144,16 @@ func UpperCase(c byte) byte {
 	return c
 }
 
-func ReplaceRuneEmpty(s string, old ...rune) string {
+// TODO
+func ReplaceRunes(s string, olds []rune, new rune) string {
+	if len(olds) == 0 || (len(olds) == 1 && olds[0] == new) {
+		return s // avoid allocation
+	}
+
+	panic("TODO")
+}
+
+func ReplaceRunesEmpty(s string, old ...rune) string {
 	if len(old) == 0 {
 		return s // avoid allocation
 	}
@@ -265,6 +274,30 @@ func (n *NumLetterSlice[T]) Set(b byte, v T) {
 	n[b-'0'] = v
 }
 
+func ReplaceBytes(s string, olds []byte, new byte) string {
+	if len(olds) == 0 || (len(olds) == 1 && olds[0] == new) {
+		return s // avoid allocation
+	}
+	tmpl := make([]bool, 255)
+
+	for _, b := range olds {
+		tmpl[b] = true
+	}
+
+	// Apply replacements to buffer.
+	t := make([]byte, len(s))
+	copy(t, s)
+
+	for i, r := range s {
+		if r < 256 && tmpl[r] {
+			t[i] = new
+		}
+
+	}
+
+	return string(t)
+}
+
 // 将字符串中指定的ascii字符替换为空
 func ReplaceBytesEmpty(s string, old ...byte) string {
 	if len(old) == 0 {
@@ -290,42 +323,6 @@ func ReplaceBytesEmpty(s string, old ...byte) string {
 			}
 			last = true
 			continue
-		}
-		needCopy = true
-		if last {
-			start = i
-			last = false
-		}
-	}
-	if needCopy {
-		w += copy(t[w:], s[start:])
-	}
-	return string(t[0:w])
-}
-
-// notest
-func ReplaceRunesEmpty(s string, old ...rune) string {
-	if len(old) == 0 {
-		return s // avoid allocation
-	}
-
-	// Apply replacements to buffer.
-	t := make([]byte, len(s))
-	w := 0
-	start := 0
-	needCopy := false
-	last := false
-Loop:
-	for i, r := range s {
-		for _, r1 := range old {
-			if r == r1 {
-				if needCopy {
-					w += copy(t[w:], s[start:i])
-					needCopy = false
-				}
-				last = true
-				continue Loop
-			}
 		}
 		needCopy = true
 		if last {

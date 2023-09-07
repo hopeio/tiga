@@ -12,12 +12,20 @@ func TestFormatLen(t *testing.T) {
 	log.Println(CamelToSnake(s))
 }
 
-func TestReplaceRuneEmpty(t *testing.T) {
+func TestReplaceBytes(t *testing.T) {
 	s := "p我o爱s中t"
-	log.Println(ReplaceRuneEmpty(s, 'o'))
-	log.Println(ReplaceRuneEmpty(s, 'o', 's'))
-	log.Println(ReplaceRuneEmpty(s, 'o', 't'))
-	log.Println(ReplaceRuneEmpty(s, '中', 't'))
+	log.Println(ReplaceBytes(s, []byte{'o'}, '-'))
+	log.Println(ReplaceBytes(s, []byte{'o', 's'}, '-'))
+	log.Println(ReplaceBytes(s, []byte{'o', 't'}, '-'))
+	log.Println(ReplaceBytes(s, []byte{'p', 't'}, '-'))
+}
+
+func TestReplaceRunesEmpty(t *testing.T) {
+	s := "p我o爱s中t"
+	log.Println(ReplaceRunesEmpty(s, 'o'))
+	log.Println(ReplaceRunesEmpty(s, 'o', 's'))
+	log.Println(ReplaceRunesEmpty(s, 'o', 't'))
+	log.Println(ReplaceRunesEmpty(s, '中', 't'))
 }
 
 func TestCountdownCutoff(t *testing.T) {

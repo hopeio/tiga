@@ -31,11 +31,10 @@ func ImgToWebp(filePath, dst string, quality int) error {
 	return ffmpegCmd(fmt.Sprintf(ImgToWebpCmd, filePath, quality, dst))
 }
 
-const ImgToTAvifCmd = CommonCmd + `-c:v libaom-av1 -crf %d -cpu-used %d %s.avif`
+const ImgToTAvifCmd = CommonCmd + `-c:v libaom-av1 -crf %d -cpu-used %d -row-mt 1 %s.avif`
 
 // 多次压缩后avif会出现明显色差,比webp略好
-// -cpu-used 4 -threads 8 会加速，但是图片大小会变大,质量变差
-
+// -cpu-used 3 会加速，但是图片大小会变大,质量变差,<=3比较好
 // More encoding options are available: -b 700k -tile-columns 600 -tile-rows 800 - example for the bitrate and tales.
 
 // crf推荐28
