@@ -21,7 +21,7 @@ const ToAv1Libaomav1Cmd = CommonCmd + "-c:v libaom-av1 -crf %d -cpu-used %d -row
 // Set the quality/encoding speed tradeoff. Valid range is from 0 to 8, higher numbers indicating greater speed and lower quality. The default value is 1, which will be slow and high quality.
 // row-mt 是否多线程 0否,1是
 // tiles 图块数,配合row-mt, axb 猜测是一帧，分成几成几的图片,如2x2就是2行2列4张图分别编码,默认为输入视频大小所需的最小图块数（对于最大 4K 和 4K 的大小，这是 1x1（即单个图块）。
-// 很慢,cpu-used调高质量差
+// 很慢,cpu-used调高质量差,推荐3
 // crf推荐28
 func ToAV1ByLibaomav1(filePath, dst string, crf, cpuUsed int) error {
 	return ffmpegCmd(fmt.Sprintf(ToAv1Libaomav1Cmd, filePath, crf, cpuUsed, dst))
