@@ -245,6 +245,15 @@ func main() {
 本项目需要用到的protobuf插件，`go run tools/protoc/install-env.go`或者运行`go generate tools/protoc/install-tools.go`或者运行`tools/protoc/install-tools.sh`，会自动安装
 
 - protogen为go语言写的protobuf生成程序
+  - go/dart 生成go/dart文件，E.g: protogen go -p xxx -g xxx
+  - -p proto dir
+  - -g generate dir
+  - (-d) 指定lemon proto dir,如项目引用本项目或使用jybl/protogen image 可省略
+  - -e 是否使用enum扩展插件
+  - -w 是否使用grpc-gateway插件
+  - -v 是否使用validators插件
+  - -q 是否使用graphql插件
+  - --patch 是否使用原生protopatch
 - protoc-go-patch 支持通过ast重新生成自定义结构体tag,生成结构体方法等功能
 - protoc-gen-grpc-gin github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway的gin版本，支持生成http路由代理转发到grpc sercvice中
 - protoc-gin-enum 分为错误enum及普通enum，生成性能更高支持中文的`String()`,错误enum会额外生成`Error()string`，支持生成枚举的辅助方法,错误enum会额外生成`Error()string`
