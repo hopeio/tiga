@@ -8,7 +8,7 @@ import (
 // doc: https://ffmpeg.org/ffmpeg-codecs.html
 // https://ffmpeg.org/download.html
 
-const CommonCmd = `ffmpeg -i %s `
+const CommonCmd = `ffmpeg -i "%s" `
 
 func ffmpegCmd(cmd string) error {
 	log.Println(cmd)

@@ -8,7 +8,7 @@ import (
 )
 
 // webp 无损模式
-const ImgToWebpLosslessCmd = CommonCmd + `-c:v libwebp -lossless 1 -quality 100 -compression_level 6 %s.webp`
+const ImgToWebpLosslessCmd = CommonCmd + `-c:v libwebp -lossless 1 -quality 100 -compression_level 6 "%s.webp"`
 
 // 图片转webp格式
 func ImgToWebpLossless(filePath, dst string) error {
@@ -18,7 +18,7 @@ func ImgToWebpLossless(filePath, dst string) error {
 	return ffmpegCmd(fmt.Sprintf(ImgToWebpLosslessCmd, filePath, dst))
 }
 
-const ImgToWebpCmd = CommonCmd + `-c:v libwebp -quality %d %s.webp`
+const ImgToWebpCmd = CommonCmd + `-c:v libwebp -quality %d "%s.webp"`
 
 //	JPEG 采用的色彩格式是 YUVJ420P，对应的色彩区间是 0-255，而 WebP 采用的色彩格式是 YUV420P，对应的色彩区间是 16-235，也就是说如果单纯的转码，会丢失 0-15，236-255 的色彩，也就是出现了色差, 颜色空间转移：RGB < - > YUV，这会产生一些舍入误差 多次压缩后webp会出现明显色差,真的会偏绿
 //
@@ -31,7 +31,7 @@ func ImgToWebp(filePath, dst string, quality int) error {
 	return ffmpegCmd(fmt.Sprintf(ImgToWebpCmd, filePath, quality, dst))
 }
 
-const ImgToTAvifCmd = CommonCmd + `-c:v libaom-av1 -crf %d -cpu-used %d -row-mt 1 %s.avif`
+const ImgToTAvifCmd = CommonCmd + `-c:v libaom-av1 -crf %d -cpu-used %d -row-mt 1 "%s.avif"`
 
 // 多次压缩后avif会出现明显色差,比webp略好
 // -cpu-used 3 会加速，但是图片大小会变大,质量变差,<=3比较好,推荐2
@@ -46,8 +46,8 @@ func ImgToAvif(filePath, dst string, crf, cpuUsed int) error {
 }
 
 const ImgToHeicCmd = CommonCmd + `-crf 20 -psy-rd 0.4 -aq-strength 0.4 -deblock 1:1 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -preset veryslow -pix_fmt yuv420p101e -f hevc %s.hevc`
-const ImgToHeicCmd2 = `ffmpeg -hide_banner -r 1 -i %s -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m %s.hevc`
-const ImgToHeicCmd3 = `ffmpeg -hide_banner -r 1 -i %s -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m:aq-strength=1.2 -deblock -2:-2 %s.hevc
+const ImgToHeicCmd2 = `ffmpeg -hide_banner -r 1 -i "%s" -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m "%s.hevc"`
+const ImgToHeicCmd3 = `ffmpeg -hide_banner -r 1 -i "%s" -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m:aq-strength=1.2 -deblock -2:-2 "%s.hevc"
 `
 
 func ImgToHeic(filePath, dst string) error {
@@ -62,7 +62,7 @@ func ImgToHeic(filePath, dst string) error {
 	return mp4box.Heic(dst+".hevc", dst)
 }
 
-const ImgToJxlCmd = CommonCmd + `-c:v libjxl %s.jxl`
+const ImgToJxlCmd = CommonCmd + `-c:v libjxl "%s.jxl"`
 
 // 不可用,没有注明色彩空间的原因。需要显式写明 像素编码格式、色彩空间、转换色彩空间、目标色彩空间、色彩范围
 /*

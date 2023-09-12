@@ -81,6 +81,9 @@ const (
 	HeaderAccessControlRequestHeaders = "Access-Control-Request-Headers"
 	HeaderOrigin                      = "Origin"
 	HeaderConnection                  = "Connection"
+	HeaderRange                       = "Range"
+	HeaderContentRange                = "Content-Range"
+	HeaderAcceptRanges                = "Accept-Ranges"
 )
 
 const (

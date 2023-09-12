@@ -6,7 +6,7 @@ import (
 
 const param = "-global_quality 20"
 
-const H264ToH265ByIntelGPUCmd = `ffmpeg -hwaccel_output_format qsv -c:v h264_qsv -i %s -c:v hevc_qsv -preset veryslow -g 60 -gpu_copy 1 -c:a copy %s`
+const H264ToH265ByIntelGPUCmd = `ffmpeg -hwaccel_output_format qsv -c:v h264_qsv -i %s -c:v hevc_qsv -preset veryslow -g 60 -gpu_copy 1 -c:a copy "%s"`
 
 const cmd1 = `preset=veryslow,profile=main,look_ahead=1,global_quality=18`
 
@@ -15,7 +15,7 @@ func H264ToH265ByIntelGPU(filePath, dst string) error {
 }
 
 // libaom-av1
-const ToAv1Libaomav1Cmd = CommonCmd + "-c:v libaom-av1 -crf %d -cpu-used %d -row-mt 1 -y %s"
+const ToAv1Libaomav1Cmd = CommonCmd + `-c:v libaom-av1 -crf %d -cpu-used %d -row-mt 1 -y "%s"`
 
 // cpu-used
 // Set the quality/encoding speed tradeoff. Valid range is from 0 to 8, higher numbers indicating greater speed and lower quality. The default value is 1, which will be slow and high quality.
@@ -31,7 +31,7 @@ func ToAV1ByLibaomav1(filePath, dst string, crf, cpuUsed int) error {
 // librav1e
 
 // libx265
-const ToH265Cmd = CommonCmd + "-c:v libx265 -preset veryslow -crf %d -y %s"
+const ToH265Cmd = CommonCmd + `-c:v libx265 -preset veryslow -crf %d -y "%s"`
 
 // crf推荐23
 func ToH265ByXlib265(filePath, dst string, crf int) error {

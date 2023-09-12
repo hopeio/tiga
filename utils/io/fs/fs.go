@@ -283,15 +283,28 @@ func OpenLogFile(fileName, filePath string) (*os.File, error) {
 }
 
 func Create(filepath string) (*os.File, error) {
-	dir := path.GetDirName(filepath)
-	_, err := os.Stat(dir)
+	_, err := os.Stat(filepath)
 	if os.IsNotExist(err) {
+		dir := path.GetDirName(filepath)
 		err = os.MkdirAll(dir, 0666)
 		if err != nil {
 			return nil, err
 		}
 	}
 	return os.Create(filepath)
+}
+
+func Open(filepath string) (*os.File, error) {
+	_, err := os.Stat(filepath)
+	if os.IsNotExist(err) {
+		dir := path.GetDirName(filepath)
+		err = os.MkdirAll(dir, 0666)
+		if err != nil {
+			return nil, err
+		}
+		return os.Create(filepath)
+	}
+	return os.OpenFile(filepath, os.O_RDWR, 0666)
 }
 
 // LastFile 当前目录最后一个创建的文件
