@@ -1,4 +1,4 @@
-package ctrl
+package controller
 
 import "github.com/hopeio/lemon/utils/errors/multierr"
 

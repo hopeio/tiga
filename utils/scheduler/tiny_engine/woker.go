@@ -1,4 +1,4 @@
-package scheduler
+package tiny_engine
 
 import (
 	"time"
@@ -16,5 +16,5 @@ type WorkStatistics struct {
 	taskDoneCount, taskTotalCount, taskFailedCount uint64
 }
 
-// BaseEngineStatistics 基本引擎统计数据
-type BaseEngineStatistics = WorkStatistics
+// EngineStatistics 基本引擎统计数据
+type EngineStatistics = WorkStatistics

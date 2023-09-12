@@ -3,13 +3,14 @@ package listener
 import (
 	"context"
 	"github.com/hopeio/lemon/utils/scheduler/rate"
+	"github.com/hopeio/lemon/utils/scheduler/tiny_engine"
 	"time"
 )
 
 type TimerTask struct {
 	Times     uint
 	FirstExec bool
-	Do        engine_old.BaseTaskFunc
+	Do        tiny_engine.TaskFunc
 }
 
 func (task *TimerTask) Timer(ctx context.Context, interval time.Duration) {
