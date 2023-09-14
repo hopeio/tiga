@@ -309,17 +309,17 @@ func Open(filepath string) (*os.File, error) {
 
 // LastFile 当前目录最后一个创建的文件
 func LastFile(dir string) (os.FileInfo, map[string]os.FileInfo, error) {
-	entities, err := os.ReadDir(dir)
-	if len(entities) == 0 {
+	entries, err := os.ReadDir(dir)
+	if len(entries) == 0 {
 		return nil, nil, err
 	}
-	sort.Sort(DirEntities(entities))
-	lastFile, err := entities[0].Info()
+	sort.Sort(DirEntries(entries))
+	lastFile, err := entries[0].Info()
 	if err != nil {
 		return nil, nil, err
 	}
 	m := make(map[string]os.FileInfo)
-	for _, entity := range entities {
+	for _, entity := range entries {
 		m[entity.Name()], _ = entity.Info()
 	}
 	return lastFile, m, nil
@@ -340,13 +340,13 @@ func CopyDir(src, dst string) error {
 			return err
 		}
 	}
-	entities, err := os.ReadDir(src)
-	if len(entities) == 0 {
+	entries, err := os.ReadDir(src)
+	if len(entries) == 0 {
 		return nil
 	}
-	for _, entity := range entities {
-		entityName := entity.Name()
-		if entity.IsDir() {
+	for _, entry := range entries {
+		entityName := entry.Name()
+		if entry.IsDir() {
 			err = CopyDir(src+PathSeparator+entityName, dst+PathSeparator+entityName)
 			if err != nil {
 				return err

@@ -3,9 +3,9 @@ package slices
 import "reflect"
 
 type stream struct {
-	kind   reflect.Kind
-	entity reflect.Value
-	expr   any
+	kind    reflect.Kind
+	entries reflect.Value
+	expr    any
 }
 
 func Stream(array any) stream {
@@ -19,8 +19,8 @@ func Stream(array any) stream {
 		panic("参数必须为数组,切片,地图,管道,字符串")
 	}
 	return stream{
-		kind:   kind,
-		entity: value,
+		kind:    kind,
+		entries: value,
 	}
 }
 
@@ -33,16 +33,16 @@ func (s stream) ForEach(express any) {
 
 	switch s.kind {
 	case reflect.Slice, reflect.String, reflect.Array:
-		for i := 0; i < s.entity.Len(); i++ {
-			call.Call([]reflect.Value{s.entity.Index(i)})
+		for i := 0; i < s.entries.Len(); i++ {
+			call.Call([]reflect.Value{s.entries.Index(i)})
 		}
 	case reflect.Map:
-		iter := s.entity.MapRange()
+		iter := s.entries.MapRange()
 		for iter.Next() {
 			call.Call([]reflect.Value{iter.Value()})
 		}
 	case reflect.Chan: // blocked
-		item, ok := s.entity.Recv()
+		item, ok := s.entries.Recv()
 		if ok {
 			call.Call([]reflect.Value{item})
 		}
@@ -59,21 +59,21 @@ func (s stream) Map(express any) any {
 		panic("函数必须有1个返回值")
 	}
 
-	ret := make([]interface{}, 0, s.entity.Len())
+	ret := make([]interface{}, 0, s.entries.Len())
 	switch s.kind {
 	case reflect.Slice, reflect.String, reflect.Array:
-		for i := 0; i < s.entity.Len(); i++ {
-			out := call.Call([]reflect.Value{s.entity.Index(i)})
+		for i := 0; i < s.entries.Len(); i++ {
+			out := call.Call([]reflect.Value{s.entries.Index(i)})
 			ret = append(ret, out[0].Interface())
 		}
 	case reflect.Map:
-		iter := s.entity.MapRange()
+		iter := s.entries.MapRange()
 		for iter.Next() {
 			out := call.Call([]reflect.Value{iter.Value()})
 			ret = append(ret, out[0].Interface())
 		}
 	case reflect.Chan: // blocked
-		item, ok := s.entity.Recv()
+		item, ok := s.entries.Recv()
 		if ok {
 			out := call.Call([]reflect.Value{item})
 			ret = append(ret, out[0].Interface())
@@ -92,17 +92,17 @@ func (s stream) Filter(express any) any {
 	if typ.NumOut() != 1 || typ.Out(0).Kind() != reflect.Bool {
 		panic("函数返回值必须为bool")
 	}
-	ret := make([]interface{}, 0, s.entity.Len())
+	ret := make([]interface{}, 0, s.entries.Len())
 	switch s.kind {
 	case reflect.Slice, reflect.String, reflect.Array:
-		for i := 0; i < s.entity.Len(); i++ {
-			out := call.Call([]reflect.Value{s.entity.Index(i)})
+		for i := 0; i < s.entries.Len(); i++ {
+			out := call.Call([]reflect.Value{s.entries.Index(i)})
 			if !out[0].Bool() {
-				ret = append(ret, s.entity.Index(i).Interface())
+				ret = append(ret, s.entries.Index(i).Interface())
 			}
 		}
 	case reflect.Map:
-		iter := s.entity.MapRange()
+		iter := s.entries.MapRange()
 		for iter.Next() {
 			out := call.Call([]reflect.Value{iter.Value()})
 			if !out[0].Bool() {
@@ -110,7 +110,7 @@ func (s stream) Filter(express any) any {
 			}
 		}
 	case reflect.Chan: // blocked
-		item, ok := s.entity.Recv()
+		item, ok := s.entries.Recv()
 		if ok {
 			out := call.Call([]reflect.Value{item})
 			if !out[0].Bool() {
@@ -133,14 +133,14 @@ func (s stream) Every(express any) bool {
 	}
 	switch s.kind {
 	case reflect.Slice, reflect.String, reflect.Array:
-		for i := 0; i < s.entity.Len(); i++ {
-			out := call.Call([]reflect.Value{s.entity.Index(i)})
+		for i := 0; i < s.entries.Len(); i++ {
+			out := call.Call([]reflect.Value{s.entries.Index(i)})
 			if !out[0].Bool() {
 				return false
 			}
 		}
 	case reflect.Map:
-		iter := s.entity.MapRange()
+		iter := s.entries.MapRange()
 		for iter.Next() {
 			out := call.Call([]reflect.Value{iter.Value()})
 			if !out[0].Bool() {
@@ -148,7 +148,7 @@ func (s stream) Every(express any) bool {
 			}
 		}
 	case reflect.Chan: // blocked
-		item, ok := s.entity.Recv()
+		item, ok := s.entries.Recv()
 		if ok {
 			out := call.Call([]reflect.Value{item})
 			if !out[0].Bool() {
@@ -172,14 +172,14 @@ func (s stream) Some(express any) bool {
 
 	switch s.kind {
 	case reflect.Slice, reflect.String, reflect.Array:
-		for i := 0; i < s.entity.Len(); i++ {
-			out := call.Call([]reflect.Value{s.entity.Index(i)})
+		for i := 0; i < s.entries.Len(); i++ {
+			out := call.Call([]reflect.Value{s.entries.Index(i)})
 			if !out[0].Bool() {
 				return false
 			}
 		}
 	case reflect.Map:
-		iter := s.entity.MapRange()
+		iter := s.entries.MapRange()
 		for iter.Next() {
 			out := call.Call([]reflect.Value{iter.Value()})
 			if !out[0].Bool() {
@@ -187,7 +187,7 @@ func (s stream) Some(express any) bool {
 			}
 		}
 	case reflect.Chan: // blocked
-		item, ok := s.entity.Recv()
+		item, ok := s.entries.Recv()
 		if ok {
 			out := call.Call([]reflect.Value{item})
 			if !out[0].Bool() {
