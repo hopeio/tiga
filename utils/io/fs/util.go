@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"github.com/hopeio/lemon/utils/crypto"
 	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/lemon/utils/slices"
 	"io"
 	"os"
 	stdpath "path"
@@ -146,4 +147,47 @@ func TwoDirDeDuplicate(dir1, dir2 string) error {
 		}
 		return nil
 	})
+}
+
+// 两个目录同步,第一个参数为主目录,参考目录,第二个参数目录与第一个保持一致
+func Sync(mainDir, slaveDir string) error {
+	mainDirEntries, err := os.ReadDir(mainDir)
+	if err == nil {
+		return err
+	}
+	if len(mainDirEntries) == 0 {
+		return nil
+	}
+	_, err = os.Stat(slaveDir)
+	if os.IsNotExist(err) {
+		return CopyDir(mainDir, slaveDir)
+	}
+
+	slaveDirEntries, err := os.ReadDir(slaveDir)
+	if err == nil {
+		return err
+	}
+
+	intersection, diff1, diff2 := slices.IntersectionAndDifference(mainDirEntries, slaveDirEntries)
+	for _, entry := range diff2 {
+		err := os.RemoveAll(slaveDir + PathSeparator + entry.Name())
+		if err != nil {
+			return err
+		}
+
+	}
+	for _, entry := range diff1 {
+		err = CopyDir(mainDir+PathSeparator+entry.Name(), slaveDir+PathSeparator+entry.Name())
+		if err != nil {
+			return err
+		}
+	}
+
+	for _, entry := range intersection {
+		err = Sync(mainDir+PathSeparator+entry.Name(), slaveDir+PathSeparator+entry.Name())
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

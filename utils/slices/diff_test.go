@@ -36,12 +36,14 @@ func TestIsEqu(t *testing.T) {
 		&Foo{5, "1"},
 		&Foo{6, "1"},
 	}
-	log.Println(IsCoincide(s1, s2))
-	log.Println(IsCoincideByKey(s1, s2))
+	log.Println(HasCoincide(s1, s2))
+	log.Println(HasCoincideByKey(s1, s2))
 }
 
 func TestDiff(t *testing.T) {
 	a := []uint64{1, 2, 3, 4}
 	b := []uint64{2, 3, 4, 5}
 	t.Log(Difference(a, b))
+	t.Log(intersection(a, b))
+	t.Log(IntersectionAndDifference(a, b))
 }
