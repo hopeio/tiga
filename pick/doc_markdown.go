@@ -108,7 +108,7 @@ func genFile(filePath, modName string) (*os.File, error) {
 
 	filePath = filePath + modName
 
-	err := os.MkdirAll(filePath, 0666)
+	err := os.MkdirAll(filePath, os.ModePerm)
 	if err != nil {
 		return nil, err
 	}

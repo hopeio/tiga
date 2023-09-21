@@ -6,10 +6,10 @@ import (
 	"log"
 )
 
-const TransferFormatGPUCmd = `ffmpeg -hwaccel qsv -i "%s" -c copy -y "%s"`
+const TransferFormatGPUCmd = ` -hwaccel qsv -i "%s" -c copy -y "%s"`
 
 func TransferFormatGPU(filePath, dst string) error {
-	command := fmt.Sprintf(TransferFormatGPUCmd, filePath, dst)
+	command := fmt.Sprintf(execPath+TransferFormatGPUCmd, filePath, dst)
 	log.Println(command)
 	_, err := osi.Cmd(command)
 	return err
@@ -21,8 +21,8 @@ func TransferFormat(filePath, dst string) error {
 	return ffmpegCmd(fmt.Sprintf(TransferFormatCmd, filePath, dst))
 }
 
-const ConcatCmd = `ffmpeg -f concat -safe 0  -i "%s" -c copy -y "%s"`
+const ConcatCmd = ` -f concat -safe 0  -i "%s" -c copy -y "%s"`
 
 func Concat(filePath, dst string) error {
-	return ffmpegCmd(fmt.Sprintf(ConcatCmd, filePath, dst))
+	return ffmpegCmd(fmt.Sprintf(execPath+ConcatCmd, filePath, dst))
 }

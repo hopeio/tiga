@@ -103,7 +103,7 @@ var rootCmd = &cobra.Command{
 	Use: "protogen",
 	PersistentPreRun: func(cmd *cobra.Command, args []string) {
 		if fs.CheckNotExist(genpath) {
-			os.MkdirAll(genpath, 0666)
+			os.MkdirAll(genpath, os.ModePerm)
 		}
 		if useEnmuPlugin {
 			plugin = append(plugin, enumPlugin)

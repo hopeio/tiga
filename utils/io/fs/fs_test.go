@@ -81,3 +81,8 @@ func test() {
 		}(array)
 	}
 }
+
+func TestFileExists(t *testing.T) {
+	t.Log(Exist("D:\\response.jpeg"))
+	t.Log(Exist("D:\\response1.jpeg"))
+}

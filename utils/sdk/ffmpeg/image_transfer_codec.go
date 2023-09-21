@@ -46,8 +46,8 @@ func ImgToAvif(filePath, dst string, crf, cpuUsed int) error {
 }
 
 const ImgToHeicCmd = CommonCmd + `-crf 20 -psy-rd 0.4 -aq-strength 0.4 -deblock 1:1 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" -preset veryslow -pix_fmt yuv420p101e -f hevc %s.hevc`
-const ImgToHeicCmd2 = `ffmpeg -hide_banner -r 1 -i "%s" -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m "%s.hevc"`
-const ImgToHeicCmd3 = `ffmpeg -hide_banner -r 1 -i "%s" -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m:aq-strength=1.2 -deblock -2:-2 "%s.hevc"
+const ImgToHeicCmd2 = CommonCmd + `-hide_banner -r 1 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m "%s.hevc"`
+const ImgToHeicCmd3 = CommonCmd + `-hide_banner -r 1 -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2,zscale=m=170m:r=pc" -pix_fmt yuv420p -frames 1 -c:v libx265 -preset veryslow -crf 20 -x265-params range=full:colorprim=smpte170m:aq-strength=1.2 -deblock -2:-2 "%s.hevc"
 `
 
 func ImgToHeic(filePath, dst string) error {

@@ -7,6 +7,10 @@ import (
 	"syscall"
 )
 
+func init() {
+	syscall.Umask(0)
+}
+
 func GetFileCreateTime(path string) int64 {
 	fileInfo, _ := os.Stat(path)
 	stat_t := fileInfo.Sys().(*syscall.Stat_t)

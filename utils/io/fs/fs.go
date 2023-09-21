@@ -64,7 +64,7 @@ func subDirFiles(dir, path, exclude string, files *[]string, deep, step int8, nu
 	if step-1 == deep {
 		return
 	}
-	fileInfos, err := ioutil.ReadDir(dir)
+	fileInfos, err := os.ReadDir(dir)
 	if err != nil {
 		log.Println(err)
 	}
@@ -245,7 +245,7 @@ func MustOpen(fileName, filePath string) (*os.File, error) {
 		return nil, fmt.Errorf("mkdir src: %s, err: %v", src, err)
 	}
 
-	f, err := os.OpenFile(src+fileName, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
+	f, err := os.OpenFile(src+fileName, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0666)
 	if err != nil {
 		return nil, fmt.Errorf("Fail to OpenFile :%v", err)
 	}
@@ -286,7 +286,7 @@ func Create(filepath string) (*os.File, error) {
 	_, err := os.Stat(filepath)
 	if os.IsNotExist(err) {
 		dir := path.GetDirName(filepath)
-		err = os.MkdirAll(dir, 0666)
+		err = os.MkdirAll(dir, os.ModePerm)
 		if err != nil {
 			return nil, err
 		}
@@ -298,7 +298,7 @@ func Open(filepath string) (*os.File, error) {
 	_, err := os.Stat(filepath)
 	if os.IsNotExist(err) {
 		dir := path.GetDirName(filepath)
-		err = os.MkdirAll(dir, 0666)
+		err = os.MkdirAll(dir, os.ModePerm)
 		if err != nil {
 			return nil, err
 		}
@@ -335,7 +335,7 @@ func CopyDir(src, dst string) error {
 	}
 	_, err := os.Stat(dst)
 	if os.IsNotExist(err) {
-		err = os.MkdirAll(dst, 0666)
+		err = os.MkdirAll(dst, os.ModePerm)
 		if err != nil {
 			return err
 		}

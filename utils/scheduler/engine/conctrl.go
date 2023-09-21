@@ -89,6 +89,11 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 	e.wg.Wait()
 	e.isRunning = false
 	e.isFinished = true
+	if e.stopCallBack != nil {
+		for _, callBack := range e.stopCallBack {
+			callBack()
+		}
+	}
 	log.Infof("任务结束,total:%d,done:%d,failed:%d", e.taskTotalCount, e.taskDoneCount, e.taskFailedCount)
 }
 

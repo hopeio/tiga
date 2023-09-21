@@ -127,7 +127,7 @@ func WriteToFile(realPath, modName string) {
 	}
 
 	realPath = realPath + modName
-	err := os.MkdirAll(realPath, 0666)
+	err := os.MkdirAll(realPath, os.ModePerm)
 	if err != nil {
 		log.Error(err)
 	}

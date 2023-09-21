@@ -2,7 +2,9 @@ package engine
 
 import (
 	"context"
+	"github.com/davecgh/go-spew/spew"
 	"github.com/dgraph-io/ristretto"
+	"github.com/hopeio/lemon/utils/io/fs"
 	"github.com/hopeio/lemon/utils/log"
 	rate2 "github.com/hopeio/lemon/utils/scheduler/rate"
 	"github.com/hopeio/lemon/utils/slices"
@@ -41,9 +43,10 @@ type Engine[KEY comparable, T, W any] struct {
 	EngineStatistics
 	done *ristretto.Cache
 	//TasksChan   chan []*Task[KEY, T]
-	kindHandler []*KindHandler[KEY, T]
-	errHandler  func(task *Task[KEY, T])
-	errChan     chan *Task[KEY, T]
+	kindHandler  []*KindHandler[KEY, T]
+	errHandler   func(task *Task[KEY, T])
+	errChan      chan *Task[KEY, T]
+	stopCallBack []func()
 }
 
 type KindHandler[KEY comparable, T any] struct {
@@ -130,6 +133,24 @@ func (e *Engine[KEY, T, W]) ErrHandlerUtilSuccess() *Engine[KEY, T, W] {
 		task.errs = task.errs[:0]
 		e.AsyncAddTasks(task.Priority, task)
 	})
+}
+
+func (e *Engine[KEY, T, W]) ErrHandlerWriteToFile(path string) *Engine[KEY, T, W] {
+	file, err := fs.Create(path)
+	if err != nil {
+		panic(err)
+	}
+	e.StopCallBack(func() {
+		file.Close()
+	})
+	return e.ErrHandler(func(task *Task[KEY, T]) {
+		spew.Fdump(file, task)
+	})
+}
+
+func (e *Engine[KEY, T, W]) StopCallBack(callBack func()) *Engine[KEY, T, W] {
+	e.stopCallBack = append(e.stopCallBack, callBack)
+	return e
 }
 
 func (e *Engine[KEY, T, W]) Timer(kind Kind, interval time.Duration) *Engine[KEY, T, W] {

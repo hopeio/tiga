@@ -2,6 +2,7 @@ package engine
 
 import (
 	"context"
+	"github.com/hopeio/lemon/utils/definition/constraints"
 	"time"
 )
 
@@ -11,16 +12,17 @@ const (
 	KindNormal = iota
 )
 
-// TODO
+type TaskMetaNew[T constraints.Key[KEY], KEY comparable] struct{}
+
 type TaskMeta[KEY comparable] struct {
 	id          uint64
+	Kind        Kind
 	Key         KEY
-	Describe    string
 	Priority    int
+	Describe    string
 	createdAt   time.Time
 	execBeginAt time.Time
 	execEndAt   time.Time
-	Kind        Kind
 	TaskStatistics
 }
 

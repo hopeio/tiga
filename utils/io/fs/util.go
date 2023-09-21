@@ -14,7 +14,7 @@ import (
 
 func Exist(filepath string) bool {
 	_, err := os.Stat(filepath)
-	return !os.IsNotExist(err)
+	return err == nil
 }
 
 func NotExist(filepath string) bool {

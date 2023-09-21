@@ -8,11 +8,18 @@ import (
 // doc: https://ffmpeg.org/ffmpeg-codecs.html
 // https://ffmpeg.org/download.html
 
-const CommonCmd = `ffmpeg -i "%s" `
+const CommonCmd = ` -i "%s" -y `
+
+var execPath = "ffmpeg"
+
+func SetExecPath(path string) {
+	execPath = path
+}
 
 func ffmpegCmd(cmd string) error {
+	cmd = execPath + cmd
 	log.Println(cmd)
-	_, err := osi.Cmd(cmd)
+	_, err := osi.ContainQuotedCMD(cmd)
 	if err != nil {
 		log.Println(err)
 		return err
