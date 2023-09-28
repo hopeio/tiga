@@ -27,6 +27,14 @@ func Cmd(s string) (string, error) {
 	return stringsi.BytesToString(buf), nil
 }
 
+func StdOutCmd(s string) error {
+	words := Split(s)
+	cmd := exec.Command(words[0], words[1:]...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
 func Split(line string) []string {
 	var words []string
 Words:

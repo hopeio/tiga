@@ -17,7 +17,7 @@ import (
 type Download struct {
 	Client  *http.Client
 	Request *http.Request
-	mode    uint8 // 模式，0-强制覆盖，1-不存在下载,3-断续下载
+	mode    uint8 // 模式，0-不存在下载，1-强制覆盖,3-断续下载
 }
 
 func NewDownload(url string) (*Download, error) {
@@ -81,8 +81,8 @@ func (d *Download) WithMode(mode uint8) *Download {
 	return d
 }
 
-// 保留模式，如果文件已存在，不下载覆盖
-func (d *Download) RetainMode() *Download {
+// 强制覆盖，如果文件已存在，不下载覆盖
+func (d *Download) OverwriteMode() *Download {
 	d.mode = 1
 	return d
 }

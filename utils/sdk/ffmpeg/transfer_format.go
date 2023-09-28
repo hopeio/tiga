@@ -24,5 +24,5 @@ func TransferFormat(filePath, dst string) error {
 const ConcatCmd = ` -f concat -safe 0  -i "%s" -c copy -y "%s"`
 
 func Concat(filePath, dst string) error {
-	return ffmpegCmd(fmt.Sprintf(execPath+ConcatCmd, filePath, dst))
+	return ffmpegCmd(fmt.Sprintf(ConcatCmd, filePath, dst))
 }

@@ -19,7 +19,7 @@ func SetExecPath(path string) {
 func ffmpegCmd(cmd string) error {
 	cmd = execPath + cmd
 	log.Println(cmd)
-	_, err := osi.ContainQuotedCMD(cmd)
+	err := osi.ContainQuotedStdoutCMD(cmd)
 	if err != nil {
 		log.Println(err)
 		return err

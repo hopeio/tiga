@@ -4,6 +4,21 @@ import (
 	"fmt"
 )
 
+type PerSet string
+
+const (
+	Ultrafast PerSet = "ultrafast"
+	SuperFast PerSet = "superfast"
+	VeryFast  PerSet = "veryfast"
+	Faster    PerSet = "faster"
+	Fast      PerSet = "fast"
+	Medium    PerSet = "medium"
+	Slow      PerSet = "slow"
+	Slower    PerSet = "slower"
+	VerySlow  PerSet = "veryslow"
+	Placebo   PerSet = "placebo"
+)
+
 const param = "-global_quality 20"
 
 const H264ToH265ByIntelGPUCmd = `ffmpeg -hwaccel_output_format qsv -c:v h264_qsv -i %s -c:v hevc_qsv -preset veryslow -g 60 -gpu_copy 1 -c:a copy "%s"`
@@ -30,12 +45,22 @@ func ToAV1ByLibaomav1(filePath, dst string, crf, cpuUsed int) error {
 // libsvtav1
 // librav1e
 
+// libx264
+const ToH264Cmd = CommonCmd + `-c:v libx264 -preset %s -crf %d -y "%s"`
+
+// crf推荐18
+func ToH264ByXlib264(filePath, dst string, crf int, perset PerSet) error {
+	return ffmpegCmd(fmt.Sprintf(ToH264Cmd, filePath, perset, crf, dst))
+}
+
+// libvpx
+
 // libx265
-const ToH265Cmd = CommonCmd + `-c:v libx265 -preset veryslow -crf %d -y "%s"`
+const ToH265Cmd = CommonCmd + `-c:v libx265 -preset %s -crf %d -y "%s"`
 
 // crf推荐23
-func ToH265ByXlib265(filePath, dst string, crf int) error {
-	return ffmpegCmd(fmt.Sprintf(ToH265Cmd, filePath, crf, dst))
+func ToH265ByXlib265(filePath, dst string, crf int, perset PerSet) error {
+	return ffmpegCmd(fmt.Sprintf(ToH265Cmd, filePath, perset, crf, dst))
 }
 
 // libvpx
