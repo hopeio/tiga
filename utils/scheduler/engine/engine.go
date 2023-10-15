@@ -147,12 +147,14 @@ func (e *Engine[KEY, T, W]) StopCallBack(callBack func()) *Engine[KEY, T, W] {
 	return e
 }
 
-func (e *Engine[KEY, T, W]) SpeedLimited(interval time.Duration) {
+func (e *Engine[KEY, T, W]) SpeedLimited(interval time.Duration) *Engine[KEY, T, W] {
 	e.speedLimit = rate2.NewSpeedLimiter(interval)
+	return e
 }
 
-func (e *Engine[KEY, T, W]) RandSpeedLimited(start, stop time.Duration) {
+func (e *Engine[KEY, T, W]) RandSpeedLimited(start, stop time.Duration) *Engine[KEY, T, W] {
 	e.speedLimit = rate2.NewRandSpeedLimiter(start, stop)
+	return e
 }
 
 func (e *Engine[KEY, T, W]) RateTimer(interval time.Duration) *Engine[KEY, T, W] {
@@ -160,12 +162,13 @@ func (e *Engine[KEY, T, W]) RateTimer(interval time.Duration) *Engine[KEY, T, W]
 	return e
 }
 
-func (e *Engine[KEY, T, W]) KindRateTimer(kind Kind, interval time.Duration) {
+func (e *Engine[KEY, T, W]) KindRateTimer(kind Kind, interval time.Duration) *Engine[KEY, T, W] {
 	ticker := time.NewTicker(interval)
 	e.kindRateTimer(kind, ticker)
+	return e
 }
 
-func (e *Engine[KEY, T, W]) kindRateTimer(kind Kind, ticker *time.Ticker) {
+func (e *Engine[KEY, T, W]) kindRateTimer(kind Kind, ticker *time.Ticker) *Engine[KEY, T, W] {
 	if e.kindHandler == nil {
 		e.kindHandler = make([]*KindHandler[KEY, T], int(kind)+1)
 	}
@@ -177,6 +180,7 @@ func (e *Engine[KEY, T, W]) kindRateTimer(kind Kind, ticker *time.Ticker) {
 	} else {
 		e.kindHandler[kind].rateTimer = ticker
 	}
+	return e
 }
 
 // 多个kind共用一个timer
