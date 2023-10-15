@@ -46,7 +46,7 @@ func ToAV1ByLibaomav1(filePath, dst string, crf, cpuUsed int) error {
 // librav1e
 
 // libx264
-const ToH264Cmd = CommonCmd + `-c:v libx264 -preset %s -crf %d -y "%s"`
+const ToH264Cmd = CommonCmd + `-c:v libx264 -profile high -preset %s -crf %d -y "%s"`
 
 // crf推荐18
 func ToH264ByXlib264(filePath, dst string, crf int, perset PerSet) error {

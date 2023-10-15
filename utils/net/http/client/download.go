@@ -1,6 +1,7 @@
 package client
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	fs2 "github.com/hopeio/lemon/utils/io/fs"
@@ -14,13 +15,14 @@ import (
 )
 
 // TODO: Range StatusPartialContent 下载
-type Download struct {
-	Client  *http.Client
-	Request *http.Request
-	mode    uint8 // 模式，0-不存在下载，1-强制覆盖,3-断续下载
+type Downloader struct {
+	Client          *http.Client
+	Request         *http.Request
+	Mode            uint8 // 模式，0-强制覆盖，1-不存在下载，3-断续下载
+	ResponseHandler func(response []byte) ([]byte, error)
 }
 
-func NewDownload(url string) (*Download, error) {
+func NewDownloader(url string) (*Downloader, error) {
 	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return nil, err
@@ -29,67 +31,75 @@ func NewDownload(url string) (*Download, error) {
 	//req.Header.Set("Accept-Encoding", "gzip, deflate")
 	req.Header.Set(httpi.HeaderAcceptLanguage, "zh-CN,zh;q=0.9;charset=utf-8")
 	req.Header.Set(httpi.HeaderConnection, "keep-alive")
-	req.Header.Set(httpi.HeaderUserAgent, UserAgent2)
-	return &Download{
+	req.Header.Set(httpi.HeaderUserAgent, UserAgentChrome117)
+	return &Downloader{
 		Client:  defaultClient,
 		Request: req,
 	}, nil
 }
 
-func (d *Download) WithClient(c *http.Client) *Download {
+func (d *Downloader) WithClient(c *http.Client) *Downloader {
 	d.Client = c
 	return d
 }
 
-func (d *Download) SetClient(set func(*http.Client)) *Download {
+func (d *Downloader) SetClient(set func(*http.Client)) *Downloader {
 	set(d.Client)
 	return d
 }
 
-func (d *Download) WithRequest(c *http.Request) *Download {
+func (d *Downloader) WithRequest(c *http.Request) *Downloader {
 	d.Request = c
 	return d
 }
 
-func (d *Download) SetRequest(set RequestOption) *Download {
+func (d *Downloader) SetRequest(set RequestOption) *Downloader {
 	set(d.Request)
 	return d
 }
 
-func (d *Download) WithOptions(opts ...RequestOption) *Download {
+func (d *Downloader) WithOptions(opts ...RequestOption) *Downloader {
 	for _, opt := range opts {
 		opt(d.Request)
 	}
 	return d
 }
 
-func (d *Download) SetHeader(header Header) *Download {
+func (d *Downloader) WithResponseHandler(responseHandler func(response []byte) ([]byte, error)) *Downloader {
+	d.ResponseHandler = responseHandler
+	return d
+}
+
+func (d *Downloader) SetHeader(header Header) *Downloader {
 	return d.WithOptions(SetHeader(header))
 }
 
-func (d *Download) AddHeader(header, value string) *Download {
+func (d *Downloader) AddHeader(header, value string) *Downloader {
 	return d.WithOptions(SetHeader(Header{header, value}))
 }
 
-func (d *Download) WithRange(begin, end string) *Download {
+func (d *Downloader) WithRange(begin, end string) *Downloader {
 	d.Request.Header.Set(httpi.HeaderRange, "bytes="+begin+"-"+end)
 	return d
 }
 
-func (d *Download) WithMode(mode uint8) *Download {
-	d.mode = mode
+func (d *Downloader) WithMode(mode uint8) *Downloader {
+	d.Mode = mode
 	return d
 }
 
 // 强制覆盖，如果文件已存在，不下载覆盖
-func (d *Download) OverwriteMode() *Download {
-	d.mode = 1
+func (d *Downloader) OverwriteMode() *Downloader {
+	d.Mode = 1
 	return d
 }
 
-func (d *Download) GetResponse() (*http.Response, error) {
-	if d.Client == nil || d.Request == nil {
+func (d *Downloader) GetResponse() (*http.Response, error) {
+	if d.Request == nil {
 		return nil, errors.New("client 或 request 为 nil")
+	}
+	if d.Client == nil {
+		d.Client = defaultClient
 	}
 
 	var resp *http.Response
@@ -116,20 +126,32 @@ func (d *Download) GetResponse() (*http.Response, error) {
 	return nil, err
 }
 
-func (d *Download) DownloadFile(filepath string) error {
+func (d *Downloader) DownloadFile(filepath string) error {
+	if d.Mode == 1 && fs2.Exist(filepath) {
+		return nil
+	}
 
-	if d.mode == 3 {
+	if d.Mode == 3 {
 		return d.ContinuationDownloadFile(filepath)
 	}
 
-	if d.mode == 1 && fs2.Exist(filepath) {
-		return nil
-	}
 	resp, err := d.GetResponse()
 	if err != nil {
 		return err
 	}
-	err = fs2.CreatFileFromReader(filepath, resp.Body)
+	var reader io.Reader = resp.Body
+	if d.ResponseHandler != nil {
+		data, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+		data, err = d.ResponseHandler(data)
+		if err != nil {
+			return err
+		}
+		reader = bytes.NewReader(data)
+	}
+	err = fs2.CreatFileFromReader(filepath, reader)
 	err1 := resp.Body.Close()
 	if err1 != nil {
 		log.Warn("Close Reader", err1)
@@ -139,7 +161,7 @@ func (d *Download) DownloadFile(filepath string) error {
 
 const DownloadKey = fs2.DownloadKey
 
-func (d *Download) ContinuationDownloadFile(filepath string) error {
+func (d *Downloader) ContinuationDownloadFile(filepath string) error {
 	f, err := fs2.Open(filepath + DownloadKey)
 	if err != nil {
 		return err
@@ -191,8 +213,8 @@ func (d *Download) ContinuationDownloadFile(filepath string) error {
 const defaultRange = "bytes=0-8388608" // 1024*1024*8
 
 // TODO: 利用简单任务调度实现
-func (d *Download) ConcurrencyDownloadFile(filepath string, concurrencyNum int) error {
-	if d.mode == 1 && fs2.Exist(filepath) {
+func (d *Downloader) ConcurrencyDownloadFile(filepath string, concurrencyNum int) error {
+	if d.Mode == 1 && fs2.Exist(filepath) {
 		return nil
 	}
 	panic("TODO")
@@ -204,7 +226,7 @@ func GetFile(url string) (io.ReadCloser, error) {
 }
 
 func GetFileWithReqOption(url string, opts ...RequestOption) (io.ReadCloser, error) {
-	d, err := NewDownload(url)
+	d, err := NewDownloader(url)
 	if err != nil {
 		return nil, err
 	}
@@ -216,7 +238,7 @@ func GetFileWithReqOption(url string, opts ...RequestOption) (io.ReadCloser, err
 }
 
 func DownloadFile(filepath, url string) error {
-	d, err := NewDownload(url)
+	d, err := NewDownloader(url)
 	if err != nil {
 		return err
 	}

@@ -237,7 +237,7 @@ type ResponseBodyCheck interface {
 	CheckError() error
 }
 
-type RawResponse = []byte
+type RawBytes = []byte
 
 func (req *Request) DoWithNoParam(response interface{}) error {
 	return req.Do(nil, response)
@@ -445,7 +445,7 @@ func (req *Request) Do(param, response interface{}) error {
 			respBody.ContentType = ContentTypeJson
 		}
 
-		if raw, ok := response.(*RawResponse); ok {
+		if raw, ok := response.(*RawBytes); ok {
 			*raw = respBytes
 			return nil
 		}
@@ -467,8 +467,8 @@ func (req *Request) Do(param, response interface{}) error {
 	return err
 }
 
-func (req *Request) DoRaw(param interface{}) (RawResponse, error) {
-	var raw RawResponse
+func (req *Request) DoRaw(param interface{}) (RawBytes, error) {
+	var raw RawBytes
 	err := req.Do(param, &raw)
 	if err != nil {
 		return raw, err

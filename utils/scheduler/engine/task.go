@@ -73,3 +73,7 @@ func (tasks Tasks[KEY, T]) Less(i, j int) bool {
 type ErrHandle func(context.Context, error)
 
 type TaskFunc[KEY comparable, P any] func(ctx context.Context) ([]*Task[KEY, P], error)
+
+func emptyTaskFunc[KEY comparable, P any](ctx context.Context) ([]*Task[KEY, P], error) {
+	return nil, nil
+}

@@ -35,6 +35,7 @@ type Engine[KEY comparable, T, W any] struct {
 	cancel                               context.CancelFunc   // 手动停止执行
 	wg                                   sync.WaitGroup       // 控制确保所有任务执行完
 	fixedWorkers                         []chan *Task[KEY, T] // 固定只执行一种任务的worker,避免并发问题
+	rateTimer                            *time.Ticker
 	speedLimit                           *rate2.SpeedLimiter
 	rateLimiter                          *rate.Limiter
 	//TODO
@@ -50,9 +51,10 @@ type Engine[KEY comparable, T, W any] struct {
 }
 
 type KindHandler[KEY comparable, T any] struct {
-	Skip    bool
-	Ticker  *time.Ticker
-	Limiter *rate.Limiter
+	Skip        bool
+	rateTimer   *time.Ticker
+	speedLimit  *rate2.SpeedLimiter
+	rateLimiter *rate.Limiter
 	// TODO 指定Kind的Handler
 	HandleFun TaskFunc[KEY, T]
 }
@@ -111,14 +113,6 @@ func (e *Engine[KEY, T, W]) SkipKind(kinds ...Kind) *Engine[KEY, T, W] {
 	return e
 }
 
-func (e *Engine[KEY, T, W]) SpeedLimited(interval time.Duration) {
-	e.speedLimit = rate2.NewSpeedLimiter(interval)
-}
-
-func (e *Engine[KEY, T, W]) RandSpeedLimited(start, stop time.Duration) {
-	e.speedLimit = rate2.NewRandSpeedLimiter(start, stop)
-}
-
 func (e *Engine[KEY, T, W]) MonitorInterval(interval time.Duration) {
 	e.monitorInterval = interval
 }
@@ -153,26 +147,25 @@ func (e *Engine[KEY, T, W]) StopCallBack(callBack func()) *Engine[KEY, T, W] {
 	return e
 }
 
-func (e *Engine[KEY, T, W]) Timer(kind Kind, interval time.Duration) *Engine[KEY, T, W] {
-	e.kindTimer(kind, time.NewTicker(interval))
+func (e *Engine[KEY, T, W]) SpeedLimited(interval time.Duration) {
+	e.speedLimit = rate2.NewSpeedLimiter(interval)
+}
+
+func (e *Engine[KEY, T, W]) RandSpeedLimited(start, stop time.Duration) {
+	e.speedLimit = rate2.NewRandSpeedLimiter(start, stop)
+}
+
+func (e *Engine[KEY, T, W]) RateTimer(interval time.Duration) *Engine[KEY, T, W] {
+	e.rateTimer = time.NewTicker(interval)
 	return e
 }
 
-func (e *Engine[KEY, T, W]) Limiter(kind Kind, r rate.Limit, b int) *Engine[KEY, T, W] {
-	e.kindLimiter(kind, r, b)
-	return e
-}
-
-// 多个kind共用一个timer
-func (e *Engine[KEY, T, W]) KindGroupTimer(interval time.Duration, kinds ...Kind) *Engine[KEY, T, W] {
+func (e *Engine[KEY, T, W]) KindRateTimer(kind Kind, interval time.Duration) {
 	ticker := time.NewTicker(interval)
-	for _, kind := range kinds {
-		e.kindTimer(kind, ticker)
-	}
-	return e
+	e.kindRateTimer(kind, ticker)
 }
 
-func (e *Engine[KEY, T, W]) kindTimer(kind Kind, ticker *time.Ticker) {
+func (e *Engine[KEY, T, W]) kindRateTimer(kind Kind, ticker *time.Ticker) {
 	if e.kindHandler == nil {
 		e.kindHandler = make([]*KindHandler[KEY, T], int(kind)+1)
 	}
@@ -180,10 +173,29 @@ func (e *Engine[KEY, T, W]) kindTimer(kind Kind, ticker *time.Ticker) {
 		e.kindHandler = append(e.kindHandler, make([]*KindHandler[KEY, T], int(kind)+1-len(e.kindHandler))...)
 	}
 	if e.kindHandler[kind] == nil {
-		e.kindHandler[kind] = &KindHandler[KEY, T]{Ticker: ticker}
+		e.kindHandler[kind] = &KindHandler[KEY, T]{rateTimer: ticker}
 	} else {
-		e.kindHandler[kind].Ticker = ticker
+		e.kindHandler[kind].rateTimer = ticker
 	}
+}
+
+// 多个kind共用一个timer
+func (e *Engine[KEY, T, W]) KindGroupRateTimer(interval time.Duration, kinds ...Kind) *Engine[KEY, T, W] {
+	ticker := time.NewTicker(interval)
+	for _, kind := range kinds {
+		e.kindRateTimer(kind, ticker)
+	}
+	return e
+}
+
+func (e *Engine[KEY, T, W]) Limiter(r rate.Limit, b int) *Engine[KEY, T, W] {
+	e.rateLimiter = rate.NewLimiter(r, b)
+	return e
+}
+
+func (e *Engine[KEY, T, W]) KindLimiter(kind Kind, r rate.Limit, b int) *Engine[KEY, T, W] {
+	e.kindLimiter(kind, r, b)
+	return e
 }
 
 func (e *Engine[KEY, T, W]) kindLimiter(kind Kind, r rate.Limit, b int) {
@@ -194,9 +206,9 @@ func (e *Engine[KEY, T, W]) kindLimiter(kind Kind, r rate.Limit, b int) {
 		e.kindHandler = append(e.kindHandler, make([]*KindHandler[KEY, T], int(kind)+1-len(e.kindHandler))...)
 	}
 	if e.kindHandler[kind] == nil {
-		e.kindHandler[kind] = &KindHandler[KEY, T]{Limiter: rate.NewLimiter(r, b)}
+		e.kindHandler[kind] = &KindHandler[KEY, T]{rateLimiter: rate.NewLimiter(r, b)}
 	} else {
-		e.kindHandler[kind].Limiter = rate.NewLimiter(r, b)
+		e.kindHandler[kind].rateLimiter = rate.NewLimiter(r, b)
 	}
 }
 

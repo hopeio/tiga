@@ -82,6 +82,9 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 	e.taskTotalCount += uint64(len(tasks))
 	e.wg.Add(len(tasks) + 1)
 	for _, task := range tasks {
+		if task == nil {
+			task = &Task[KEY, T]{TaskFunc: emptyTaskFunc[KEY, T]}
+		}
 		task.id = generator.GenOrderID()
 		e.taskChan <- task
 	}
@@ -172,6 +175,10 @@ func (e *Engine[KEY, T, W]) AddTasks(generation int, tasks ...*Task[KEY, T]) {
 	atomic.AddUint64(&e.taskTotalCount, uint64(l))
 	e.wg.Add(l)
 	for _, task := range tasks {
+		// 如果task为nil,补一个什么都不做的task,为了减少atomic.AddUint64和e.wg.Add的调用次数
+		if task == nil {
+			task = &Task[KEY, T]{TaskFunc: emptyTaskFunc[KEY, T]}
+		}
 		task.Priority += generation
 		task.id = generator.GenOrderID()
 		e.taskChan <- task
@@ -234,6 +241,9 @@ func (e *Engine[KEY, T, W]) AddFixedTasks(workerId int, generation int, tasks ..
 	atomic.AddUint64(&e.taskTotalCount, uint64(l))
 	e.wg.Add(l)
 	for _, task := range tasks {
+		if task == nil {
+			task = &Task[KEY, T]{TaskFunc: emptyTaskFunc[KEY, T]}
+		}
 		task.Priority += generation
 		task.id = generator.GenOrderID()
 		ch <- task
@@ -259,11 +269,11 @@ func (e *Engine[KEY, T, W]) Stop() {
 	e.done.Close()
 	for _, kindHandler := range e.kindHandler {
 		if kindHandler != nil {
-			if kindHandler.Ticker != nil {
-				kindHandler.Ticker.Stop()
+			if kindHandler.rateTimer != nil {
+				kindHandler.rateTimer.Stop()
 			}
-			if kindHandler.Limiter != nil {
-				kindHandler.Limiter = nil
+			if kindHandler.rateLimiter != nil {
+				kindHandler.rateLimiter = nil
 			}
 		}
 	}
@@ -294,17 +304,28 @@ func (e *Engine[KEY, T, W]) ExecTask(ctx context.Context, task *Task[KEY, T]) {
 				}
 			}
 			if kindHandler != nil {
-				if kindHandler.Ticker != nil {
-					<-kindHandler.Ticker.C
+				if kindHandler.rateTimer != nil {
+					<-kindHandler.rateTimer.C
 				}
-				if kindHandler.Limiter != nil {
-					kindHandler.Limiter.Wait(ctx)
+				if kindHandler.speedLimit != nil {
+					<-kindHandler.speedLimit.C
 				}
+				if kindHandler.rateLimiter != nil {
+					kindHandler.rateLimiter.Wait(ctx)
+				}
+			}
+
+			if e.rateTimer != nil {
+				<-e.rateTimer.C
 			}
 
 			if e.speedLimit != nil {
 				<-e.speedLimit.C
 				e.speedLimit.Reset()
+			}
+
+			if e.rateLimiter != nil {
+				e.rateLimiter.Wait(ctx)
 			}
 
 			tasks, err := task.TaskFunc(ctx)

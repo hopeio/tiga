@@ -32,3 +32,6 @@ type TaskMeta[KEY comparable] struct {
 func (t *TaskMeta[KEY]) SetPriority(priority int) {
 	t.Priority = priority
 }
+
+func emptyTaskFunc[KEY comparable, P any](ctx context.Context) {
+}

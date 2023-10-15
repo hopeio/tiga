@@ -20,7 +20,7 @@ func FileNameRewrite(filename string) string {
 func FileNameClean(filename string) string {
 	// windows
 	filename = strings.Trim(filename, ".")
-	filename = stringsi.ReplaceRunesEmpty(filename, '/', '\\', ':', '*', '?', '"', '<', '>', '|', ' ', '\t', '\n')
+	filename = stringsi.ReplaceRunesEmpty(filename, '/', '\\', ':', '*', '?', '"', '<', '>', '|', ' ', '\t', '\n', '：')
 	// linux
 	//filename = stringsi.ReplaceRunesEmpty(filename, '!', '@', '#', '*', '?', ' ', '$', '&', '(', ')')
 	return filename

@@ -28,6 +28,10 @@ func NewRandSpeedLimiter(start, stop time.Duration) *SpeedLimiter {
 	}
 }
 
+func (s *SpeedLimiter) Stop() bool {
+	return s.Timer.Stop()
+}
+
 func (s *SpeedLimiter) Reset() {
 	if s.randSpeedLimitRange == 0 {
 		s.Timer.Reset(s.randSpeedLimitBase)
