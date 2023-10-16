@@ -30,3 +30,5 @@ func TodayZeroTime() time.Time {
 	todayZeroTime, _ := time.ParseInLocation(DateFormat, time.Now().Format(DateFormat), time.Local)
 	return todayZeroTime
 }
+
+var ZeroTime = time.Time{}
