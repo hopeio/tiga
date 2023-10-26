@@ -18,11 +18,18 @@ func FileNameRewrite(filename string) string {
 
 // 仅仅针对文件名
 func FileNameClean(filename string) string {
-	// windows
+
 	filename = strings.Trim(filename, ".")
-	filename = stringsi.ReplaceRunesEmpty(filename, '/', '\\', ':', '*', '?', '"', '<', '>', '|', ' ', '\t', '\n', '：')
+	filename = strings.TrimPrefix(filename, "-")
+	filename = strings.TrimPrefix(filename, "+")
+	// windows
+	//filename = stringsi.ReplaceRunesEmpty(filename, '/', '\\', ':', '*', '?', '"', '<', '>', '|')
 	// linux
-	//filename = stringsi.ReplaceRunesEmpty(filename, '!', '@', '#', '*', '?', ' ', '$', '&', '(', ')')
+	//filename = stringsi.ReplaceRunesEmpty(filename, '\'', '*','?', '@', '#', '$', '&', '(', ')', '|', ';',  '/', '%', '^', ' ', '\t', '\n')
+
+	filename = stringsi.ReplaceRunesEmpty(filename, '/', '\\', ':', '*', '?', '"', '<', '>', '|', ';', '/', '%', '^', ' ', '\t', '\n', '$', '&')
+	// 中文符号
+	//filename = stringsi.ReplaceRunesEmpty(filename, '：', '，', '。', '！', '？', '、', '“', '”', '、')
 	return filename
 }
 

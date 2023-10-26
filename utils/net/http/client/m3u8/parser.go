@@ -69,6 +69,10 @@ func FromURL(link string) (*Result, error) {
 func (r *Result) Download(segIndex int) ([]byte, error) {
 	sf := r.M3u8.Segments[segIndex]
 
+	if sf == nil {
+		return nil, fmt.Errorf("invalid segment index: %d", segIndex)
+	}
+
 	tsUrl := client.ResolveURL(r.URL, sf.URI)
 
 	var bytes client.RawBytes
@@ -77,9 +81,6 @@ func (r *Result) Download(segIndex int) ([]byte, error) {
 		return nil, fmt.Errorf("request %s, %s", tsUrl, err.Error())
 	}
 
-	if sf == nil {
-		return nil, fmt.Errorf("invalid segment index: %d", segIndex)
-	}
 	key, ok := r.Keys[sf.KeyIndex]
 	if ok && key != "" {
 		bytes, err = crypto.AESCBCDecrypt(bytes, []byte(key),
