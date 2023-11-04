@@ -10,24 +10,17 @@ import (
 const envTagName = "env"
 
 // example
-type EnvConfig struct {
+/*type EnvConfig struct {
 	Proxy string `env:"name:HTTP_PROXY"`
 }
-
+*/
 type EnvTagSettings struct {
 	Name  string `meta:"name"`
 	Usage string `meta:"usage"`
 }
 
 func envinit() {
-
-	if env, ok := os.LookupEnv("ENV"); ok {
-		GlobalConfig.Env = env
-	}
-	if conf, ok := os.LookupEnv("CONFIG"); ok {
-		GlobalConfig.ConfUrl = conf
-	}
-
+	injectEnvConfig(reflect.ValueOf(&GlobalConfig.BasicConfig).Elem())
 	http.DefaultClient.Transport = &http.Transport{
 		Proxy: http.ProxyFromEnvironment,
 	}

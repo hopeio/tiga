@@ -17,9 +17,9 @@ import (
 // 约定大于配置
 var (
 	GlobalConfig = &globalConfig{
-		Env: DEVELOPMENT, ConfUrl: "./config.toml",
-		confMap: map[string]interface{}{},
-		RWMutex: sync.RWMutex{},
+		BasicConfig: BasicConfig{Env: DEVELOPMENT, ConfUrl: "./config.toml"},
+		confMap:     map[string]interface{}{},
+		RWMutex:     sync.RWMutex{},
 	}
 )
 
@@ -43,9 +43,14 @@ type ConfigCenterConfig struct {
 // BasicConfig
 // zh: 基本配置，包含模块名
 type BasicConfig struct {
-	Module string
+	// 模块名
+	Module string `flag:"name:mod;short:m;default:;usage:模块名" env:"name:MODULE"`
+	// environment
+	Env string `flag:"name:env;short:e;default:dev;usage:环境" env:"name:ENV"`
+	// 配置文件路径
+	ConfUrl string `flag:"name:conf;short:c;default:config.toml;usage:配置文件路径,默认./config.toml或./config/config.toml" env:"name:CONFIG"`
 	// 代理, socks5://localhost:1080
-	Proxy string `flag:"name:proxy;short:p;default:'socks5://localhost:1080';usage:代理"`
+	Proxy string `flag:"name:proxy;short:p;default:'socks5://localhost:1080';usage:代理" env:"HTTP_PROXY"`
 }
 
 // FileConfig
@@ -84,17 +89,14 @@ password = "nacos"
 LogLevel = "debug"
 ```*/
 type FileConfig struct {
-	BasicConfig
+	// 模块名
+	Module          string `flag:"name:mod;short:m;default:;usage:模块名" env:"name:MODULE"`
 	Dev, Test, Prod *ConfigCenterConfig
 }
 
 // globalConfig
 // 全局配置
 type globalConfig struct {
-	// environment
-	Env string `flag:"name:env;short:e;default:dev;usage:环境" env:"name:ENV"`
-	// 配置文件路径
-	ConfUrl string `flag:"name:conf;short:c;default:config.toml;usage:配置文件路径,默认./config.toml或./config/config.toml" env:"name:CONFIG"`
 	BasicConfig
 	ConfigCenterConfig ConfigCenterConfig
 	confMap            map[string]any
@@ -132,7 +134,7 @@ func (gc *globalConfig) LoadConfig(notinject ...string) {
 	}
 	fmt.Printf("Load config from: %s\n", gc.ConfUrl)
 
-	gc.BasicConfig = onceConfig.BasicConfig
+	gc.Module = onceConfig.Module
 
 	value := reflect.ValueOf(&onceConfig).Elem()
 	typ := reflect.TypeOf(&onceConfig).Elem()

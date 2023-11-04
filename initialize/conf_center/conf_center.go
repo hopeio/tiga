@@ -22,7 +22,7 @@ type ConfigCenterConfig struct {
 	// 配置类型
 	ConfigType string `flag:"name:conf_type;default:local;usage:配置类型"`
 	// 是否监听配置文件
-	Watch bool `flag:"name:watch;short:w;default:false;usage:是否监听配置文件"`
+	Watch bool `flag:"name:watch;short:w;default:false;usage:是否监听配置文件" env:"WATCH"`
 	Nacos *nacos.Nacos
 	Local *local.Local
 	Http  *http.Config

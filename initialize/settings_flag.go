@@ -14,16 +14,12 @@ const flagTagName = "flag"
 
 // TODO: 优先级高于其他Config,覆盖环境变量及配置中心的配置
 // example
-type FlagConfig struct {
+/*type FlagConfig struct {
 	// environment
 	Env string `flag:"name:env;short:e;default:dev;usage:环境"`
 	// 配置文件路径
 	ConfUrl string `flag:"name:conf;short:c;default:config.toml;usage:配置文件路径,默认./config.toml或./config/config.toml"`
-	// 是否监听配置文件
-	Watch bool `flag:"name:watch;short:w;default:false;usage:是否监听配置文件"`
-	// 代理, socks5://localhost:1080
-	Proxy string `flag:"name:proxy;short:p;default:'socks5://localhost:1080';usage:代理"`
-}
+}*/
 
 type FlagTagSettings struct {
 	Name    string `meta:"name"`
@@ -34,16 +30,9 @@ type FlagTagSettings struct {
 
 func init() {
 	envinit()
-	if _, err := os.Stat(GlobalConfig.ConfUrl); os.IsNotExist(err) {
-		GlobalConfig.ConfUrl = "./config/config.toml"
-	}
-
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ContinueOnError)
 	commandLine := newCommandLine()
-
-	commandLine.StringVarP(&GlobalConfig.Env, "env", "e", DEVELOPMENT, "环境")
-	commandLine.StringVarP(&GlobalConfig.ConfUrl, "conf", "c", GlobalConfig.ConfUrl, "配置文件路径,默认./config.toml或./config/config.toml")
-
+	injectFlagConfig(commandLine, reflect.ValueOf(&GlobalConfig.BasicConfig).Elem())
 	Parse(commandLine)
 
 	if GlobalConfig.Proxy != "" {

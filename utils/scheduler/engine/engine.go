@@ -129,6 +129,18 @@ func (e *Engine[KEY, T, W]) ErrHandlerUtilSuccess() *Engine[KEY, T, W] {
 	})
 }
 
+func (e *Engine[KEY, T, W]) ErrHandlerRetryTimes(times int) *Engine[KEY, T, W] {
+	return e.ErrHandler(func(task *Task[KEY, T]) {
+		task.errs = task.errs[:0]
+		if task.errTimes < times {
+			e.AsyncAddTasks(task.Priority, task)
+		} else {
+			log.Error(task.errs)
+		}
+
+	})
+}
+
 func (e *Engine[KEY, T, W]) ErrHandlerWriteToFile(path string) *Engine[KEY, T, W] {
 	file, err := fs.Create(path)
 	if err != nil {

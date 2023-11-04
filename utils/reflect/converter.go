@@ -179,6 +179,7 @@ func SetFieldByString(value string, field reflect.Value) error {
 	if converter != nil {
 		if v := converter(value); v != nil {
 			field.Set(reflect.ValueOf(v))
+			return nil
 		}
 	}
 	return errors.New("unsupported kind")
