@@ -39,8 +39,8 @@ type Engine[KEY comparable, T, W any] struct {
 	speedLimit                           *rate2.SpeedLimiter
 	rateLimiter                          *rate.Limiter
 	//TODO
-	monitorInterval       time.Duration // 全局检测定时器间隔时间，任务的卡住检测，worker panic recover都可以用这个检测
-	isRunning, isFinished bool
+	monitorInterval            time.Duration // 全局检测定时器间隔时间，任务的卡住检测，worker panic recover都可以用这个检测
+	isRunning, isFinished, ran bool
 	EngineStatistics
 	done *ristretto.Cache
 	//TasksChan   chan []*Task[KEY, T]

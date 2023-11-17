@@ -5,10 +5,11 @@ import (
 )
 
 type Worker[KEY comparable, T, W any] struct {
-	Id     uint
-	Kind   Kind
-	taskCh chan *Task[KEY, T]
-	Props  W
+	Id          uint
+	Kind        Kind
+	taskCh      chan *Task[KEY, T]
+	isExecuting bool
+	Props       W
 }
 
 // WorkStatistics worker统计数据

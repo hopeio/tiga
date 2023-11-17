@@ -17,7 +17,7 @@ import (
 // 约定大于配置
 var (
 	GlobalConfig = &globalConfig{
-		BasicConfig: BasicConfig{Env: DEVELOPMENT, ConfUrl: "./config.toml"},
+		BasicConfig: BasicConfig{Module: "lemon-app", Env: DEVELOPMENT, ConfUrl: "./config.toml"},
 		confMap:     map[string]interface{}{},
 		RWMutex:     sync.RWMutex{},
 	}

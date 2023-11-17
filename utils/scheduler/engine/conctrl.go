@@ -13,13 +13,17 @@ import (
 )
 
 func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
-	go func() {
-		for task := range e.errChan {
-			e.taskErrCount++
-			e.errHandler(task)
-		}
-	}()
-	e.addWorker()
+	if !e.ran {
+		go func() {
+			for task := range e.errChan {
+				e.taskErrCount++
+				e.errHandler(task)
+			}
+		}()
+		e.addWorker()
+		e.ran = true
+	}
+
 	e.isRunning = true
 	go func() {
 		timer := time.NewTimer(5 * time.Second)
@@ -125,7 +129,9 @@ func (e *Engine[KEY, T, W]) newWorker(readyTask *Task[KEY, T]) {
 			select {
 			case e.workerChan <- worker:
 				readyTask = <-taskChan
+				worker.isExecuting = true
 				e.ExecTask(e.ctx, readyTask)
+				worker.isExecuting = false
 			case <-e.ctx.Done():
 				return
 			}
