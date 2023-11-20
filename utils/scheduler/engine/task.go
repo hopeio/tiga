@@ -12,6 +12,10 @@ const (
 	KindNormal = iota
 )
 
+var (
+	stdTimeout time.Duration = 0
+)
+
 type TaskMetaNew[T constraints.Key[KEY], KEY comparable] struct{}
 
 type TaskMeta[KEY comparable] struct {
@@ -23,6 +27,7 @@ type TaskMeta[KEY comparable] struct {
 	createdAt   time.Time
 	execBeginAt time.Time
 	execEndAt   time.Time
+	timeout     time.Duration
 	TaskStatistics
 }
 

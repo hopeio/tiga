@@ -708,7 +708,7 @@ func (d *Decoder) decodeMapFromMap(name string, dataVal reflect.Value, val refle
 			continue
 		}
 
-		// Next decode the data into the proper type
+		// next decode the data into the proper type
 		v := dataVal.MapIndex(k).Interface()
 		currentVal := reflect.Indirect(reflect.New(valElemType))
 		if err := d.decode(fieldName, v, currentVal); err != nil {
@@ -740,7 +740,7 @@ func (d *Decoder) decodeMapFromStruct(name string, dataVal reflect.Value, val re
 			continue
 		}
 
-		// Next get the actual value of this field and verify it is assignable
+		// next get the actual value of this field and verify it is assignable
 		// to the map value.
 		v := dataVal.Field(i)
 		if !v.Type().AssignableTo(valMap.Type().Elem()) {

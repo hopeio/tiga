@@ -34,3 +34,11 @@ func AddFloat32(addr *float32, delta float32) (new float32) {
 	}
 	return
 }
+
+func SubUint32(addr *uint32, delta uint32) (new uint32) {
+	return atomic.AddUint32(addr, ^uint32(delta-1))
+}
+
+func SubUint64(addr *uint64, delta uint64) (new uint64) {
+	return atomic.AddUint64(addr, ^uint64(delta-1))
+}

@@ -2,58 +2,82 @@ package list
 
 type Node[T any] struct {
 	Data T
-	Next *Node[T]
+	next *Node[T]
 }
 
 type List[T any] struct {
-	Head, Tail *Node[T]
-	Size       uint
+	head, tail *Node[T]
+	size       uint
 }
 
 func New[T any]() List[T] {
 	l := List[T]{}
-	l.Head = nil //head指向头部结点
-	l.Tail = nil //tail指向尾部结点
-	l.Size = 0
+	l.head = nil //head指向头部结点
+	l.tail = nil //tail指向尾部结点
+	l.size = 0
 	return l
 }
 
 func (l *List[T]) Len() uint {
-	return l.Size
+	return l.size
+}
+
+func (l *List[T]) Head() *Node[T] {
+	if l.size == 0 {
+		panic("list is empty")
+		return nil
+	}
+	return l.head
+}
+
+func (l *List[T]) Tail() *Node[T] {
+	if l.size == 0 {
+		panic("list is empty")
+		return nil
+	}
+	return l.tail
 }
 
 func (l *List[T]) First() T {
-	if l.Size == 0 {
+	if l.size == 0 {
 		panic("list is empty")
 		return *new(T)
 	}
-	return l.Head.Data
+	return l.head.Data
+}
+
+func (l *List[T]) Last() T {
+	if l.size == 0 {
+		panic("list is empty")
+		return *new(T)
+	}
+	return l.tail.Data
 }
 
 func (l *List[T]) Pop() T {
-	if l.Size == 0 {
+	if l.size == 0 {
 		panic("list is empty")
 		return *new(T)
 	}
 
-	p := l.Head
-	l.Head = p.Next
-	if l.Size == 1 {
-		l.Tail = nil
+	p := l.head
+	l.head = p.next
+	if l.size == 1 {
+		l.tail = nil
 	}
-	l.Size--
+	l.size--
 	return p.Data
 }
 
 func (l *List[T]) Push(v T) {
 	node := &Node[T]{v, nil}
-	if l.Size == 0 {
-		l.Head = node
-		l.Tail = node
-		l.Size++
+	if l.size == 0 {
+		l.head = node
+		l.tail = node
+		l.size++
 		return
 	}
-	l.Tail.Next = node
-	l.Tail = node
-	l.Size++
+	l.tail.next = node
+	l.tail = node
+	l.size++
 }

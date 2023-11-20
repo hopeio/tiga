@@ -33,7 +33,7 @@ type Engine[KEY comparable, T, W any] struct {
 	cancel                               context.CancelFunc   // 手动停止执行
 	wg                                   sync.WaitGroup       // 控制确保所有任务执行完
 	fixedWorker                          []chan *Task[KEY, T] // 固定只执行一种任务的worker,避免并发问题
-	speedLimit                           *rate2.SpeedLimiter
+	speedLimit                           rate2.SpeedLimiter
 	rateLimiter                          *rate.Limiter
 	//TODO
 	monitorInterval time.Duration // 全局检测定时器间隔时间，任务的卡住检测，worker panic recover都可以用这个检测
@@ -94,7 +94,7 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 		var readyTask *Task[KEY, T]
 	loop:
 		for {
-			if e.workerList.Size > 0 && len(e.taskList) > 0 {
+			if e.workerList.Len() > 0 && len(e.taskList) > 0 {
 				if readyWorkerCh == nil {
 					readyWorkerCh = e.workerList.Pop().taskCh
 				}
@@ -124,7 +124,7 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 					readyTask = nil
 				case <-timer.C:
 					//检测任务是否已空
-					if e.workerList.Size == uint(e.currentWorkerCount) && len(e.taskList) == 0 {
+					if e.workerList.Len() == uint(e.currentWorkerCount) && len(e.taskList) == 0 {
 						counter, _ := synci.WaitGroupState(&e.wg)
 						if counter == 1 {
 							emptyTimes++
@@ -191,8 +191,7 @@ func (e *Engine[KEY, T, W]) newWorker(readyTask *Task[KEY, T]) {
 				readyTask = <-taskChan
 				if readyTask != nil && readyTask.TaskFunc != nil {
 					if e.speedLimit != nil {
-						<-e.speedLimit.C
-						e.speedLimit.Reset()
+						e.speedLimit.Wait()
 					}
 					readyTask.TaskFunc(e.ctx)
 				}
