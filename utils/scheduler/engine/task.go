@@ -57,6 +57,7 @@ type TaskStatistics struct {
 }
 
 type Task[KEY comparable, P any] struct {
+	ctx context.Context
 	TaskMeta[KEY]
 	TaskFunc[KEY, P]
 	errs  []error

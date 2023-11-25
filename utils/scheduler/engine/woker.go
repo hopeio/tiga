@@ -1,6 +1,7 @@
 package engine
 
 import (
+	"context"
 	"time"
 )
 
@@ -18,6 +19,7 @@ type Worker[KEY comparable, T, W any] struct {
 	taskCh      chan *Task[KEY, T]
 	currentTask *Task[KEY, T]
 	isExecuting bool
+	ctx         context.Context
 	Props       W
 }
 

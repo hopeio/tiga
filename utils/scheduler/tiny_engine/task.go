@@ -8,6 +8,7 @@ import (
 type TaskFunc func(context.Context)
 
 type Task[KEY comparable, T any] struct {
+	ctx context.Context
 	TaskMeta[KEY]
 	TaskFunc
 	Props T

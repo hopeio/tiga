@@ -193,7 +193,10 @@ func (e *Engine[KEY, T, W]) newWorker(readyTask *Task[KEY, T]) {
 					if e.speedLimit != nil {
 						e.speedLimit.Wait()
 					}
-					readyTask.TaskFunc(e.ctx)
+					if readyTask.ctx == nil {
+						readyTask.ctx = e.ctx
+					}
+					readyTask.TaskFunc(readyTask.ctx)
 				}
 				atomic.AddUint64(&e.taskDoneCount, 1)
 				e.wg.Done()
@@ -276,7 +279,10 @@ func (e *Engine[KEY, T, W]) newFixedWorker(ch chan *Task[KEY, T], interval time.
 			if interval > 0 {
 				<-timer.C
 			}
-			task.TaskFunc(e.ctx)
+			if task.ctx == nil {
+				task.ctx = e.ctx
+			}
+			task.TaskFunc(task.ctx)
 			atomic.AddUint64(&e.taskDoneCount, 1)
 			e.wg.Done()
 		}

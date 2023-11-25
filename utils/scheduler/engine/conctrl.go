@@ -1,7 +1,6 @@
 package engine
 
 import (
-	"context"
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/hopeio/lemon/utils/generator"
@@ -13,9 +12,12 @@ import (
 )
 
 func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
-	e.lock.RLock()
+	e.lock.Lock()
 	if e.isRunning {
-		e.AddTasks(0, tasks...)
+		if len(tasks) > 0 {
+			e.AddTasks(0, tasks...)
+		}
+		e.lock.Unlock()
 		return
 	}
 	if !e.ran {
@@ -28,68 +30,72 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 		e.addWorker()
 		e.ran = true
 	}
-	e.lock.RUnlock()
-	go func() {
+
+	if !e.isRunning {
 		e.isRunning = true
-		timer := time.NewTimer(5 * time.Second)
-		defer timer.Stop()
-		var emptyTimes uint
-		var readyTaskCh chan *Task[KEY, T]
-		var readyTask *Task[KEY, T]
-	loop:
-		for {
-			if e.workerReadyList.Len() > 0 && len(e.taskReadyList) > 0 {
-				if readyTaskCh == nil {
-					readyTaskCh = e.workerReadyList.Pop().taskCh
-				}
-				if readyTask == nil {
-					readyTask = e.taskReadyList.Pop()
-				}
-			}
-
-			if len(e.taskReadyList) >= int(e.limitWaitTaskCount) {
-				select {
-				case readyWorker := <-e.workerChan:
-					e.workerReadyList.Push(readyWorker)
-				case readyTaskCh <- readyTask:
-					readyTaskCh = nil
-					readyTask = nil
-				case <-e.ctx.Done():
-					break loop
-				}
-			} else {
-				select {
-				case readyTaskTmp := <-e.taskChan:
-					e.taskReadyList.Push(readyTaskTmp)
-				case readyWorker := <-e.workerChan:
-					e.workerReadyList.Push(readyWorker)
-				case readyTaskCh <- readyTask:
-					readyTaskCh = nil
-					readyTask = nil
-				case <-timer.C:
-					//检测任务是否已空
-					if e.workerReadyList.Len() == uint(e.currentWorkerCount) && len(e.taskReadyList) == 0 {
-						counter, _ := synci.WaitGroupState(&e.wg)
-						if counter == 1 {
-							emptyTimes++
-							if emptyTimes > 2 {
-								log.Debug("任务即将结束")
-								e.isRunning = false
-								e.wg.Done()
-								break loop
-							}
-						}
-
+		go func() {
+			timer := time.NewTimer(5 * time.Second)
+			defer timer.Stop()
+			var emptyTimes uint
+			var readyTaskCh chan *Task[KEY, T]
+			var readyTask *Task[KEY, T]
+		loop:
+			for {
+				if e.workerReadyList.Len() > 0 && len(e.taskReadyList) > 0 {
+					if readyTaskCh == nil {
+						readyTaskCh = e.workerReadyList.Pop().taskCh
 					}
-					timer.Reset(e.monitorInterval)
-				case <-e.ctx.Done():
-					break loop
+					if readyTask == nil {
+						readyTask = e.taskReadyList.Pop()
+					}
+				}
+
+				if len(e.taskReadyList) >= int(e.limitWaitTaskCount) {
+					select {
+					case readyWorker := <-e.workerChan:
+						e.workerReadyList.Push(readyWorker)
+					case readyTaskCh <- readyTask:
+						readyTaskCh = nil
+						readyTask = nil
+					case <-e.ctx.Done():
+						break loop
+					}
+				} else {
+					select {
+					case readyTaskTmp := <-e.taskChan:
+						e.taskReadyList.Push(readyTaskTmp)
+					case readyWorker := <-e.workerChan:
+						e.workerReadyList.Push(readyWorker)
+					case readyTaskCh <- readyTask:
+						readyTaskCh = nil
+						readyTask = nil
+					case <-timer.C:
+						//检测任务是否已空
+						if e.workerReadyList.Len() == uint(e.currentWorkerCount) && len(e.taskReadyList) == 0 {
+							e.lock.Lock()
+							counter, _ := synci.WaitGroupState(&e.wg)
+							if counter == 1 {
+								emptyTimes++
+								if emptyTimes > 2 {
+									log.Debug("任务即将结束")
+									e.wg.Done()
+									e.isRunning = false
+									e.lock.Unlock()
+									break loop
+								}
+							}
+							e.lock.Unlock()
+						}
+						timer.Reset(e.monitorInterval)
+					case <-e.ctx.Done():
+						break loop
+					}
 				}
 			}
-		}
-	}()
-
+		}()
+	}
 	e.wg.Add(1)
+	e.lock.Unlock()
 	if len(tasks) > 0 {
 		e.AddTasks(0, tasks...)
 	}
@@ -122,13 +128,13 @@ func (e *Engine[KEY, T, W]) newWorker(readyTask *Task[KEY, T]) {
 			atomic.AddUint64(&e.currentWorkerCount, ^uint64(0))
 		}()
 		if readyTask != nil {
-			e.ExecTask(e.ctx, worker, readyTask)
+			e.ExecTask(worker, readyTask)
 		}
 		for {
 			select {
 			case e.workerChan <- worker:
 				readyTask = <-taskChan
-				e.ExecTask(e.ctx, worker, readyTask)
+				e.ExecTask(worker, readyTask)
 			case <-e.ctx.Done():
 				return
 			}
@@ -223,7 +229,7 @@ func (e *Engine[KEY, T, W]) newFixedWorker(worker *Worker[KEY, T, W], interval t
 			if interval > 0 {
 				<-timer.C
 			}
-			e.ExecTask(e.ctx, worker, task)
+			e.ExecTask(worker, task)
 		}
 	}()
 }
@@ -265,7 +271,7 @@ func (e *Engine[KEY, T, W]) Stop() {
 		close(worker.taskCh)
 	}
 	if e.speedLimit != nil {
-		e.speedLimit.Wait()
+		e.speedLimit.Stop()
 	}
 	e.done.Close()
 	for _, kindHandler := range e.kindHandler {
@@ -280,12 +286,15 @@ func (e *Engine[KEY, T, W]) Stop() {
 	}
 }
 
-func (e *Engine[KEY, T, W]) ExecTask(ctx context.Context, worker *Worker[KEY, T, W], task *Task[KEY, T]) {
+func (e *Engine[KEY, T, W]) ExecTask(worker *Worker[KEY, T, W], task *Task[KEY, T]) {
 	worker.isExecuting = true
 	worker.currentTask = task
 	if task != nil {
 		if task.TaskFunc != nil {
-			if !e.execTask(ctx, task) {
+			if task.ctx == nil {
+				task.ctx = e.ctx
+			}
+			if !e.execTask(task) {
 				atomic.AddUint64(&e.taskDoneCount, ^uint64(0))
 			}
 		}
@@ -295,13 +304,21 @@ func (e *Engine[KEY, T, W]) ExecTask(ctx context.Context, worker *Worker[KEY, T,
 	worker.isExecuting = false
 }
 
-func (e *Engine[KEY, T, W]) execTask(ctx context.Context, task *Task[KEY, T]) bool {
+func (e *Engine[KEY, T, W]) execTask(task *Task[KEY, T]) bool {
 
 	zeroKey := *new(KEY)
 	if task.Key != zeroKey {
 		if _, ok := e.done.Get(task.Key); ok {
 			return false
 		}
+	}
+
+	if e.speedLimit != nil {
+		e.speedLimit.Wait()
+	}
+
+	if e.rateLimiter != nil {
+		e.rateLimiter.Wait(task.ctx)
 	}
 
 	var kindHandler *KindHandler[KEY, T]
@@ -318,19 +335,11 @@ func (e *Engine[KEY, T, W]) execTask(ctx context.Context, task *Task[KEY, T]) bo
 			kindHandler.speedLimit.Wait()
 		}
 		if kindHandler.rateLimiter != nil {
-			_ = kindHandler.rateLimiter.Wait(ctx)
+			_ = kindHandler.rateLimiter.Wait(task.ctx)
 		}
 	}
 
-	if e.speedLimit != nil {
-		e.speedLimit.Wait()
-	}
-
-	if e.rateLimiter != nil {
-		e.rateLimiter.Wait(ctx)
-	}
-
-	tasks, err := task.TaskFunc(ctx)
+	tasks, err := task.TaskFunc(task.ctx)
 	if err != nil {
 		task.errTimes++
 		task.errs = append(task.errs, err)
@@ -361,7 +370,12 @@ func (e *Engine[KEY, T, W]) Cancel() {
 
 }
 
-func (e *Engine[KEY, T, W]) StopAfter(interval time.Duration) *Engine[KEY, T, W] {
+func (e *Engine[KEY, T, W]) CancelAfter(interval time.Duration) *Engine[KEY, T, W] {
 	time.AfterFunc(interval, e.Cancel)
+	return e
+}
+
+func (e *Engine[KEY, T, W]) StopAfter(interval time.Duration) *Engine[KEY, T, W] {
+	time.AfterFunc(interval, e.Stop)
 	return e
 }
