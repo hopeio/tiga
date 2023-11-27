@@ -237,7 +237,9 @@ func (e *Engine[KEY, T, W]) AddTasks(tasks ...*Task[KEY, T]) {
 	e.wg.Add(len(tasks))
 	for _, task := range tasks {
 		if task == nil {
-			task = &Task[KEY, T]{TaskFunc: emptyTaskFunc[KEY, T]}
+			atomic.AddUint64(&e.taskTotalCount, ^uint64(0))
+			e.wg.Done()
+			continue
 		}
 		task.id = generator.GenOrderID()
 		e.taskChan <- task
@@ -299,7 +301,9 @@ func (e *Engine[KEY, T, W]) AddFixedTasks(workerId int, tasks ...*Task[KEY, T]) 
 	e.wg.Add(l)
 	for _, task := range tasks {
 		if task == nil {
-			task = &Task[KEY, T]{TaskFunc: emptyTaskFunc[KEY, T]}
+			atomic.AddUint64(&e.taskTotalCount, ^uint64(0))
+			e.wg.Done()
+			continue
 		}
 		task.id = generator.GenOrderID()
 		ch <- task

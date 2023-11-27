@@ -30,7 +30,7 @@ type Engine[KEY comparable, T, W any] struct {
 	workers                              []*Worker[KEY, T, W]
 	workerReadyList                      list.List[*Worker[KEY, T, W]]
 	taskChan                             chan *Task[KEY, T]
-	taskReadyList                        heap.Heap[*Task[KEY, T], Tasks[KEY, T]]
+	taskReadyHeap                        heap.Heap[*Task[KEY, T], Tasks[KEY, T]]
 	ctx                                  context.Context
 	cancel                               context.CancelFunc   // 手动停止执行
 	wg                                   sync.WaitGroup       // 控制确保所有任务执行完
@@ -38,13 +38,12 @@ type Engine[KEY comparable, T, W any] struct {
 	speedLimit                           rate2.SpeedLimiter
 	rateLimiter                          *rate.Limiter
 	//TODO
-	monitorInterval            time.Duration // 全局检测定时器间隔时间，任务的卡住检测，worker panic recover都可以用这个检测
-	isRunning, isFinished, ran bool
-	lock                       sync.RWMutex
+	monitorInterval              time.Duration // 全局检测定时器间隔时间，任务的卡住检测，worker panic recover都可以用这个检测
+	isRunning, isFinished, isRan bool
+	lock                         sync.RWMutex
 	EngineStatistics
-	done *ristretto.Cache
-	//TasksChan   chan []*Task[KEY, T]
-	kindHandler  []*KindHandler[KEY, T]
+	done         *ristretto.Cache
+	kindHandlers []*KindHandler[KEY, T]
 	errHandler   func(task *Task[KEY, T])
 	errChan      chan *Task[KEY, T]
 	stopCallBack []func()
@@ -79,7 +78,7 @@ func NewEngineWithContext[KEY comparable, T, W any](workerCount uint, ctx contex
 		workerChan:         make(chan *Worker[KEY, T, W]),
 		taskChan:           make(chan *Task[KEY, T]),
 		workerReadyList:    list.New[*Worker[KEY, T, W]](),
-		taskReadyList:      heap.Heap[*Task[KEY, T], Tasks[KEY, T]]{},
+		taskReadyHeap:      heap.Heap[*Task[KEY, T], Tasks[KEY, T]]{},
 		monitorInterval:    time.Second,
 		done:               cache,
 		errHandler: func(task *Task[KEY, T]) {
@@ -96,17 +95,17 @@ func (e *Engine[KEY, T, W]) Context() context.Context {
 
 func (e *Engine[KEY, T, W]) SkipKind(kinds ...Kind) *Engine[KEY, T, W] {
 	length := slices.Max(kinds) + 1
-	if e.kindHandler == nil {
-		e.kindHandler = make([]*KindHandler[KEY, T], length)
+	if e.kindHandlers == nil {
+		e.kindHandlers = make([]*KindHandler[KEY, T], length)
 	}
-	if int(length) > len(e.kindHandler) {
-		e.kindHandler = append(e.kindHandler, make([]*KindHandler[KEY, T], int(length)-len(e.kindHandler))...)
+	if int(length) > len(e.kindHandlers) {
+		e.kindHandlers = append(e.kindHandlers, make([]*KindHandler[KEY, T], int(length)-len(e.kindHandlers))...)
 	}
 	for _, kind := range kinds {
-		if e.kindHandler[kind] == nil {
-			e.kindHandler[kind] = &KindHandler[KEY, T]{Skip: true}
+		if e.kindHandlers[kind] == nil {
+			e.kindHandlers[kind] = &KindHandler[KEY, T]{Skip: true}
 		} else {
-			e.kindHandler[kind].Skip = true
+			e.kindHandlers[kind].Skip = true
 		}
 
 	}
@@ -182,16 +181,16 @@ func (e *Engine[KEY, T, W]) KindRandSpeedLimit(kind Kind, minInterval, maxInterv
 }
 
 func (e *Engine[KEY, T, W]) kindSpeedLimit(kind Kind, limiter rate2.SpeedLimiter) *Engine[KEY, T, W] {
-	if e.kindHandler == nil {
-		e.kindHandler = make([]*KindHandler[KEY, T], int(kind)+1)
+	if e.kindHandlers == nil {
+		e.kindHandlers = make([]*KindHandler[KEY, T], int(kind)+1)
 	}
-	if int(kind)+1 > len(e.kindHandler) {
-		e.kindHandler = append(e.kindHandler, make([]*KindHandler[KEY, T], int(kind)+1-len(e.kindHandler))...)
+	if int(kind)+1 > len(e.kindHandlers) {
+		e.kindHandlers = append(e.kindHandlers, make([]*KindHandler[KEY, T], int(kind)+1-len(e.kindHandlers))...)
 	}
-	if e.kindHandler[kind] == nil {
-		e.kindHandler[kind] = &KindHandler[KEY, T]{speedLimit: limiter}
+	if e.kindHandlers[kind] == nil {
+		e.kindHandlers[kind] = &KindHandler[KEY, T]{speedLimit: limiter}
 	} else {
-		e.kindHandler[kind].speedLimit = limiter
+		e.kindHandlers[kind].speedLimit = limiter
 	}
 	return e
 }
@@ -224,16 +223,16 @@ func (e *Engine[KEY, T, W]) KindLimiter(kind Kind, r rate.Limit, b int) *Engine[
 }
 
 func (e *Engine[KEY, T, W]) kindLimiter(kind Kind, r rate.Limit, b int) {
-	if e.kindHandler == nil {
-		e.kindHandler = make([]*KindHandler[KEY, T], int(kind)+1)
+	if e.kindHandlers == nil {
+		e.kindHandlers = make([]*KindHandler[KEY, T], int(kind)+1)
 	}
-	if int(kind)+1 > len(e.kindHandler) {
-		e.kindHandler = append(e.kindHandler, make([]*KindHandler[KEY, T], int(kind)+1-len(e.kindHandler))...)
+	if int(kind)+1 > len(e.kindHandlers) {
+		e.kindHandlers = append(e.kindHandlers, make([]*KindHandler[KEY, T], int(kind)+1-len(e.kindHandlers))...)
 	}
-	if e.kindHandler[kind] == nil {
-		e.kindHandler[kind] = &KindHandler[KEY, T]{rateLimiter: rate.NewLimiter(r, b)}
+	if e.kindHandlers[kind] == nil {
+		e.kindHandlers[kind] = &KindHandler[KEY, T]{rateLimiter: rate.NewLimiter(r, b)}
 	} else {
-		e.kindHandler[kind].rateLimiter = rate.NewLimiter(r, b)
+		e.kindHandlers[kind].rateLimiter = rate.NewLimiter(r, b)
 	}
 }
 

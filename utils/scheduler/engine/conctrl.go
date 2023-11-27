@@ -20,7 +20,7 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 		e.lock.Unlock()
 		return
 	}
-	if !e.ran {
+	if !e.isRan {
 		go func() {
 			for task := range e.errChan {
 				e.taskErrCount++
@@ -28,7 +28,7 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 			}
 		}()
 		e.addWorker()
-		e.ran = true
+		e.isRan = true
 	}
 
 	if !e.isRunning {
@@ -41,16 +41,16 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 			var readyTask *Task[KEY, T]
 		loop:
 			for {
-				if e.workerReadyList.Len() > 0 && len(e.taskReadyList) > 0 {
+				if e.workerReadyList.Len() > 0 && len(e.taskReadyHeap) > 0 {
 					if readyTaskCh == nil {
 						readyTaskCh = e.workerReadyList.Pop().taskCh
 					}
 					if readyTask == nil {
-						readyTask = e.taskReadyList.Pop()
+						readyTask = e.taskReadyHeap.Pop()
 					}
 				}
 
-				if len(e.taskReadyList) >= int(e.limitWaitTaskCount) {
+				if len(e.taskReadyHeap) >= int(e.limitWaitTaskCount) {
 					select {
 					case readyWorker := <-e.workerChan:
 						e.workerReadyList.Push(readyWorker)
@@ -63,7 +63,7 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 				} else {
 					select {
 					case readyTaskTmp := <-e.taskChan:
-						e.taskReadyList.Push(readyTaskTmp)
+						e.taskReadyHeap.Push(readyTaskTmp)
 					case readyWorker := <-e.workerChan:
 						e.workerReadyList.Push(readyWorker)
 					case readyTaskCh <- readyTask:
@@ -71,7 +71,7 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 						readyTask = nil
 					case <-timer.C:
 						//检测任务是否已空
-						if e.workerReadyList.Len() == uint(e.currentWorkerCount) && len(e.taskReadyList) == 0 {
+						if e.workerReadyList.Len() == uint(e.currentWorkerCount) && len(e.taskReadyHeap) == 0 {
 							e.lock.Lock()
 							counter, _ := synci.WaitGroupState(&e.wg)
 							if counter == 1 {
@@ -100,11 +100,6 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 		e.AddTasks(0, tasks...)
 	}
 	e.wg.Wait()
-	if e.stopCallBack != nil {
-		for _, callBack := range e.stopCallBack {
-			callBack()
-		}
-	}
 	e.isFinished = true
 	log.Infof("任务结束,total:%d,done:%d,failed:%d", e.taskTotalCount, e.taskDoneCount, e.taskFailedCount)
 }
@@ -179,6 +174,7 @@ func (e *Engine[KEY, T, W]) AddTasks(generation int, tasks ...*Task[KEY, T]) {
 		// 如果task为nil,补一个什么都不做的task,为了减少atomic.AddUint64和e.wg.Add的调用次数
 		if task == nil {
 			atomic.AddUint64(&e.taskTotalCount, ^uint64(0))
+			e.wg.Done()
 			continue
 		}
 		task.Priority += generation
@@ -246,6 +242,7 @@ func (e *Engine[KEY, T, W]) AddFixedTasks(workerId int, generation int, tasks ..
 	for _, task := range tasks {
 		if task == nil {
 			atomic.AddUint64(&e.taskTotalCount, ^uint64(0))
+			e.wg.Done()
 			continue
 		}
 		task.Priority += generation
@@ -264,6 +261,7 @@ func (e *Engine[KEY, T, W]) Stop() {
 	e.cancel()
 	close(e.workerChan)
 	close(e.taskChan)
+	close(e.errChan)
 	for _, worker := range e.workers {
 		close(worker.taskCh)
 	}
@@ -274,7 +272,7 @@ func (e *Engine[KEY, T, W]) Stop() {
 		e.speedLimit.Stop()
 	}
 	e.done.Close()
-	for _, kindHandler := range e.kindHandler {
+	for _, kindHandler := range e.kindHandlers {
 		if kindHandler != nil {
 			if kindHandler.speedLimit != nil {
 				kindHandler.speedLimit.Stop()
@@ -283,6 +281,10 @@ func (e *Engine[KEY, T, W]) Stop() {
 				kindHandler.rateLimiter = nil
 			}
 		}
+	}
+
+	for _, callback := range e.stopCallBack {
+		callback()
 	}
 }
 
@@ -322,8 +324,8 @@ func (e *Engine[KEY, T, W]) execTask(task *Task[KEY, T]) bool {
 	}
 
 	var kindHandler *KindHandler[KEY, T]
-	if e.kindHandler != nil && int(task.Kind) < len(e.kindHandler) {
-		kindHandler = e.kindHandler[task.Kind]
+	if e.kindHandlers != nil && int(task.Kind) < len(e.kindHandlers) {
+		kindHandler = e.kindHandlers[task.Kind]
 	}
 
 	if kindHandler != nil {
