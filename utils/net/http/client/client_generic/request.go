@@ -92,7 +92,8 @@ func (req *Request[RES]) LogLevel(lvl client.LogLevel) *Request[RES] {
 	return req
 }
 
-func (req *Request[RES]) ResponseHandler(handler func([]byte) ([]byte, error)) *Request[RES] {
+// handler 返回值:是否重试,返回数据,错误
+func (req *Request[RES]) ResponseHandler(handler func(response *http.Response) (retry bool, data []byte, err error)) *Request[RES] {
 	(*client.Request)(req).ResponseHandler(handler)
 	return req
 }

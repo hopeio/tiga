@@ -100,7 +100,7 @@ type Request struct {
 	cachedHeaderKey    string
 
 	// response
-	responseHandler func(response []byte) ([]byte, error)
+	responseHandler func(response *http.Response) (retry bool, data []byte, err error)
 
 	// config
 	logger   LogCallback
@@ -196,7 +196,8 @@ func (req *Request) LogLevel(lvl LogLevel) *Request {
 	return req
 }
 
-func (req *Request) ResponseHandler(handler func([]byte) ([]byte, error)) *Request {
+// handler 返回值:是否重试,返回数据,错误
+func (req *Request) ResponseHandler(handler func(response *http.Response) (retry bool, data []byte, err error)) *Request {
 	req.responseHandler = handler
 	return req
 }
@@ -294,7 +295,7 @@ func (req *Request) Do(param, response interface{}) error {
 	}
 	var body io.Reader
 	var reqBody, respBody *Body
-	var statusCode int
+	var statusCode, reqTimes int
 	var err error
 	reqTime := time.Now()
 	// 日志记录
@@ -358,33 +359,49 @@ func (req *Request) Do(param, response interface{}) error {
 	}
 
 	var resp *http.Response
-	resp, err = req.client.Do(request)
-	if err != nil {
-		if req.retryTimes == 0 {
-			return err
+Retry:
+	if reqTimes > 0 {
+		if req.retryInterval != 0 {
+			time.Sleep(req.retryInterval)
 		}
-		for i := 0; i < req.retryTimes; i++ {
-			if req.retryInterval != 0 {
-				time.Sleep(req.retryInterval)
-			}
-			if req.retryHandler != nil {
-				req.retryHandler(req)
-			}
-			reqTime = time.Now()
-			if reqBody != nil {
-				request.Body = io.NopCloser(bytes.NewReader(reqBody.Data))
-			}
-			resp, err = req.client.Do(request)
-			if err == nil {
-				break
-			} else if req.logLevel > LogLevelSilent {
-				req.logger(url, method, req.AuthUser, reqBody, respBody, statusCode, time.Since(reqTime), errors.New(err.Error()+";will retry"))
-			}
+		if req.retryHandler != nil {
+			req.retryHandler(req)
 		}
-		if err != nil {
-			return err
+		reqTime = time.Now()
+		if reqBody != nil && reqBody.Data != nil {
+			request.Body = io.NopCloser(bytes.NewReader(reqBody.Data))
 		}
 	}
+	resp, err = req.client.Do(request)
+	reqTimes++
+	if err != nil {
+		if req.retryTimes == 0 || reqTimes == req.retryTimes {
+			return err
+		} else {
+			if req.logLevel > LogLevelSilent {
+				req.logger(url, method, req.AuthUser, reqBody, respBody, statusCode, time.Since(reqTime), errors.New(err.Error()+";will retry"))
+			}
+			goto Retry
+		}
+	}
+
+	respBody = &Body{}
+	if resp.StatusCode < 200 || resp.StatusCode > 300 {
+		respBody.ContentType = ContentTypeText
+		if resp.StatusCode == http.StatusNotFound {
+			err = errors.New("not found")
+		} else {
+			var msg []byte
+			msg, err = io.ReadAll(resp.Body)
+			resp.Body.Close()
+			if err != nil {
+				return err
+			}
+			err = errors.New("status:" + resp.Status + " " + stringsi.ConvertUnicode(msg))
+		}
+		return err
+	}
+
 	if httpresp, ok := response.(**http.Response); ok {
 		*httpresp = resp
 		return err
@@ -394,9 +411,7 @@ func (req *Request) Do(param, response interface{}) error {
 	if resp.Header.Get(httpi.HeaderContentEncoding) == "gzip" {
 		reader, err = gzip.NewReader(resp.Body)
 		if err != nil {
-			if resp != nil {
-				resp.Body.Close()
-			}
+			resp.Body.Close()
 			return err
 		}
 	} else {
@@ -406,26 +421,25 @@ func (req *Request) Do(param, response interface{}) error {
 		*httpresp = reader
 		return err
 	}
-	respBody = &Body{}
-	var respBytes []byte
-	respBytes, err = io.ReadAll(reader)
-	if err != nil {
-		return err
-	}
-	resp.Body.Close()
 	statusCode = resp.StatusCode
-	if resp.StatusCode < 200 || resp.StatusCode > 300 {
-		respBody.ContentType = ContentTypeText
-		if resp.StatusCode == http.StatusNotFound {
-			err = errors.New("not found")
-		} else {
-			err = errors.New("status:" + resp.Status + " " + stringsi.ConvertUnicode(respBytes))
-		}
-		return err
-	}
 
+	var respBytes []byte
 	if req.responseHandler != nil {
-		respBytes, err = req.responseHandler(respBytes)
+		var retry bool
+		retry, respBytes, err = req.responseHandler(resp)
+		resp.Body.Close()
+		if err != nil {
+			return err
+		}
+		if retry {
+			if req.logLevel > LogLevelSilent {
+				req.logger(url, method, req.AuthUser, reqBody, respBody, statusCode, time.Since(reqTime), errors.New("will retry"))
+			}
+			goto Retry
+		}
+	} else {
+		respBytes, err = io.ReadAll(reader)
+		resp.Body.Close()
 		if err != nil {
 			return err
 		}

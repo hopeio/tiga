@@ -15,7 +15,7 @@ func AESCBCEncrypt(origData, key, iv []byte) ([]byte, error) {
 		return nil, err
 	}
 	blockSize := block.BlockSize()
-	origData = pkcs7Padding(origData, blockSize)
+	origData = Pkcs7Padding(origData, blockSize)
 	blockMode := cipher.NewCBCEncrypter(block, iv[:blockSize])
 	crypted := make([]byte, len(origData))
 	blockMode.CryptBlocks(crypted, origData)
@@ -39,7 +39,7 @@ func AESCBCDecrypt(crypted, key, iv []byte) ([]byte, error) {
 	return origData, nil
 }
 
-func pkcs7Padding(cipherText []byte, blockSize int) []byte {
+func Pkcs7Padding(cipherText []byte, blockSize int) []byte {
 	padding := blockSize - len(cipherText)%blockSize
 	padText := bytes.Repeat([]byte{byte(padding)}, padding)
 	return append(cipherText, padText...)
@@ -56,32 +56,32 @@ func UnPadding(origData []byte) []byte {
 	return origData[:(length - unPadding)]
 }
 
-func pkcs5Padding(cipherText []byte, blockSize int) []byte {
-	return pkcs7Padding(cipherText, 8)
+func Pkcs5Padding(cipherText []byte, blockSize int) []byte {
+	return Pkcs7Padding(cipherText, 8)
 }
 
 func AesECBEncrypt(data, key []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
+	cipher, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
-	blockSize := block.BlockSize()
-	origData := PKCS5Padding(data, blockSize)
-	ecb := NewECBEncrypter(block)
+	blockSize := cipher.BlockSize()
+	origData := Pkcs7Padding(data, blockSize)
+	ecb := NewECBEncrypter(cipher)
 	crypted := make([]byte, len(origData))
 	ecb.CryptBlocks(crypted, origData)
 	return crypted, nil
 }
 
 func AesECBDecrypt(crypted, key []byte) ([]byte, error) {
-	block, err := aes.NewCipher(key)
+	cipher, err := aes.NewCipher(key)
 	if err != nil {
 		return nil, err
 	}
-	blockMode := NewECBDecrypter(block)
-	origData := make([]byte, len(crypted))
+	blockMode := NewECBDecrypter(cipher)
+	origData := make([]byte, len(crypted)-len(crypted)%cipher.BlockSize())
 	blockMode.CryptBlocks(origData, crypted)
-	origData = PKCS5UnPadding(origData)
+	origData = UnPadding(origData)
 	return origData, nil
 }
 
@@ -128,27 +128,15 @@ func NewECBDecrypter(b cipher.Block) cipher.BlockMode {
 }
 func (x *ecbDecrypter) BlockSize() int { return x.blockSize }
 func (x *ecbDecrypter) CryptBlocks(dst, src []byte) {
-	if len(src)%x.blockSize != 0 {
-		panic("crypto/cipher: input not full blocks")
-	}
-	if len(dst) < len(src) {
-		panic("crypto/cipher: output smaller than input")
-	}
-	for len(src) > 0 {
+	/*	if len(src)%x.blockSize != 0 {
+			panic("crypto/cipher: input not full blocks")
+		}
+		if len(dst) < len(src) {
+			panic("crypto/cipher: output smaller than input")
+		}*/
+	for len(src) >= x.blockSize {
 		x.b.Decrypt(dst, src[:x.blockSize])
 		src = src[x.blockSize:]
 		dst = dst[x.blockSize:]
 	}
-}
-
-func PKCS5Padding(ciphertext []byte, blockSize int) []byte {
-	padding := blockSize - len(ciphertext)%blockSize
-	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(ciphertext, padtext...)
-}
-
-func PKCS5UnPadding(origData []byte) []byte {
-	length := len(origData)
-	unpadding := int(origData[length-1])
-	return origData[:(length - unpadding)]
 }

@@ -7,6 +7,8 @@ import (
 	"github.com/hopeio/lemon/utils/crypto"
 	em3u8 "github.com/hopeio/lemon/utils/encoding/m3u8"
 	"github.com/hopeio/lemon/utils/net/http/client"
+	"io"
+	"net/http"
 	"net/url"
 )
 
@@ -53,11 +55,19 @@ func FromURL(link string) (*Result, error) {
 			keyURL := key.URI
 			keyURL = client.ResolveURL(u, keyURL)
 			var keyByte client.RawBytes
-			err = client.DefaultHeaderRequest().RetryTimes(20).DisableLog().Get(keyURL, &keyByte)
+			err = client.DefaultHeaderRequest().RetryTimes(20).DisableLog().ResponseHandler(func(response *http.Response) (retry bool, data []byte, err error) {
+				data, err = io.ReadAll(response.Body)
+				if err != nil {
+					return false, nil, err
+				}
+				if bytesp.HasPrefix(data, []byte("<html>")) {
+					return true, nil, nil
+				}
+				return false, data, err
+			}).Get(keyURL, &keyByte)
 			if err != nil {
 				return nil, fmt.Errorf("request m3u8 URL failed: %s", err.Error())
 			}
-
 			fmt.Println("decryption key: ", string(keyByte))
 			result.Keys[idx] = string(keyByte)
 		default:
@@ -77,13 +87,21 @@ func (r *Result) Download(segIndex int) ([]byte, error) {
 	tsUrl := client.ResolveURL(r.URL, sf.URI)
 
 	var bytes client.RawBytes
-	err := client.DefaultHeaderRequest().DisableLog().Get(tsUrl, &bytes)
+	err := client.DefaultHeaderRequest().DisableLog().ResponseHandler(func(response *http.Response) (retry bool, data []byte, err error) {
+		data, err = io.ReadAll(response.Body)
+		if err != nil {
+			return false, nil, err
+		}
+		if len(data) == 0 {
+			return false, data, errors.New("empty response body")
+		}
+		if bytesp.HasPrefix(data, []byte("<html>")) {
+			return true, nil, nil
+		}
+		return false, data, err
+	}).Get(tsUrl, &bytes)
 	if err != nil {
 		return nil, fmt.Errorf("request %s, %s", tsUrl, err.Error())
-	}
-
-	if bytesp.HasPrefix(bytes, []byte("<html>")) {
-		return nil, errors.New(string(bytes))
 	}
 
 	key, ok := r.Keys[sf.KeyIndex]
