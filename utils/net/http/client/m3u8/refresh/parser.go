@@ -63,6 +63,9 @@ func FromURL(link string) (*Result, error) {
 				if bytesp.HasPrefix(data, []byte("<html>")) {
 					return true, nil, nil
 				}
+				if len(data) == 0 {
+					return false, nil, fmt.Errorf("no key")
+				}
 				return false, data, err
 			}).Get(keyURL, &keyByte)
 			if err != nil {

@@ -11,6 +11,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -111,6 +112,9 @@ func (d *Downloader) GetResponse() (*http.Response, error) {
 		resp, err = d.Client.Do(d.Request)
 		if err != nil {
 			log.Warn(err, "url:", d.Request.URL.Path)
+			if strings.HasPrefix(err.Error(), "dial tcp: lookup") {
+				return nil, err
+			}
 			continue
 		}
 		if resp.StatusCode < 200 || resp.StatusCode > 299 {
