@@ -120,54 +120,6 @@ defer initialize.Start(Conf, nil)()
 支持http及fasthttp,并支持自定义的请求类型
 ![context](_readme/assets/context.webp)
 
-## [pick框架](https://github.com/actliboy/pick)
-一个简单的易于开发的http api服务器,灵感来自于grpc和springmvc,基于反射自动注入
-```go
-
-package main
-
-import (
-	"github.com/hopeio/lemon/pick"
-	"github.com/hopeio/lemon/utils/log"
-)
-
-func init(){
-    pick.RegisterService(&service.UserService{},&other.Service{})
-}
-
-type UserService struct{}
-//需要实现Service方法，返回该服务的说明，url前缀，以及需要的中间件
-func (*UserService) Service() (string, string, []http.HandlerFunc) {
-return "用户相关", "/api/user", []http.HandlerFunc{middleware.Log}
-}
-
-
-func (*UserService) Add(ctx *model.Claims, req *model.SignupReq) (*model.User, error) {
-	pick.Api(func() {
-            pick.Method(http.MethodPost).//定义请求的方法
-            Title("用户注册").//接口描述
-            Middleware(nil).//中间件
-            //接口迭代信息
-            CreateLog("1.0.0", "jyb", "2019/12/16", "创建").//创建，唯一
-            ChangeLog("1.0.1", "jyb", "2019/12/16", "修改测试").//变更，可有多个
-            End()
-	})
-
-	return &model.User{Name: "测试"}, nil
-}
-
-func main() {
-    router := pick.NewRouter(true)
-    router.ServeFiles("/static", "E:/")
-    log.Info("visit http://localhost:8080")
-    log.Fatal(http.ListenAndServe(":8080", router))
-}
-
-```
-上面代码将会自动创建POST /api/user/add 路由
-
-pick的路由基于httprouter改造,如不想使用，pick同时兼容gin,fiber(fasthttp),底层可选择。
-
 ## server
 lemon服务器，各种服务接口的保留，集成支持，一个服务暴露grpc,http,graphql接口
 - 集成opencensus实现调用链路跟踪记录，配合context及utils-log 实现完整的请求链路日志记录
@@ -179,7 +131,6 @@ lemon服务器，各种服务接口的保留，集成支持，一个服务暴露
 package main
 
 import (
-	"github.com/hopeio/lemon/pick"
 	"github.com/hopeio/lemon/utils/net/http/gin/handler"
 	"net/http"
 	"time"
@@ -208,7 +159,6 @@ func main() {
 	if err := view.Register(ocgrpc.DefaultClientViews...); err != nil {
 		log.Fatal(err)
 	}
-	pick.RegisterService(userservice.GetUserService())
 	server.Start(&server.Server{
 		//为了可以自定义中间件
 		GRPCOptions: []grpc.ServerOption{
@@ -222,7 +172,6 @@ func main() {
 		GinHandle: func(app *gin.Engine) {
 			_ = user.RegisterUserServiceHandlerServer(app, userservice.GetUserService())
 			app.Static("/static", "F:/upload")
-			pick.Gin(app, true, initialize.GlobalConfig.Module)
 		},
         /*	GraphqlResolve: model.NewExecutableSchema(model.Config{
                 Resolvers: &model.GQLServer{

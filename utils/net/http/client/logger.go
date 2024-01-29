@@ -11,8 +11,8 @@ type LogLevel int8
 
 const (
 	LogLevelSilent LogLevel = iota
-	LogLevelInfo
 	LogLevelError
+	LogLevelInfo
 )
 
 type Body struct {

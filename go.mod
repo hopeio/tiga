@@ -6,7 +6,7 @@ toolchain go1.21.0
 
 require (
 	bou.ke/monkey v1.0.2
-	github.com/99designs/gqlgen v0.17.40
+	github.com/99designs/gqlgen v0.17.43
 	github.com/IBM/sarama v1.42.1
 	github.com/alta/protopatch v0.5.3
 	github.com/aws/aws-sdk-go v1.47.2
@@ -84,6 +84,7 @@ require (
 	github.com/jhump/protoreflect v1.15.3
 	github.com/lni/dragonboat/v4 v4.0.0-20230922120309-657304aedc15
 	github.com/lni/goutils v1.3.1-0.20220604063047-388d67b4dbc4
+	github.com/lxn/win v0.0.0-20210218163916-a377121e959e
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f
 	github.com/mwitkow/grpc-proxy v0.0.0-20230212185441-f345521cb9c9
 	github.com/nacos-group/nacos-sdk-go/v2 v2.2.3
@@ -93,7 +94,7 @@ require (
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/pflag v1.0.5
 	github.com/urfave/cli/v2 v2.25.7
-	github.com/vektah/gqlparser/v2 v2.5.10
+	github.com/vektah/gqlparser/v2 v2.5.11
 	golang.org/x/exp v0.0.0-20231006140011-7918f672742d
 	golang.org/x/image v0.14.0
 	golang.org/x/text v0.14.0
@@ -184,6 +185,7 @@ require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
 	github.com/jackc/pgx/v5 v5.5.0 // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/jcmturner/aescts/v2 v2.0.0 // indirect
 	github.com/jcmturner/dnsutils/v2 v2.0.0 // indirect
 	github.com/jcmturner/gofork v1.7.6 // indirect
@@ -262,10 +264,10 @@ require (
 	go.mongodb.org/mongo-driver v1.13.0 // indirect
 	go.uber.org/mock v0.3.0 // indirect
 	golang.org/x/arch v0.6.0 // indirect
-	golang.org/x/crypto v0.15.0 // indirect
+	golang.org/x/crypto v0.18.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
 	golang.org/x/sync v0.5.0 // indirect
-	golang.org/x/sys v0.14.0 // indirect
+	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
 	google.golang.org/api v0.150.0 // indirect
 	google.golang.org/appengine v1.6.8 // indirect

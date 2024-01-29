@@ -22,12 +22,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// fiber(fasthttp)
-	/*	app := fiber.New()
-		pick.RegisterFiberService(service.GetUserService())
-		pick.FiberWithCtx(app, true, initialize.GlobalConfig.Module)
-		go app.Listen(":3000")*/
-
 	server.Start(&server.Server{
 		Config: conf.Conf.Server.Origin(),
 		//为了可以自定义中间件
