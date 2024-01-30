@@ -1,16 +1,14 @@
 package binding
 
 import (
-	stringsi "github.com/hopeio/tiga/utils/strings"
 	"reflect"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gofiber/fiber/v2"
 )
 
 type paramSource gin.Params
 
-var _ setter = paramSource(nil)
+var _ Setter = paramSource(nil)
 
 func (param paramSource) Peek(key string) ([]string, bool) {
 	for i := range param {
@@ -22,18 +20,6 @@ func (param paramSource) Peek(key string) ([]string, bool) {
 }
 
 // TrySet tries to set a value by request's form source (like map[string][]string)
-func (param paramSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt setOptions) (isSetted bool, err error) {
-	return setByKV(value, field, param, tagValue, opt)
-}
-
-type Ctx fiber.Ctx
-
-func (c *Ctx) Peek(key string) ([]string, bool) {
-	ctx := (*fiber.Ctx)(c)
-	v := stringsi.BytesToString(ctx.Request().URI().QueryArgs().Peek(key))
-	if v != "" {
-		return []string{v}, true
-	}
-	v = ctx.Params(key)
-	return []string{v}, v != ""
+func (param paramSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt SetOptions) (isSetted bool, err error) {
+	return SetByKV(value, field, param, tagValue, opt)
 }

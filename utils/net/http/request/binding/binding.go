@@ -5,9 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gofiber/fiber/v2"
 	"github.com/hopeio/tiga/utils/verification/validator"
-	"github.com/valyala/fasthttp"
 )
 
 const (
@@ -22,7 +20,7 @@ const (
 	MIMEMSGPACK           = "application/x-msgpack"
 	MIMEMSGPACK2          = "application/msgpack"
 	MIMEYAML              = "application/x-yaml"
-	tag                   = "json"
+	Tag                   = "json"
 )
 
 // Binding describes the interface which needs to be implemented for binding the
@@ -32,8 +30,6 @@ type Binding interface {
 	Name() string
 	Bind(*http.Request, interface{}) error
 	GinBind(*gin.Context, interface{}) error
-	FasthttpBind(*fasthttp.Request, interface{}) error
-	FiberBind(*fiber.Ctx, interface{}) error
 }
 
 // BindingBody adds BindBody method to Binding. BindBody is similar with GinBind,
@@ -67,7 +63,6 @@ var (
 	ProtoBuf      = protobufBinding{}
 	MsgPack       = msgpackBinding{}
 	YAML          = yamlBinding{}
-	Uri           = uriBinding{}
 	Header        = headerBinding{}
 )
 
@@ -96,6 +91,6 @@ func Default(method string, contentType []byte) Binding {
 	}
 }
 
-func validate(obj interface{}) error {
-	return validator.Validate(obj)
+func Validate(obj interface{}) error {
+	return Validator.ValidateStruct(obj)
 }

@@ -1,7 +1,3 @@
-// Copyright 2019 Gin Core Team.  All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package binding
 
 import (
@@ -9,42 +5,22 @@ import (
 	"mime/multipart"
 	"net/http"
 	"reflect"
-
-	"github.com/valyala/fasthttp"
 )
-
-type multipartFasthttpRequest fasthttp.Request
-
-var _ setter = (*multipartFasthttpRequest)(nil)
-
-// TrySet tries to set a value by the multipart request with the binding a form file
-func (r *multipartFasthttpRequest) TrySet(value reflect.Value, field reflect.StructField, key string, opt setOptions) (isSetted bool, err error) {
-	req := (*fasthttp.Request)(r)
-	form, err := req.MultipartForm()
-	if err != nil {
-		return false, err
-	}
-	if files := form.File[key]; len(files) != 0 {
-		return setByMultipartFormFile(value, field, files)
-	}
-
-	return setByKV(value, field, formSource(form.Value), key, opt)
-}
 
 type multipartRequest http.Request
 
-var _ setter = (*multipartRequest)(nil)
+var _ Setter = (*multipartRequest)(nil)
 
 // TrySet tries to set a value by the multipart request with the binding a form file
-func (r *multipartRequest) TrySet(value reflect.Value, field reflect.StructField, key string, opt setOptions) (isSetted bool, err error) {
+func (r *multipartRequest) TrySet(value reflect.Value, field reflect.StructField, key string, opt SetOptions) (isSetted bool, err error) {
 	if files := r.MultipartForm.File[key]; len(files) != 0 {
-		return setByMultipartFormFile(value, field, files)
+		return SetByMultipartFormFile(value, field, files)
 	}
 
-	return setByKV(value, field, formSource(r.MultipartForm.Value), key, opt)
+	return SetByKV(value, field, FormSource(r.MultipartForm.Value), key, opt)
 }
 
-func setByMultipartFormFile(value reflect.Value, field reflect.StructField, files []*multipart.FileHeader) (isSetted bool, err error) {
+func SetByMultipartFormFile(value reflect.Value, field reflect.StructField, files []*multipart.FileHeader) (isSetted bool, err error) {
 	switch value.Kind() {
 	case reflect.Ptr:
 		switch value.Interface().(type) {
@@ -77,7 +53,7 @@ func setArrayOfMultipartFormFiles(value reflect.Value, field reflect.StructField
 		return false, errors.New("unsupported len of array for []*multipart.FileHeader")
 	}
 	for i := range files {
-		setted, err := setByMultipartFormFile(value.Index(i), field, files[i:i+1])
+		setted, err := SetByMultipartFormFile(value.Index(i), field, files[i:i+1])
 		if err != nil || !setted {
 			return setted, err
 		}

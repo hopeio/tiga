@@ -17,41 +17,41 @@ import (
 
 var errUnknownType = errors.New("unknown type")
 
-func mapForm(ptr interface{}, set setter) error {
-	return mapFormByTag(ptr, set, tag)
+func MapForm(ptr interface{}, set Setter) error {
+	return mapFormByTag(ptr, set, Tag)
 }
 
 var emptyField = reflect.StructField{}
 
-func mapFormByTag(ptr interface{}, set setter, tag string) error {
-	return mappingByPtr(ptr, set, tag)
+func mapFormByTag(ptr interface{}, set Setter, tag string) error {
+	return MappingByPtr(ptr, set, tag)
 }
 
-// setter tries to set value on a walking by fields of a struct
-type setter interface {
-	TrySet(value reflect.Value, field reflect.StructField, key string, opt setOptions) (isSetted bool, err error)
+// Setter tries to set value on a walking by fields of a struct
+type Setter interface {
+	TrySet(value reflect.Value, field reflect.StructField, key string, opt SetOptions) (isSetted bool, err error)
 }
 
-type formSource map[string][]string
+type FormSource map[string][]string
 
-var _ setter = formSource(nil)
+var _ Setter = FormSource(nil)
 
-func (form formSource) Peek(key string) ([]string, bool) {
+func (form FormSource) Peek(key string) ([]string, bool) {
 	v, ok := form[key]
 	return v, ok
 }
 
 // TrySet tries to set a value by request's form source (like map[string][]string)
-func (form formSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt setOptions) (isSetted bool, err error) {
-	return setByKV(value, field, form, tagValue, opt)
+func (form FormSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt SetOptions) (isSetted bool, err error) {
+	return SetByKV(value, field, form, tagValue, opt)
 }
 
-func mappingByPtr(ptr interface{}, setter setter, tag string) error {
+func MappingByPtr(ptr interface{}, setter Setter, tag string) error {
 	_, err := mapping(reflect.ValueOf(ptr), emptyField, setter, tag)
 	return err
 }
 
-func mapping(value reflect.Value, field reflect.StructField, setter setter, tag string) (bool, error) {
+func mapping(value reflect.Value, field reflect.StructField, setter Setter, tag string) (bool, error) {
 	if field.Tag.Get(tag) == "-" { // just ignoring this field
 		return false, nil
 	}
@@ -105,14 +105,14 @@ func mapping(value reflect.Value, field reflect.StructField, setter setter, tag 
 	return false, nil
 }
 
-type setOptions struct {
+type SetOptions struct {
 	isDefaultExists bool
 	defaultValue    string
 }
 
-func tryToSetValue(value reflect.Value, field reflect.StructField, setter setter, tag string) (bool, error) {
+func tryToSetValue(value reflect.Value, field reflect.StructField, setter Setter, tag string) (bool, error) {
 	var tagValue string
-	var setOpt setOptions
+	var setOpt SetOptions
 
 	tagValue = field.Tag.Get(tag)
 	tagValue, opts := head(tagValue, ",")

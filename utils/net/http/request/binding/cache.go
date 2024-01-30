@@ -21,7 +21,7 @@ func newCache() *cache {
 	c := cache{
 		m:       make(map[reflect.Type]*structInfo),
 		regconv: make(map[reflect.Type]reflecti.Converter),
-		tag:     tag,
+		tag:     Tag,
 	}
 	return &c
 }
@@ -274,7 +274,7 @@ func indirectType(typ reflect.Type) reflect.Type {
 	return typ
 }
 
-// fieldAlias parses a field tag to get a field alias.
+// fieldAlias parses a field Tag to get a field alias.
 func fieldAlias(field reflect.StructField, tagName string) (alias string, options tagOptions) {
 	if tag := field.Tag.Get(tagName); tag != "" {
 		alias, options = parseTag(tag)
@@ -285,11 +285,11 @@ func fieldAlias(field reflect.StructField, tagName string) (alias string, option
 	return alias, options
 }
 
-// tagOptions is the string following a comma in a struct field's tag, or
+// tagOptions is the string following a comma in a struct field's Tag, or
 // the empty string. It does not include the leading comma.
 type tagOptions []string
 
-// parseTag splits a struct field's url tag into its name and comma-separated
+// parseTag splits a struct field's url Tag into its name and comma-separated
 // options.
 func parseTag(tag string) (string, tagOptions) {
 	s := strings.Split(tag, ",")

@@ -10,9 +10,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gofiber/fiber/v2"
-
-	"github.com/valyala/fasthttp"
 )
 
 type protobufBinding struct{}
@@ -26,7 +23,7 @@ func (b protobufBinding) Bind(req *http.Request, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	return b.BindBody(buf, obj)
+	return DecodeProtobuf(buf, obj)
 }
 
 func (b protobufBinding) GinBind(ctx *gin.Context, obj interface{}) error {
@@ -34,23 +31,15 @@ func (b protobufBinding) GinBind(ctx *gin.Context, obj interface{}) error {
 	if err != nil {
 		return err
 	}
-	return b.BindBody(buf, obj)
+	return DecodeProtobuf(buf, obj)
 }
 
-func (b protobufBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-	return b.BindBody(req.Body(), obj)
-}
-
-func (b protobufBinding) FiberBind(ctx *fiber.Ctx, obj interface{}) error {
-	return b.BindBody(ctx.Body(), obj)
-}
-
-func (protobufBinding) BindBody(body []byte, obj interface{}) error {
+func DecodeProtobuf(body []byte, obj interface{}) error {
 	if err := proto.Unmarshal(body, obj.(proto.Message)); err != nil {
 		return err
 	}
-	// Here it's same to return validate(obj), but util now we can't add
+	// Here it's same to return Validate(obj), but util now we can't add
 	// `binding:""` to the struct which automatically generate by gen-proto
 	return nil
-	// return validate(obj)
+	// return Validate(obj)
 }

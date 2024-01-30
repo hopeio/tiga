@@ -11,8 +11,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gofiber/fiber/v2"
-	"github.com/valyala/fasthttp"
 )
 
 type xmlBinding struct{}
@@ -29,15 +27,7 @@ func (xmlBinding) GinBind(ctx *gin.Context, obj interface{}) error {
 	return decodeXML(ctx.Request.Body, obj)
 }
 
-func (x xmlBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-	return x.BindBody(req.Body(), obj)
-}
-
-func (x xmlBinding) FiberBind(ctx *fiber.Ctx, obj interface{}) error {
-	return x.BindBody(ctx.Body(), obj)
-}
-
-func (xmlBinding) BindBody(body []byte, obj interface{}) error {
+func DecodeXml(body []byte, obj interface{}) error {
 	return decodeXML(bytes.NewReader(body), obj)
 }
 func decodeXML(r io.Reader, obj interface{}) error {
@@ -45,5 +35,5 @@ func decodeXML(r io.Reader, obj interface{}) error {
 	if err := decoder.Decode(obj); err != nil {
 		return err
 	}
-	return validate(obj)
+	return Validate(obj)
 }

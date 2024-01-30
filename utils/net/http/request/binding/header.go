@@ -4,8 +4,6 @@ import (
 	"net/http"
 	"net/textproto"
 	"reflect"
-
-	"github.com/valyala/fasthttp"
 )
 
 type headerBinding struct{}
@@ -20,31 +18,22 @@ func (headerBinding) Bind(req *http.Request, obj interface{}) error {
 		return err
 	}
 
-	return validate(obj)
-}
-
-func (headerBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-
-	if err := mappingByPtr(obj, (*reqSource)(&req.Header), tag); err != nil {
-		return err
-	}
-
-	return validate(obj)
+	return Validate(obj)
 }
 
 func mapHeader(ptr interface{}, h map[string][]string) error {
-	return mappingByPtr(ptr, headerSource(h), tag)
+	return MappingByPtr(ptr, headerSource(h), Tag)
 }
 
 type headerSource map[string][]string
 
-var _ setter = headerSource(nil)
+var _ Setter = headerSource(nil)
 
 func (hs headerSource) Peek(key string) ([]string, bool) {
 	v, ok := hs[key]
 	return v, ok
 }
 
-func (hs headerSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt setOptions) (isSetted bool, err error) {
-	return setByKV(value, field, hs, textproto.CanonicalMIMEHeaderKey(tagValue), opt)
+func (hs headerSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt SetOptions) (isSetted bool, err error) {
+	return SetByKV(value, field, hs, textproto.CanonicalMIMEHeaderKey(tagValue), opt)
 }

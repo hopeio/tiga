@@ -8,8 +8,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gofiber/fiber/v2"
-	"github.com/valyala/fasthttp"
 )
 
 const defaultMemory = 32 << 20
@@ -31,7 +29,7 @@ func (formBinding) Bind(req *http.Request, obj interface{}) error {
 	if err := Decode(obj, req.Form); err != nil {
 		return err
 	}
-	return validate(obj)
+	return Validate(obj)
 }
 
 func (formBinding) GinBind(ctx *gin.Context, obj interface{}) error {
@@ -40,25 +38,11 @@ func (formBinding) GinBind(ctx *gin.Context, obj interface{}) error {
 			return err
 		}
 	}
-	args := Args{formSource(ctx.Request.Form), paramSource(ctx.Params)}
-	if err := mapForm(obj, args); err != nil {
+	args := Args{FormSource(ctx.Request.Form), paramSource(ctx.Params)}
+	if err := MapForm(obj, args); err != nil {
 		return err
 	}
-	return validate(obj)
-}
-
-func (formBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-	if err := mapForm(obj, (*argsSource)(req.PostArgs())); err != nil {
-		return err
-	}
-	return validate(obj)
-}
-
-func (formBinding) FiberBind(ctx *fiber.Ctx, obj interface{}) error {
-	if err := mapForm(obj, (*argsSource)(ctx.Request().PostArgs())); err != nil {
-		return err
-	}
-	return validate(obj)
+	return Validate(obj)
 }
 
 func (formPostBinding) Name() string {
@@ -72,7 +56,7 @@ func (formPostBinding) Bind(req *http.Request, obj interface{}) error {
 	if err := Decode(obj, req.PostForm); err != nil {
 		return err
 	}
-	return validate(obj)
+	return Validate(obj)
 }
 
 func (formPostBinding) GinBind(ctx *gin.Context, obj interface{}) error {
@@ -80,25 +64,11 @@ func (formPostBinding) GinBind(ctx *gin.Context, obj interface{}) error {
 		return err
 	}
 
-	args := Args{formSource(ctx.Request.Form), paramSource(ctx.Params)}
-	if err := mapForm(obj, args); err != nil {
+	args := Args{FormSource(ctx.Request.Form), paramSource(ctx.Params)}
+	if err := MapForm(obj, args); err != nil {
 		return err
 	}
-	return validate(obj)
-}
-
-func (formPostBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-	if err := mapForm(obj, (*argsSource)(req.PostArgs())); err != nil {
-		return err
-	}
-	return validate(obj)
-}
-
-func (formPostBinding) FiberBind(ctx *fiber.Ctx, obj interface{}) error {
-	if err := mapForm(obj, (*argsSource)(ctx.Request().PostArgs())); err != nil {
-		return err
-	}
-	return validate(obj)
+	return Validate(obj)
 }
 
 func (formMultipartBinding) Name() string {
@@ -109,36 +79,20 @@ func (formMultipartBinding) Bind(req *http.Request, obj interface{}) error {
 	if err := req.ParseMultipartForm(defaultMemory); err != nil {
 		return err
 	}
-	if err := mappingByPtr(obj, (*multipartRequest)(req), tag); err != nil {
+	if err := MappingByPtr(obj, (*multipartRequest)(req), Tag); err != nil {
 		return err
 	}
 
-	return validate(obj)
+	return Validate(obj)
 }
 
 func (formMultipartBinding) GinBind(ctx *gin.Context, obj interface{}) error {
 	if err := ctx.Request.ParseMultipartForm(defaultMemory); err != nil {
 		return err
 	}
-	if err := mappingByPtr(obj, (*multipartRequest)(ctx.Request), tag); err != nil {
+	if err := MappingByPtr(obj, (*multipartRequest)(ctx.Request), Tag); err != nil {
 		return err
 	}
 
-	return validate(obj)
-}
-
-func (formMultipartBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-	if err := mappingByPtr(obj, (*multipartFasthttpRequest)(req), tag); err != nil {
-		return err
-	}
-
-	return validate(obj)
-}
-
-func (formMultipartBinding) FiberBind(ctx *fiber.Ctx, obj interface{}) error {
-	if err := mappingByPtr(obj, (*multipartFasthttpRequest)(ctx.Request()), tag); err != nil {
-		return err
-	}
-
-	return validate(obj)
+	return Validate(obj)
 }

@@ -10,8 +10,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gofiber/fiber/v2"
-	"github.com/valyala/fasthttp"
 	"gopkg.in/yaml.v3"
 )
 
@@ -29,15 +27,7 @@ func (yamlBinding) GinBind(ctx *gin.Context, obj interface{}) error {
 	return decodeYAML(ctx.Request.Body, obj)
 }
 
-func (y yamlBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-	return y.BindBody(req.Body(), obj)
-}
-
-func (y yamlBinding) FiberBind(ctx *fiber.Ctx, obj interface{}) error {
-	return y.BindBody(ctx.Body(), obj)
-}
-
-func (yamlBinding) BindBody(body []byte, obj interface{}) error {
+func DecodeYaml(body []byte, obj interface{}) error {
 	return decodeYAML(bytes.NewReader(body), obj)
 }
 
@@ -46,5 +36,5 @@ func decodeYAML(r io.Reader, obj interface{}) error {
 	if err := decoder.Decode(obj); err != nil {
 		return err
 	}
-	return validate(obj)
+	return Validate(obj)
 }

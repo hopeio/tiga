@@ -8,8 +8,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gofiber/fiber/v2"
-	"github.com/valyala/fasthttp"
 )
 
 type queryBinding struct{}
@@ -20,33 +18,17 @@ func (queryBinding) Name() string {
 
 func (queryBinding) Bind(req *http.Request, obj interface{}) error {
 	values := req.URL.Query()
-	if err := mapForm(obj, formSource(values)); err != nil {
+	if err := MapForm(obj, FormSource(values)); err != nil {
 		return err
 	}
-	return validate(obj)
+	return Validate(obj)
 }
 
 func (queryBinding) GinBind(ctx *gin.Context, obj interface{}) error {
 	values := ctx.Request.URL.Query()
-	args := Args{formSource(ctx.Request.Form), formSource(values), paramSource(ctx.Params)}
-	if err := mapForm(obj, args); err != nil {
+	args := Args{FormSource(ctx.Request.Form), FormSource(values), paramSource(ctx.Params)}
+	if err := MapForm(obj, args); err != nil {
 		return err
 	}
-	return validate(obj)
-}
-
-func (queryBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-	values := req.URI().QueryArgs()
-	if err := mapForm(obj, (*argsSource)(values)); err != nil {
-		return err
-	}
-	return validate(obj)
-}
-
-func (queryBinding) FiberBind(ctx *fiber.Ctx, obj interface{}) error {
-	values := ctx.Request().URI().QueryArgs()
-	if err := mapForm(obj, (*argsSource)(values)); err != nil {
-		return err
-	}
-	return validate(obj)
+	return Validate(obj)
 }

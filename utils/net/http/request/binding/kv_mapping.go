@@ -2,11 +2,7 @@ package binding
 
 import (
 	"fmt"
-	stringsi "github.com/hopeio/tiga/utils/strings"
 	"reflect"
-
-	"github.com/gofiber/fiber/v2"
-	"github.com/valyala/fasthttp"
 )
 
 type Arg interface {
@@ -24,23 +20,11 @@ func (args Args) Peek(key string) (v []string, ok bool) {
 	return
 }
 
-func (args Args) TrySet(value reflect.Value, field reflect.StructField, key string, opt setOptions) (isSetted bool, err error) {
-	return setByKV(value, field, args, key, opt)
+func (args Args) TrySet(value reflect.Value, field reflect.StructField, key string, opt SetOptions) (isSetted bool, err error) {
+	return SetByKV(value, field, args, key, opt)
 }
 
-type argsSource fasthttp.Args
-
-// TrySet tries to set a value by request's form source (like map[string][]string)
-func (form *argsSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt setOptions) (isSetted bool, err error) {
-	return setByKV(value, field, form, tagValue, opt)
-}
-
-func (form *argsSource) Peek(key string) ([]string, bool) {
-	v := stringsi.BytesToString((*fasthttp.Args)(form).Peek(key))
-	return []string{v}, v != ""
-}
-
-func setByKV(value reflect.Value, field reflect.StructField, kv Arg, tagValue string, opt setOptions) (isSetted bool, err error) {
+func SetByKV(value reflect.Value, field reflect.StructField, kv Arg, tagValue string, opt SetOptions) (isSetted bool, err error) {
 	vs, ok := kv.Peek(tagValue)
 	if !ok && !opt.isDefaultExists {
 		return false, nil
@@ -71,28 +55,4 @@ func setByKV(value reflect.Value, field reflect.StructField, kv Arg, tagValue st
 		}
 		return true, setWithProperType(val, value, field)
 	}
-}
-
-type ctxSource fiber.Ctx
-
-// TrySet tries to set a value by request's form source (like map[string][]string)
-func (form *ctxSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt setOptions) (isSetted bool, err error) {
-	return setByKV(value, field, form, tagValue, opt)
-}
-
-func (form *ctxSource) Peek(key string) ([]string, bool) {
-	v := (*fiber.Ctx)(form).Params(key)
-	return []string{v}, v != ""
-}
-
-type reqSource fasthttp.RequestHeader
-
-// TrySet tries to set a value by request's form source (like map[string][]string)
-func (form *reqSource) TrySet(value reflect.Value, field reflect.StructField, tagValue string, opt setOptions) (isSetted bool, err error) {
-	return setByKV(value, field, form, tagValue, opt)
-}
-
-func (form *reqSource) Peek(key string) ([]string, bool) {
-	v := stringsi.BytesToString((*fasthttp.RequestHeader)(form).Peek(key))
-	return []string{v}, v != ""
 }

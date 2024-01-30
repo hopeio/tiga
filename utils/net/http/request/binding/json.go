@@ -11,9 +11,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/gofiber/fiber/v2"
 	"github.com/hopeio/tiga/utils/encoding/json"
-	"github.com/valyala/fasthttp"
 )
 
 // EnableDecoderUseNumber is used to call the UseNumber method on the JSON
@@ -47,23 +45,7 @@ func (jsonBinding) GinBind(ctx *gin.Context, obj interface{}) error {
 	return decodeJSON(ctx.Request.Body, obj)
 }
 
-func (j jsonBinding) FasthttpBind(req *fasthttp.Request, obj interface{}) error {
-	body := req.Body()
-	if req == nil || body == nil {
-		return fmt.Errorf("invalid request")
-	}
-	return j.BindBody(body, obj)
-}
-
-func (j jsonBinding) FiberBind(ctx *fiber.Ctx, obj interface{}) error {
-	body := ctx.Request().Body()
-	if body == nil {
-		return fmt.Errorf("invalid request")
-	}
-	return j.BindBody(body, obj)
-}
-
-func (jsonBinding) BindBody(body []byte, obj interface{}) error {
+func DecodeJson(body []byte, obj interface{}) error {
 	return decodeJSON(bytes.NewReader(body), obj)
 }
 
@@ -78,5 +60,5 @@ func decodeJSON(r io.Reader, obj interface{}) error {
 	if err := decoder.Decode(obj); err != nil {
 		return err
 	}
-	return validate(obj)
+	return Validate(obj)
 }
