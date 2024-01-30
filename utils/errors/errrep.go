@@ -2,7 +2,7 @@ package errorsi
 
 import (
 	"github.com/gin-gonic/gin/render"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"net/http"

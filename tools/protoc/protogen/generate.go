@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/hopeio/lemon/utils/io/fs"
-	"github.com/hopeio/lemon/utils/os"
-	execi "github.com/hopeio/lemon/utils/os/exec"
-	_go "github.com/hopeio/lemon/utils/sdk/go"
+	"github.com/hopeio/tiga/utils/io/fs"
+	"github.com/hopeio/tiga/utils/os"
+	execi "github.com/hopeio/tiga/utils/os/exec"
+	_go "github.com/hopeio/tiga/utils/sdk/go"
 	"github.com/spf13/cobra"
 	"log"
 	"os"
@@ -35,7 +35,7 @@ const (
 	goListDir     = `go list -m -f {{.Dir}} `
 	goListDep     = `go list -m -f {{.Path}}@{{.Version}} `
 	DepGoogleapis = "github.com/googleapis/googleapis@v0.0.0-20220520010701-4c6f5836a32f"
-	Deplemon      = "github.com/hopeio/lemon"
+	Deptiga       = "github.com/hopeio/tiga"
 )
 
 var (
@@ -64,7 +64,7 @@ func init() {
 	pflag := rootCmd.PersistentFlags()
 	pflag.StringVarP(&proto, "proto", "p", protodef, "proto dir")
 	pflag.StringVarP(&genpath, "genpath", "g", pwd+"/protobuf", "generate dir")
-	pflag.StringVarP(&dproto, "lemon", "d", "/proto", "lemon proto dir")
+	pflag.StringVarP(&dproto, "tiga", "d", "/proto", "tiga proto dir")
 	pflag.BoolVarP(&useEnmuPlugin, "enum", "e", false, "是否使用enum扩展插件")
 	pflag.BoolVarP(&useGateWayPlugin, "gw", "w", false, "是否使用grpc-gateway插件")
 	pflag.BoolVarP(&useValidatorsOutPlugin, "validator", "v", false, "是否使用validators插件")
@@ -169,12 +169,12 @@ func getInclude() {
 		}
 		osi.Cmd("go mod init generate")*/
 
-	liblemonDir, err := osi.Cmd(_go.GoListDir + Deplemon)
+	libtigaDir, err := osi.Cmd(_go.GoListDir + Deptiga)
 	if err == nil {
-		dproto = liblemonDir + "/protobuf/_proto"
+		dproto = libtigaDir + "/protobuf/_proto"
 	}
 	include = "-I" + dproto + " -I" + proto
-	/*	os.Chdir(liblemonDir)
+	/*	os.Chdir(libtigaDir)
 		DepGrpcGateway, _ = osi.Cmd(goListDep + DepGrpcGateway)
 		DepProtopatch, _ = osi.Cmd(goListDep + DepProtopatch)
 		os.Chdir(generatePath)

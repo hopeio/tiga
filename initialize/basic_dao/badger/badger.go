@@ -2,7 +2,7 @@ package badger
 
 import (
 	"github.com/dgraph-io/badger/v3"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 type BadgerDBConfig struct {

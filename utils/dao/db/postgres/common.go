@@ -2,7 +2,7 @@ package postgres
 
 import (
 	"database/sql"
-	dbi "github.com/hopeio/lemon/utils/dao/db"
+	dbi "github.com/hopeio/tiga/utils/dao/db"
 )
 
 func ExistsByFilterExpressions(db *sql.DB, tableName string, filters dbi.FilterExpressions) (bool, error) {

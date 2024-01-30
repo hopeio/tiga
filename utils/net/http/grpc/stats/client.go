@@ -2,7 +2,7 @@ package stats
 
 import (
 	"context"
-	httpi "github.com/hopeio/lemon/utils/net/http"
+	httpi "github.com/hopeio/tiga/utils/net/http"
 	"go.opencensus.io/trace"
 	"go.opencensus.io/trace/propagation"
 	"google.golang.org/grpc/codes"

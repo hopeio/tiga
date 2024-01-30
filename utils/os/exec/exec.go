@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	osi "github.com/hopeio/lemon/utils/os"
+	osi "github.com/hopeio/tiga/utils/os"
 )
 
 func Run(arg string) error {

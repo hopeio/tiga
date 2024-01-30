@@ -15,11 +15,11 @@ import (
 	"sync"
 	"time"
 
-	"github.com/hopeio/lemon/utils/encoding/json/gjson"
-	"github.com/hopeio/lemon/utils/strings/match"
-	grect "github.com/hopeio/lemon/utils/struct/rect"
-	"github.com/hopeio/lemon/utils/struct/tree/btree"
-	"github.com/hopeio/lemon/utils/struct/tree/rtree"
+	"github.com/hopeio/tiga/utils/encoding/json/gjson"
+	"github.com/hopeio/tiga/utils/strings/match"
+	grect "github.com/hopeio/tiga/utils/struct/rect"
+	"github.com/hopeio/tiga/utils/struct/tree/btree"
+	"github.com/hopeio/tiga/utils/struct/tree/rtree"
 )
 
 var (

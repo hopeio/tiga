@@ -2,7 +2,7 @@ package libheif
 
 import (
 	"fmt"
-	osi "github.com/hopeio/lemon/utils/os"
+	osi "github.com/hopeio/tiga/utils/os"
 	"strings"
 )
 

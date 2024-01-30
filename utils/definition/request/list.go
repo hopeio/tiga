@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/hopeio/lemon/utils/definition/constraints"
+	"github.com/hopeio/tiga/utils/definition/constraints"
 	"time"
 )
 

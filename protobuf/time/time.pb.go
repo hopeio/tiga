@@ -2,12 +2,12 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.20.1
-// source: lemon/protobuf/time/time.proto
+// source: tiga/protobuf/time/time.proto
 
 package time
 
 import (
-	_ "github.com/hopeio/lemon/protobuf/utils/patch"
+	_ "github.com/hopeio/tiga/protobuf/utils/patch"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -32,7 +32,7 @@ type Time struct {
 func (x *Time) Reset() {
 	*x = Time{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_time_time_proto_msgTypes[0]
+		mi := &file_tiga_protobuf_time_time_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -45,7 +45,7 @@ func (x *Time) String() string {
 func (*Time) ProtoMessage() {}
 
 func (x *Time) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_time_time_proto_msgTypes[0]
+	mi := &file_tiga_protobuf_time_time_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *Time) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Time.ProtoReflect.Descriptor instead.
 func (*Time) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_time_time_proto_rawDescGZIP(), []int{0}
+	return file_tiga_protobuf_time_time_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Time) GetT() int64 {
@@ -79,7 +79,7 @@ type Date struct {
 func (x *Date) Reset() {
 	*x = Date{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_time_time_proto_msgTypes[1]
+		mi := &file_tiga_protobuf_time_time_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -92,7 +92,7 @@ func (x *Date) String() string {
 func (*Date) ProtoMessage() {}
 
 func (x *Date) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_time_time_proto_msgTypes[1]
+	mi := &file_tiga_protobuf_time_time_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -105,7 +105,7 @@ func (x *Date) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Date.ProtoReflect.Descriptor instead.
 func (*Date) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_time_time_proto_rawDescGZIP(), []int{1}
+	return file_tiga_protobuf_time_time_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Date) GetT() int64 {
@@ -128,7 +128,7 @@ type Model struct {
 func (x *Model) Reset() {
 	*x = Model{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_time_time_proto_msgTypes[2]
+		mi := &file_tiga_protobuf_time_time_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -141,7 +141,7 @@ func (x *Model) String() string {
 func (*Model) ProtoMessage() {}
 
 func (x *Model) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_time_time_proto_msgTypes[2]
+	mi := &file_tiga_protobuf_time_time_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -154,7 +154,7 @@ func (x *Model) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Model.ProtoReflect.Descriptor instead.
 func (*Model) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_time_time_proto_rawDescGZIP(), []int{2}
+	return file_tiga_protobuf_time_time_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Model) GetCreatedAt() string {
@@ -178,9 +178,9 @@ func (x *Model) GetDeletedAt() string {
 	return ""
 }
 
-var File_lemon_protobuf_time_time_proto protoreflect.FileDescriptor
+var File_tiga_protobuf_time_time_proto protoreflect.FileDescriptor
 
-var file_lemon_protobuf_time_time_proto_rawDesc = []byte{
+var file_tiga_protobuf_time_time_proto_rawDesc = []byte{
 	0x0a, 0x20, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x72, 0x61, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x12, 0x04, 0x74, 0x69, 0x6d, 0x65, 0x1a, 0x25, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x72,
@@ -213,24 +213,24 @@ var file_lemon_protobuf_time_time_proto_rawDesc = []byte{
 }
 
 var (
-	file_lemon_protobuf_time_time_proto_rawDescOnce sync.Once
-	file_lemon_protobuf_time_time_proto_rawDescData = file_lemon_protobuf_time_time_proto_rawDesc
+	file_tiga_protobuf_time_time_proto_rawDescOnce sync.Once
+	file_tiga_protobuf_time_time_proto_rawDescData = file_tiga_protobuf_time_time_proto_rawDesc
 )
 
-func file_lemon_protobuf_time_time_proto_rawDescGZIP() []byte {
-	file_lemon_protobuf_time_time_proto_rawDescOnce.Do(func() {
-		file_lemon_protobuf_time_time_proto_rawDescData = protoimpl.X.CompressGZIP(file_lemon_protobuf_time_time_proto_rawDescData)
+func file_tiga_protobuf_time_time_proto_rawDescGZIP() []byte {
+	file_tiga_protobuf_time_time_proto_rawDescOnce.Do(func() {
+		file_tiga_protobuf_time_time_proto_rawDescData = protoimpl.X.CompressGZIP(file_tiga_protobuf_time_time_proto_rawDescData)
 	})
-	return file_lemon_protobuf_time_time_proto_rawDescData
+	return file_tiga_protobuf_time_time_proto_rawDescData
 }
 
-var file_lemon_protobuf_time_time_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
-var file_lemon_protobuf_time_time_proto_goTypes = []interface{}{
+var file_tiga_protobuf_time_time_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_tiga_protobuf_time_time_proto_goTypes = []interface{}{
 	(*Time)(nil),  // 0: time.Time
 	(*Date)(nil),  // 1: time.Date
 	(*Model)(nil), // 2: time.Model
 }
-var file_lemon_protobuf_time_time_proto_depIdxs = []int32{
+var file_tiga_protobuf_time_time_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -238,13 +238,13 @@ var file_lemon_protobuf_time_time_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_lemon_protobuf_time_time_proto_init() }
-func file_lemon_protobuf_time_time_proto_init() {
-	if File_lemon_protobuf_time_time_proto != nil {
+func init() { file_tiga_protobuf_time_time_proto_init() }
+func file_tiga_protobuf_time_time_proto_init() {
+	if File_tiga_protobuf_time_time_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_lemon_protobuf_time_time_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_time_time_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Time); i {
 			case 0:
 				return &v.state
@@ -256,7 +256,7 @@ func file_lemon_protobuf_time_time_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_time_time_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_time_time_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Date); i {
 			case 0:
 				return &v.state
@@ -268,7 +268,7 @@ func file_lemon_protobuf_time_time_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_time_time_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_time_time_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Model); i {
 			case 0:
 				return &v.state
@@ -285,18 +285,18 @@ func file_lemon_protobuf_time_time_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_lemon_protobuf_time_time_proto_rawDesc,
+			RawDescriptor: file_tiga_protobuf_time_time_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_lemon_protobuf_time_time_proto_goTypes,
-		DependencyIndexes: file_lemon_protobuf_time_time_proto_depIdxs,
-		MessageInfos:      file_lemon_protobuf_time_time_proto_msgTypes,
+		GoTypes:           file_tiga_protobuf_time_time_proto_goTypes,
+		DependencyIndexes: file_tiga_protobuf_time_time_proto_depIdxs,
+		MessageInfos:      file_tiga_protobuf_time_time_proto_msgTypes,
 	}.Build()
-	File_lemon_protobuf_time_time_proto = out.File
-	file_lemon_protobuf_time_time_proto_rawDesc = nil
-	file_lemon_protobuf_time_time_proto_goTypes = nil
-	file_lemon_protobuf_time_time_proto_depIdxs = nil
+	File_tiga_protobuf_time_time_proto = out.File
+	file_tiga_protobuf_time_time_proto_rawDesc = nil
+	file_tiga_protobuf_time_time_proto_goTypes = nil
+	file_tiga_protobuf_time_time_proto_depIdxs = nil
 }

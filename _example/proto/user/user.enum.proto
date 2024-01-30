@@ -1,12 +1,12 @@
 syntax = "proto3";
 package user;
-import "lemon/protobuf/utils/enum/enum.proto";
-import "lemon/protobuf/utils/patch/go.proto";
+import "tiga/protobuf/utils/enum/enum.proto";
+import "tiga/protobuf/utils/patch/go.proto";
 
 option (enum.enum_gqlgen_all) = true;
 
-option java_package = "lemon.hopeio.protobuf.user";
-option go_package = "github.com/hopeio/lemon/_example/protobuf/user";
+option java_package = "tiga.hopeio.protobuf.user";
+option go_package = "github.com/hopeio/tiga/_example/protobuf/user";
 
 option (enum.enum_prefix_all) = false;
 option (go.file) = {no_enum_prefix:true};

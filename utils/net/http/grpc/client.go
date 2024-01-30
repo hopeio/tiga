@@ -2,8 +2,8 @@ package grpci
 
 import (
 	"crypto/tls"
-	"github.com/hopeio/lemon/utils/errors/multierr"
-	"github.com/hopeio/lemon/utils/net/http/grpc/stats"
+	"github.com/hopeio/tiga/utils/errors/multierr"
+	"github.com/hopeio/tiga/utils/net/http/grpc/stats"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/credentials/insecure"

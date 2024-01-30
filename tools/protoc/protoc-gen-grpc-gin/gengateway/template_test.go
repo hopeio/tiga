@@ -1,8 +1,8 @@
 package gengateway
 
 import (
-	descriptor2 "github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/descriptor"
-	"github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/httprule"
+	descriptor2 "github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/descriptor"
+	"github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/httprule"
 	"strings"
 	"testing"
 

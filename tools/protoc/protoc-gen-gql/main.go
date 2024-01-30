@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"github.com/hopeio/lemon/tools/protoc/protoc-gen-gql/generator"
+	"github.com/hopeio/tiga/tools/protoc/protoc-gen-gql/generator"
 	"google.golang.org/protobuf/compiler/protogen"
 	"io/ioutil"
 	"log"

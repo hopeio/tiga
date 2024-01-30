@@ -4,11 +4,11 @@ package reflecti
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/utils/definition/foo"
+	"github.com/hopeio/tiga/utils/definition/foo"
 	"github.com/modern-go/reflect2"
 	"testing"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 type Foo struct {

@@ -1,7 +1,7 @@
 package rect
 
 import (
-	"github.com/hopeio/lemon/utils/encoding/json/gjson"
+	"github.com/hopeio/tiga/utils/encoding/json/gjson"
 	"strconv"
 	"strings"
 )

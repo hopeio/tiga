@@ -7,7 +7,7 @@ import (
 
 type StructTag string
 
-func GetCustomilemong(customize, key string) string {
+func GetCustomTag(customize, key string) string {
 	v, _ := StructTag(customize).Lookup(key)
 	return v
 }

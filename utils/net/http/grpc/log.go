@@ -1,7 +1,7 @@
 package grpci
 
 import (
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 	"go.uber.org/zap/zapgrpc"
 	"google.golang.org/grpc/grpclog"
 )

@@ -3,9 +3,9 @@ package m3u8
 import (
 	"errors"
 	"fmt"
-	"github.com/hopeio/lemon/utils/crypto"
-	em3u8 "github.com/hopeio/lemon/utils/encoding/m3u8"
-	"github.com/hopeio/lemon/utils/net/http/client"
+	"github.com/hopeio/tiga/utils/crypto"
+	em3u8 "github.com/hopeio/tiga/utils/encoding/m3u8"
+	"github.com/hopeio/tiga/utils/net/http/client"
 	"net/url"
 )
 

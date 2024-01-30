@@ -1,7 +1,7 @@
 package dingding
 
 import (
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 	"go.uber.org/zap/zapcore"
 	"testing"
 )

@@ -2,13 +2,13 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.20.1
-// source: lemon/protobuf/dict/dict.proto
+// source: tiga/protobuf/dict/dict.proto
 
 package dict
 
 import (
 	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
-	_ "github.com/hopeio/lemon/protobuf/utils/patch"
+	_ "github.com/hopeio/tiga/protobuf/utils/patch"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -41,7 +41,7 @@ type Dict struct {
 func (x *Dict) Reset() {
 	*x = Dict{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_dict_dict_proto_msgTypes[0]
+		mi := &file_tiga_protobuf_dict_dict_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -54,7 +54,7 @@ func (x *Dict) String() string {
 func (*Dict) ProtoMessage() {}
 
 func (x *Dict) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_dict_dict_proto_msgTypes[0]
+	mi := &file_tiga_protobuf_dict_dict_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -67,7 +67,7 @@ func (x *Dict) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Dict.ProtoReflect.Descriptor instead.
 func (*Dict) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_dict_dict_proto_rawDescGZIP(), []int{0}
+	return file_tiga_protobuf_dict_dict_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Dict) GetId() uint64 {
@@ -133,9 +133,9 @@ func (x *Dict) GetStatus() uint32 {
 	return 0
 }
 
-var File_lemon_protobuf_dict_dict_proto protoreflect.FileDescriptor
+var File_tiga_protobuf_dict_dict_proto protoreflect.FileDescriptor
 
-var file_lemon_protobuf_dict_dict_proto_rawDesc = []byte{
+var file_tiga_protobuf_dict_dict_proto_rawDesc = []byte{
 	0x0a, 0x20, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x72, 0x61, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2f, 0x64, 0x69, 0x63, 0x74, 0x2f, 0x64, 0x69, 0x63, 0x74, 0x2e, 0x70, 0x72, 0x6f,
 	0x74, 0x6f, 0x12, 0x04, 0x64, 0x69, 0x63, 0x74, 0x1a, 0x25, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x72,
@@ -182,22 +182,22 @@ var file_lemon_protobuf_dict_dict_proto_rawDesc = []byte{
 }
 
 var (
-	file_lemon_protobuf_dict_dict_proto_rawDescOnce sync.Once
-	file_lemon_protobuf_dict_dict_proto_rawDescData = file_lemon_protobuf_dict_dict_proto_rawDesc
+	file_tiga_protobuf_dict_dict_proto_rawDescOnce sync.Once
+	file_tiga_protobuf_dict_dict_proto_rawDescData = file_tiga_protobuf_dict_dict_proto_rawDesc
 )
 
-func file_lemon_protobuf_dict_dict_proto_rawDescGZIP() []byte {
-	file_lemon_protobuf_dict_dict_proto_rawDescOnce.Do(func() {
-		file_lemon_protobuf_dict_dict_proto_rawDescData = protoimpl.X.CompressGZIP(file_lemon_protobuf_dict_dict_proto_rawDescData)
+func file_tiga_protobuf_dict_dict_proto_rawDescGZIP() []byte {
+	file_tiga_protobuf_dict_dict_proto_rawDescOnce.Do(func() {
+		file_tiga_protobuf_dict_dict_proto_rawDescData = protoimpl.X.CompressGZIP(file_tiga_protobuf_dict_dict_proto_rawDescData)
 	})
-	return file_lemon_protobuf_dict_dict_proto_rawDescData
+	return file_tiga_protobuf_dict_dict_proto_rawDescData
 }
 
-var file_lemon_protobuf_dict_dict_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_lemon_protobuf_dict_dict_proto_goTypes = []interface{}{
+var file_tiga_protobuf_dict_dict_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_tiga_protobuf_dict_dict_proto_goTypes = []interface{}{
 	(*Dict)(nil), // 0: dict.Dict
 }
-var file_lemon_protobuf_dict_dict_proto_depIdxs = []int32{
+var file_tiga_protobuf_dict_dict_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -205,13 +205,13 @@ var file_lemon_protobuf_dict_dict_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_lemon_protobuf_dict_dict_proto_init() }
-func file_lemon_protobuf_dict_dict_proto_init() {
-	if File_lemon_protobuf_dict_dict_proto != nil {
+func init() { file_tiga_protobuf_dict_dict_proto_init() }
+func file_tiga_protobuf_dict_dict_proto_init() {
+	if File_tiga_protobuf_dict_dict_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_lemon_protobuf_dict_dict_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_dict_dict_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Dict); i {
 			case 0:
 				return &v.state
@@ -228,18 +228,18 @@ func file_lemon_protobuf_dict_dict_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_lemon_protobuf_dict_dict_proto_rawDesc,
+			RawDescriptor: file_tiga_protobuf_dict_dict_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_lemon_protobuf_dict_dict_proto_goTypes,
-		DependencyIndexes: file_lemon_protobuf_dict_dict_proto_depIdxs,
-		MessageInfos:      file_lemon_protobuf_dict_dict_proto_msgTypes,
+		GoTypes:           file_tiga_protobuf_dict_dict_proto_goTypes,
+		DependencyIndexes: file_tiga_protobuf_dict_dict_proto_depIdxs,
+		MessageInfos:      file_tiga_protobuf_dict_dict_proto_msgTypes,
 	}.Build()
-	File_lemon_protobuf_dict_dict_proto = out.File
-	file_lemon_protobuf_dict_dict_proto_rawDesc = nil
-	file_lemon_protobuf_dict_dict_proto_goTypes = nil
-	file_lemon_protobuf_dict_dict_proto_depIdxs = nil
+	File_tiga_protobuf_dict_dict_proto = out.File
+	file_tiga_protobuf_dict_dict_proto_rawDesc = nil
+	file_tiga_protobuf_dict_dict_proto_goTypes = nil
+	file_tiga_protobuf_dict_dict_proto_depIdxs = nil
 }

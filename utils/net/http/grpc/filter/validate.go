@@ -3,8 +3,8 @@ package filter
 import (
 	"context"
 
-	"github.com/hopeio/lemon/protobuf/errorcode"
-	"github.com/hopeio/lemon/utils/verification/validator"
+	"github.com/hopeio/tiga/protobuf/errorcode"
+	"github.com/hopeio/tiga/utils/verification/validator"
 	"google.golang.org/grpc"
 )
 

@@ -1,7 +1,7 @@
 package osi
 
 import (
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"log"
 	"os"
 	"os/exec"

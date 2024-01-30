@@ -14,5 +14,5 @@ type Bar1 struct {
 func TestTag(t *testing.T) {
 	var bar Bar1
 	typ := reflect.TypeOf(bar)
-	log.Println(GetCustomilemong(typ.Field(1).Tag.Get("mock"), "example"))
+	log.Println(GetCustomTag(typ.Field(1).Tag.Get("mock"), "example"))
 }

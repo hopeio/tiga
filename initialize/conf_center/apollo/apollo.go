@@ -2,7 +2,7 @@ package apollo
 
 import (
 	"encoding/json"
-	"github.com/hopeio/lemon/utils/configor/apollo"
+	"github.com/hopeio/tiga/utils/configor/apollo"
 )
 
 type Apollo struct {

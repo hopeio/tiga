@@ -1,8 +1,8 @@
 package plugin
 
 import (
-	"github.com/hopeio/lemon/protobuf/utils/enum"
-	protogeni "github.com/hopeio/lemon/utils/encoding/protobuf/protogen"
+	"github.com/hopeio/tiga/protobuf/utils/enum"
+	protogeni "github.com/hopeio/tiga/utils/encoding/protobuf/protogen"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 

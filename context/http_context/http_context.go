@@ -2,8 +2,8 @@ package http_context
 
 import (
 	"context"
-	contexti "github.com/hopeio/lemon/context"
-	contexti2 "github.com/hopeio/lemon/utils/context"
+	contexti "github.com/hopeio/tiga/context"
+	contexti2 "github.com/hopeio/tiga/utils/context"
 	"go.opencensus.io/trace"
 	"net/http"
 )

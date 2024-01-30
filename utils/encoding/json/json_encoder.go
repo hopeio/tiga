@@ -28,7 +28,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/hopeio/lemon/utils/encoding"
+	"github.com/hopeio/tiga/utils/encoding"
 	"go.uber.org/zap/buffer"
 )
 

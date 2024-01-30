@@ -2,9 +2,9 @@ package ffmpeg
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/utils/io/fs"
-	"github.com/hopeio/lemon/utils/io/fs/path"
-	osi "github.com/hopeio/lemon/utils/os"
+	"github.com/hopeio/tiga/utils/io/fs"
+	"github.com/hopeio/tiga/utils/io/fs/path"
+	osi "github.com/hopeio/tiga/utils/os"
 )
 
 type Frame int

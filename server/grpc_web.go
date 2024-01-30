@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/hopeio/lemon/utils/net/http/grpc/web"
+	"github.com/hopeio/tiga/utils/net/http/grpc/web"
 	"google.golang.org/grpc"
 	"net/http"
 )

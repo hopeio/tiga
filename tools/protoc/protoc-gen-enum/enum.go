@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/hopeio/lemon/tools/protoc/protoc-gen-enum/plugin"
+	"github.com/hopeio/tiga/tools/protoc/protoc-gen-enum/plugin"
 	"google.golang.org/protobuf/compiler/protogen"
 )
 

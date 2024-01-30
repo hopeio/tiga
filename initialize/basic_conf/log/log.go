@@ -1,8 +1,8 @@
 package log
 
 import (
-	initialize2 "github.com/hopeio/lemon/initialize"
-	"github.com/hopeio/lemon/utils/log"
+	initialize2 "github.com/hopeio/tiga/initialize"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 type LogConfig log.Config

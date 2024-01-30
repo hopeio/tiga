@@ -2,7 +2,7 @@ package postgres
 
 import (
 	"fmt"
-	pkdb "github.com/hopeio/lemon/initialize/basic_dao/gormdb"
+	pkdb "github.com/hopeio/tiga/initialize/basic_dao/gormdb"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"

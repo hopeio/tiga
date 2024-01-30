@@ -3,7 +3,7 @@ package apollo
 import (
 	"testing"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 func TestApollo(t *testing.T) {

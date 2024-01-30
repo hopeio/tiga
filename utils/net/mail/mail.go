@@ -6,8 +6,8 @@ import (
 	"net"
 	"net/smtp"
 
-	templatei "github.com/hopeio/lemon/utils/definition/template"
-	"github.com/hopeio/lemon/utils/log"
+	templatei "github.com/hopeio/tiga/utils/definition/template"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 // 550,Mailbox not found or access denied.是因为收件邮箱不存在

@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-openapi/spec"
-	"github.com/hopeio/lemon/utils/net/http/api/apidoc"
-	"github.com/hopeio/lemon/utils/reflect"
+	"github.com/hopeio/tiga/utils/net/http/api/apidoc"
+	"github.com/hopeio/tiga/utils/reflect"
 )
 
 // Deprecated

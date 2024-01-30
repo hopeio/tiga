@@ -1,7 +1,7 @@
 package gormi
 
 import (
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )

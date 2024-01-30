@@ -3,7 +3,7 @@ package linkedlist
 import (
 	"fmt"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 // 链表结点

@@ -1,6 +1,6 @@
 # grpcweb
 --
-    import "github.com/hopeio/lemon/utils/net/http/grpc/web"
+    import "github.com/hopeio/tiga/utils/net/http/grpc/web"
 
 `grpcweb` implements the gRPC-Web spec as a wrapper around a gRPC-Go Server.
 

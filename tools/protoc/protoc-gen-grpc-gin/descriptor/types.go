@@ -2,10 +2,10 @@ package descriptor
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/httprule"
+	"github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/httprule"
 	"strings"
 
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"google.golang.org/protobuf/types/descriptorpb"
 	"google.golang.org/protobuf/types/pluginpb"
 )

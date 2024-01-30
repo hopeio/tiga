@@ -1,6 +1,6 @@
 package lazy
 
-import _interface "github.com/hopeio/lemon/utils/definition/interface"
+import _interface "github.com/hopeio/tiga/utils/definition/interface"
 
 type Lazy[T _interface.Init] struct {
 	init bool

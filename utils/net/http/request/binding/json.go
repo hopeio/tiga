@@ -12,7 +12,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gofiber/fiber/v2"
-	"github.com/hopeio/lemon/utils/encoding/json"
+	"github.com/hopeio/tiga/utils/encoding/json"
 	"github.com/valyala/fasthttp"
 )
 

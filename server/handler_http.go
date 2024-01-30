@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/gin-gonic/gin"
-	"github.com/hopeio/lemon/context/http_context"
-	httpi "github.com/hopeio/lemon/utils/net/http"
-	gin_build "github.com/hopeio/lemon/utils/net/http/gin"
-	"github.com/hopeio/lemon/utils/net/http/grpc/gateway"
+	"github.com/hopeio/tiga/context/http_context"
+	httpi "github.com/hopeio/tiga/utils/net/http"
+	gin_build "github.com/hopeio/tiga/utils/net/http/gin"
+	"github.com/hopeio/tiga/utils/net/http/grpc/gateway"
 	"io"
 
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"net/http"
 )
 

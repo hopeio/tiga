@@ -1,9 +1,9 @@
 package viper
 
 import (
-	initialize2 "github.com/hopeio/lemon/initialize"
-	"github.com/hopeio/lemon/utils/log"
-	reflecti "github.com/hopeio/lemon/utils/reflect"
+	initialize2 "github.com/hopeio/tiga/initialize"
+	"github.com/hopeio/tiga/utils/log"
+	reflecti "github.com/hopeio/tiga/utils/reflect"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
 )

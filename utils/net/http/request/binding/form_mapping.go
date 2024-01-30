@@ -6,13 +6,13 @@ package binding
 
 import (
 	"errors"
-	"github.com/hopeio/lemon/utils/encoding/json"
+	"github.com/hopeio/tiga/utils/encoding/json"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
 
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 )
 
 var errUnknownType = errors.New("unknown type")

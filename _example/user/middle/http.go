@@ -4,7 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 func Log(w http.ResponseWriter, r *http.Request) {

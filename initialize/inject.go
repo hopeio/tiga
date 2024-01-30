@@ -1,9 +1,9 @@
 package initialize
 
 import (
-	"github.com/hopeio/lemon/utils/log"
-	"github.com/hopeio/lemon/utils/reflect/mtos"
-	"github.com/hopeio/lemon/utils/slices"
+	"github.com/hopeio/tiga/utils/log"
+	"github.com/hopeio/tiga/utils/reflect/mtos"
+	"github.com/hopeio/tiga/utils/slices"
 	"github.com/pelletier/go-toml"
 	"reflect"
 	"strings"

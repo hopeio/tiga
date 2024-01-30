@@ -1,6 +1,6 @@
 package mp4box
 
-import osi "github.com/hopeio/lemon/utils/os"
+import osi "github.com/hopeio/tiga/utils/os"
 
 // https://www.videohelp.com/software/MP4Box
 const Mp4BoxCmd = `mp4box -add-image %s.hevc:primary -ab heic -new %s.heic`

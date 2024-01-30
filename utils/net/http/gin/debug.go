@@ -2,8 +2,8 @@ package gini
 
 import (
 	"github.com/gin-gonic/gin"
-	httpi "github.com/hopeio/lemon/utils/net/http"
-	"github.com/hopeio/lemon/utils/net/http/gin/handler"
+	httpi "github.com/hopeio/tiga/utils/net/http"
+	"github.com/hopeio/tiga/utils/net/http/gin/handler"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 

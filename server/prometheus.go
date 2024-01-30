@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/hashicorp/go-metrics"
 	"github.com/hashicorp/go-metrics/prometheus"
-	"github.com/hopeio/lemon/initialize"
+	"github.com/hopeio/tiga/initialize"
 )
 
 var (

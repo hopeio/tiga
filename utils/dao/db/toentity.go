@@ -3,8 +3,8 @@ package dbi
 import (
 	"bytes"
 	"fmt"
-	"github.com/hopeio/lemon/utils/io/fs"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	"github.com/hopeio/tiga/utils/io/fs"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"go/ast"
 	"go/format"
 	"go/parser"

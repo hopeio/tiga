@@ -1,4 +1,4 @@
-module github.com/hopeio/lemon
+module github.com/hopeio/tiga
 
 go 1.21
 
@@ -157,6 +157,7 @@ require (
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
+	github.com/gonutz/w32/v2 v2.11.1 // indirect
 	github.com/google/btree v1.1.2 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/google/pprof v0.0.0-20231101202521-4ca4178f5c7a // indirect

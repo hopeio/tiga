@@ -1,8 +1,8 @@
 package http
 
 import (
-	http_fs "github.com/hopeio/lemon/utils/net/http/fs"
-	http_fs_watch "github.com/hopeio/lemon/utils/net/http/fs/watch"
+	http_fs "github.com/hopeio/tiga/utils/net/http/fs"
+	http_fs_watch "github.com/hopeio/tiga/utils/net/http/fs/watch"
 	"net/http"
 	"time"
 )

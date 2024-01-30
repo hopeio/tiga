@@ -1,7 +1,7 @@
 package querytypes
 
 import (
-	"github.com/hopeio/lemon/utils/definition/request"
+	"github.com/hopeio/tiga/utils/definition/request"
 	"golang.org/x/exp/constraints"
 	"time"
 )

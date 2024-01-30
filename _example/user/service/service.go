@@ -4,10 +4,10 @@ import (
 	"context"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 
-	"github.com/hopeio/lemon/_example/protobuf/user"
-	"github.com/hopeio/lemon/_example/user/conf"
-	"github.com/hopeio/lemon/context/http_context"
-	"github.com/hopeio/lemon/protobuf/errorcode"
+	"github.com/hopeio/tiga/_example/protobuf/user"
+	"github.com/hopeio/tiga/_example/user/conf"
+	"github.com/hopeio/tiga/context/http_context"
+	"github.com/hopeio/tiga/protobuf/errorcode"
 )
 
 type UserService struct {

@@ -1,7 +1,7 @@
 package content_type
 
 import (
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday"
 )

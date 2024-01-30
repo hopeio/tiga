@@ -1,7 +1,7 @@
 package sqlite
 
 import (
-	pkdb "github.com/hopeio/lemon/initialize/basic_dao/gormdb"
+	pkdb "github.com/hopeio/tiga/initialize/basic_dao/gormdb"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"runtime"

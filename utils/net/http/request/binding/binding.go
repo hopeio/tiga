@@ -1,12 +1,12 @@
 package binding
 
 import (
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gofiber/fiber/v2"
-	"github.com/hopeio/lemon/utils/verification/validator"
+	"github.com/hopeio/tiga/utils/verification/validator"
 	"github.com/valyala/fasthttp"
 )
 

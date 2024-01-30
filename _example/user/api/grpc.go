@@ -1,8 +1,8 @@
 package api
 
 import (
-	"github.com/hopeio/lemon/_example/protobuf/user"
-	userService "github.com/hopeio/lemon/_example/user/service"
+	"github.com/hopeio/tiga/_example/protobuf/user"
+	userService "github.com/hopeio/tiga/_example/user/service"
 	"google.golang.org/grpc"
 )
 

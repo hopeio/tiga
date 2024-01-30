@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hopeio/lemon/_example/protobuf/user"
-	"github.com/hopeio/lemon/_example/user/service"
+	"github.com/hopeio/tiga/_example/protobuf/user"
+	"github.com/hopeio/tiga/_example/user/service"
 	"net/http"
 )
 

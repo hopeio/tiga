@@ -2,14 +2,14 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.20.1
-// source: lemon/protobuf/response/response.proto
+// source: tiga/protobuf/response/response.proto
 
 package response
 
 import (
 	_ "github.com/danielvladco/go-proto-gql/pkg/graphqlpb"
-	any1 "github.com/hopeio/lemon/protobuf/any"
-	_ "github.com/hopeio/lemon/protobuf/utils/patch"
+	any1 "github.com/hopeio/tiga/protobuf/any"
+	_ "github.com/hopeio/tiga/protobuf/utils/patch"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	anypb "google.golang.org/protobuf/types/known/anypb"
@@ -37,7 +37,7 @@ type AnyReply struct {
 func (x *AnyReply) Reset() {
 	*x = AnyReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_response_response_proto_msgTypes[0]
+		mi := &file_tiga_protobuf_response_response_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -50,7 +50,7 @@ func (x *AnyReply) String() string {
 func (*AnyReply) ProtoMessage() {}
 
 func (x *AnyReply) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_response_response_proto_msgTypes[0]
+	mi := &file_tiga_protobuf_response_response_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,7 +63,7 @@ func (x *AnyReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AnyReply.ProtoReflect.Descriptor instead.
 func (*AnyReply) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_response_response_proto_rawDescGZIP(), []int{0}
+	return file_tiga_protobuf_response_response_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *AnyReply) GetCode() uint32 {
@@ -101,7 +101,7 @@ type RawReply struct {
 func (x *RawReply) Reset() {
 	*x = RawReply{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_response_response_proto_msgTypes[1]
+		mi := &file_tiga_protobuf_response_response_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -114,7 +114,7 @@ func (x *RawReply) String() string {
 func (*RawReply) ProtoMessage() {}
 
 func (x *RawReply) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_response_response_proto_msgTypes[1]
+	mi := &file_tiga_protobuf_response_response_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -127,7 +127,7 @@ func (x *RawReply) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RawReply.ProtoReflect.Descriptor instead.
 func (*RawReply) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_response_response_proto_rawDescGZIP(), []int{1}
+	return file_tiga_protobuf_response_response_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *RawReply) GetCode() uint32 {
@@ -165,7 +165,7 @@ type CommonRep struct {
 func (x *CommonRep) Reset() {
 	*x = CommonRep{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_response_response_proto_msgTypes[2]
+		mi := &file_tiga_protobuf_response_response_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -178,7 +178,7 @@ func (x *CommonRep) String() string {
 func (*CommonRep) ProtoMessage() {}
 
 func (x *CommonRep) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_response_response_proto_msgTypes[2]
+	mi := &file_tiga_protobuf_response_response_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -191,7 +191,7 @@ func (x *CommonRep) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommonRep.ProtoReflect.Descriptor instead.
 func (*CommonRep) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_response_response_proto_rawDescGZIP(), []int{2}
+	return file_tiga_protobuf_response_response_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *CommonRep) GetCode() uint32 {
@@ -227,7 +227,7 @@ type TinyRep struct {
 func (x *TinyRep) Reset() {
 	*x = TinyRep{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_response_response_proto_msgTypes[3]
+		mi := &file_tiga_protobuf_response_response_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -240,7 +240,7 @@ func (x *TinyRep) String() string {
 func (*TinyRep) ProtoMessage() {}
 
 func (x *TinyRep) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_response_response_proto_msgTypes[3]
+	mi := &file_tiga_protobuf_response_response_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -253,7 +253,7 @@ func (x *TinyRep) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TinyRep.ProtoReflect.Descriptor instead.
 func (*TinyRep) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_response_response_proto_rawDescGZIP(), []int{3}
+	return file_tiga_protobuf_response_response_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *TinyRep) GetCode() uint32 {
@@ -283,7 +283,7 @@ type HttpResponse struct {
 func (x *HttpResponse) Reset() {
 	*x = HttpResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_response_response_proto_msgTypes[4]
+		mi := &file_tiga_protobuf_response_response_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -296,7 +296,7 @@ func (x *HttpResponse) String() string {
 func (*HttpResponse) ProtoMessage() {}
 
 func (x *HttpResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_response_response_proto_msgTypes[4]
+	mi := &file_tiga_protobuf_response_response_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -309,7 +309,7 @@ func (x *HttpResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HttpResponse.ProtoReflect.Descriptor instead.
 func (*HttpResponse) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_response_response_proto_rawDescGZIP(), []int{4}
+	return file_tiga_protobuf_response_response_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *HttpResponse) GetHeader() []string {
@@ -333,9 +333,9 @@ func (x *HttpResponse) GetStatusCode() uint32 {
 	return 0
 }
 
-var File_lemon_protobuf_response_response_proto protoreflect.FileDescriptor
+var File_tiga_protobuf_response_response_proto protoreflect.FileDescriptor
 
-var file_lemon_protobuf_response_response_proto_rawDesc = []byte{
+var file_tiga_protobuf_response_response_proto_rawDesc = []byte{
 	0x0a, 0x28, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x72, 0x61, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2f, 0x72, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x2f, 0x72, 0x65, 0x73, 0x70,
 	0x6f, 0x6e, 0x73, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x08, 0x72, 0x65, 0x73, 0x70,
@@ -389,19 +389,19 @@ var file_lemon_protobuf_response_response_proto_rawDesc = []byte{
 }
 
 var (
-	file_lemon_protobuf_response_response_proto_rawDescOnce sync.Once
-	file_lemon_protobuf_response_response_proto_rawDescData = file_lemon_protobuf_response_response_proto_rawDesc
+	file_tiga_protobuf_response_response_proto_rawDescOnce sync.Once
+	file_tiga_protobuf_response_response_proto_rawDescData = file_tiga_protobuf_response_response_proto_rawDesc
 )
 
-func file_lemon_protobuf_response_response_proto_rawDescGZIP() []byte {
-	file_lemon_protobuf_response_response_proto_rawDescOnce.Do(func() {
-		file_lemon_protobuf_response_response_proto_rawDescData = protoimpl.X.CompressGZIP(file_lemon_protobuf_response_response_proto_rawDescData)
+func file_tiga_protobuf_response_response_proto_rawDescGZIP() []byte {
+	file_tiga_protobuf_response_response_proto_rawDescOnce.Do(func() {
+		file_tiga_protobuf_response_response_proto_rawDescData = protoimpl.X.CompressGZIP(file_tiga_protobuf_response_response_proto_rawDescData)
 	})
-	return file_lemon_protobuf_response_response_proto_rawDescData
+	return file_tiga_protobuf_response_response_proto_rawDescData
 }
 
-var file_lemon_protobuf_response_response_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-var file_lemon_protobuf_response_response_proto_goTypes = []interface{}{
+var file_tiga_protobuf_response_response_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_tiga_protobuf_response_response_proto_goTypes = []interface{}{
 	(*AnyReply)(nil),     // 0: response.AnyReply
 	(*RawReply)(nil),     // 1: response.RawReply
 	(*CommonRep)(nil),    // 2: response.CommonRep
@@ -410,7 +410,7 @@ var file_lemon_protobuf_response_response_proto_goTypes = []interface{}{
 	(*anypb.Any)(nil),    // 5: google.protobuf.Any
 	(*any1.RawJson)(nil), // 6: any.RawJson
 }
-var file_lemon_protobuf_response_response_proto_depIdxs = []int32{
+var file_tiga_protobuf_response_response_proto_depIdxs = []int32{
 	5, // 0: response.AnyReply.details:type_name -> google.protobuf.Any
 	6, // 1: response.RawReply.details:type_name -> any.RawJson
 	2, // [2:2] is the sub-list for method output_type
@@ -420,13 +420,13 @@ var file_lemon_protobuf_response_response_proto_depIdxs = []int32{
 	0, // [0:2] is the sub-list for field type_name
 }
 
-func init() { file_lemon_protobuf_response_response_proto_init() }
-func file_lemon_protobuf_response_response_proto_init() {
-	if File_lemon_protobuf_response_response_proto != nil {
+func init() { file_tiga_protobuf_response_response_proto_init() }
+func file_tiga_protobuf_response_response_proto_init() {
+	if File_tiga_protobuf_response_response_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_lemon_protobuf_response_response_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_response_response_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*AnyReply); i {
 			case 0:
 				return &v.state
@@ -438,7 +438,7 @@ func file_lemon_protobuf_response_response_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_response_response_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_response_response_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RawReply); i {
 			case 0:
 				return &v.state
@@ -450,7 +450,7 @@ func file_lemon_protobuf_response_response_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_response_response_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_response_response_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CommonRep); i {
 			case 0:
 				return &v.state
@@ -462,7 +462,7 @@ func file_lemon_protobuf_response_response_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_response_response_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_response_response_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*TinyRep); i {
 			case 0:
 				return &v.state
@@ -474,7 +474,7 @@ func file_lemon_protobuf_response_response_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_response_response_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_response_response_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*HttpResponse); i {
 			case 0:
 				return &v.state
@@ -491,18 +491,18 @@ func file_lemon_protobuf_response_response_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_lemon_protobuf_response_response_proto_rawDesc,
+			RawDescriptor: file_tiga_protobuf_response_response_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_lemon_protobuf_response_response_proto_goTypes,
-		DependencyIndexes: file_lemon_protobuf_response_response_proto_depIdxs,
-		MessageInfos:      file_lemon_protobuf_response_response_proto_msgTypes,
+		GoTypes:           file_tiga_protobuf_response_response_proto_goTypes,
+		DependencyIndexes: file_tiga_protobuf_response_response_proto_depIdxs,
+		MessageInfos:      file_tiga_protobuf_response_response_proto_msgTypes,
 	}.Build()
-	File_lemon_protobuf_response_response_proto = out.File
-	file_lemon_protobuf_response_response_proto_rawDesc = nil
-	file_lemon_protobuf_response_response_proto_goTypes = nil
-	file_lemon_protobuf_response_response_proto_depIdxs = nil
+	File_tiga_protobuf_response_response_proto = out.File
+	file_tiga_protobuf_response_response_proto_rawDesc = nil
+	file_tiga_protobuf_response_response_proto_goTypes = nil
+	file_tiga_protobuf_response_response_proto_depIdxs = nil
 }

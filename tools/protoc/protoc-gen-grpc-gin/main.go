@@ -12,9 +12,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	descriptor2 "github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/descriptor"
-	"github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/gengateway"
-	"github.com/hopeio/lemon/utils/log"
+	descriptor2 "github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/descriptor"
+	"github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/gengateway"
+	"github.com/hopeio/tiga/utils/log"
 	"go.uber.org/zap/zapcore"
 	"os"
 	"strings"

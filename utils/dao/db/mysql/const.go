@@ -1,7 +1,7 @@
 package mysql
 
 import (
-	dbi "github.com/hopeio/lemon/utils/dao/db/const"
+	dbi "github.com/hopeio/tiga/utils/dao/db/const"
 )
 
 const (

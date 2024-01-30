@@ -1,7 +1,7 @@
 package dingding
 
 import (
-	"github.com/hopeio/lemon/utils/sdk/dingding"
+	"github.com/hopeio/tiga/utils/sdk/dingding"
 	"go.uber.org/zap"
 	"net/url"
 )

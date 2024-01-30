@@ -2,22 +2,22 @@ package initialize
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/initialize/conf_center"
-	ilocal "github.com/hopeio/lemon/initialize/conf_center/local"
-	"github.com/hopeio/lemon/utils/configor/local"
-	"github.com/hopeio/lemon/utils/errors/multierr"
+	"github.com/hopeio/tiga/initialize/conf_center"
+	ilocal "github.com/hopeio/tiga/initialize/conf_center/local"
+	"github.com/hopeio/tiga/utils/configor/local"
+	"github.com/hopeio/tiga/utils/errors/multierr"
 	"os"
 	"reflect"
 	"strings"
 	"sync"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 // 约定大于配置
 var (
 	GlobalConfig = &globalConfig{
-		BasicConfig: BasicConfig{Module: "lemon-app", Env: DEVELOPMENT, ConfUrl: "./config.toml"},
+		BasicConfig: BasicConfig{Module: "tiga-app", Env: DEVELOPMENT, ConfUrl: "./config.toml"},
 		confMap:     map[string]interface{}{},
 		RWMutex:     sync.RWMutex{},
 	}

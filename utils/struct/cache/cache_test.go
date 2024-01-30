@@ -8,9 +8,9 @@ import (
 	"time"
 
 	"github.com/dgraph-io/ristretto"
-	"github.com/hopeio/lemon/utils/struct/cache/freecache"
-	"github.com/hopeio/lemon/utils/struct/cache/gcache"
-	gocache "github.com/hopeio/lemon/utils/struct/cache/go-cache"
+	"github.com/hopeio/tiga/utils/struct/cache/freecache"
+	"github.com/hopeio/tiga/utils/struct/cache/gcache"
+	gocache "github.com/hopeio/tiga/utils/struct/cache/go-cache"
 )
 
 func BenchmarkFree(b *testing.B) {

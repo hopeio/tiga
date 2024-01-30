@@ -1,7 +1,7 @@
 package any
 
 import (
-	"github.com/hopeio/lemon/utils/encoding/json"
+	"github.com/hopeio/tiga/utils/encoding/json"
 )
 
 func NewAny(v interface{}) (*RawJson, error) {

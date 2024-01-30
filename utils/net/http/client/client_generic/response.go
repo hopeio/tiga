@@ -2,7 +2,7 @@ package client_generic
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/utils/net/http/client"
+	"github.com/hopeio/tiga/utils/net/http/client"
 )
 
 type ResponseBody[RES any] struct {

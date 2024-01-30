@@ -3,8 +3,8 @@
 package clause
 
 import (
-	dbi "github.com/hopeio/lemon/utils/dao/db"
-	"github.com/hopeio/lemon/utils/definition/request"
+	dbi "github.com/hopeio/tiga/utils/dao/db"
+	"github.com/hopeio/tiga/utils/definition/request"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

@@ -25,7 +25,7 @@ import (
 	"testing"
 	"time"
 
-	testproto "github.com/hopeio/lemon/utils/net/http/grpc/web/test"
+	testproto "github.com/hopeio/tiga/utils/net/http/grpc/web/test"
 	"github.com/mwitkow/go-conntrack/connhelpers"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

@@ -2,8 +2,8 @@ package dingding
 
 import (
 	"encoding/base64"
-	bufferi "github.com/hopeio/lemon/utils/io/buffer"
-	"github.com/hopeio/lemon/utils/log/output"
+	bufferi "github.com/hopeio/tiga/utils/io/buffer"
+	"github.com/hopeio/tiga/utils/log/output"
 	"go.uber.org/zap/zapcore"
 	"math"
 	"sync"

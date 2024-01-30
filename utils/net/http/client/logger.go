@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/hopeio/lemon/utils/log"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	"github.com/hopeio/tiga/utils/log"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"go.uber.org/zap"
 	"time"
 )

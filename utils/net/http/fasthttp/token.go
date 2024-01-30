@@ -1,8 +1,8 @@
 package fasthttpi
 
 import (
-	httpi "github.com/hopeio/lemon/utils/net/http"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	httpi "github.com/hopeio/tiga/utils/net/http"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"net/url"
 
 	"github.com/valyala/fasthttp"

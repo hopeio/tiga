@@ -2,7 +2,7 @@ package contexti
 
 import (
 	"context"
-	logi "github.com/hopeio/lemon/utils/log"
+	logi "github.com/hopeio/tiga/utils/log"
 	"go.uber.org/zap"
 )
 

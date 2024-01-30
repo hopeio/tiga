@@ -2,7 +2,7 @@ package initialize
 
 import (
 	"flag"
-	reflecti "github.com/hopeio/lemon/utils/reflect"
+	reflecti "github.com/hopeio/tiga/utils/reflect"
 	"github.com/spf13/pflag"
 	"net/http"
 	"net/url"

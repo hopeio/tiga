@@ -2,11 +2,11 @@ package fasthttp_context
 
 import (
 	"context"
-	contexti "github.com/hopeio/lemon/context"
-	contexti2 "github.com/hopeio/lemon/utils/context"
-	httpi "github.com/hopeio/lemon/utils/net/http"
-	fasthttpi "github.com/hopeio/lemon/utils/net/http/fasthttp"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	contexti "github.com/hopeio/tiga/context"
+	contexti2 "github.com/hopeio/tiga/utils/context"
+	httpi "github.com/hopeio/tiga/utils/net/http"
+	fasthttpi "github.com/hopeio/tiga/utils/net/http/fasthttp"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"github.com/valyala/fasthttp"
 )
 

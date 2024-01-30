@@ -2,10 +2,10 @@ package gini
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hopeio/lemon/protobuf/errorcode"
-	"github.com/hopeio/lemon/utils/net/http/request/binding"
-	stringsi "github.com/hopeio/lemon/utils/strings"
-	"github.com/hopeio/lemon/utils/verification/validator"
+	"github.com/hopeio/tiga/protobuf/errorcode"
+	"github.com/hopeio/tiga/utils/net/http/request/binding"
+	stringsi "github.com/hopeio/tiga/utils/strings"
+	"github.com/hopeio/tiga/utils/verification/validator"
 	"io/ioutil"
 )
 

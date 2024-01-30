@@ -3,9 +3,9 @@ package engine
 import (
 	"fmt"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/hopeio/lemon/utils/generator"
-	"github.com/hopeio/lemon/utils/log"
-	synci "github.com/hopeio/lemon/utils/sync"
+	"github.com/hopeio/tiga/utils/generator"
+	"github.com/hopeio/tiga/utils/log"
+	synci "github.com/hopeio/tiga/utils/sync"
 	"runtime/debug"
 	"sync/atomic"
 	"time"

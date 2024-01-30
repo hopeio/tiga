@@ -7,7 +7,7 @@ import (
 	"errors"
 	"github.com/elastic/go-elasticsearch/v8"
 	"github.com/elastic/go-elasticsearch/v8/esapi"
-	"github.com/hopeio/lemon/utils/io/reader"
+	"github.com/hopeio/tiga/utils/io/reader"
 	"net/http"
 )
 

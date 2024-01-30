@@ -2,8 +2,8 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hopeio/lemon/protobuf/errorcode"
-	httpi "github.com/hopeio/lemon/utils/net/http"
+	"github.com/hopeio/tiga/protobuf/errorcode"
+	httpi "github.com/hopeio/tiga/utils/net/http"
 )
 
 func RespErrcode(ctx *gin.Context, code errorcode.ErrCode) {

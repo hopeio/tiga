@@ -11,8 +11,8 @@ import (
 	"github.com/go-oauth2/oauth2/v4"
 	"github.com/go-oauth2/oauth2/v4/errors"
 	"github.com/go-oauth2/oauth2/v4/server"
-	"github.com/hopeio/lemon/protobuf/oauth"
-	"github.com/hopeio/lemon/protobuf/response"
+	"github.com/hopeio/tiga/protobuf/oauth"
+	"github.com/hopeio/tiga/protobuf/response"
 )
 
 type Server struct {

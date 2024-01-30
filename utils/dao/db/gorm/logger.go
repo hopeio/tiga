@@ -3,8 +3,8 @@ package gormi
 import (
 	"context"
 	"fmt"
-	contexti "github.com/hopeio/lemon/utils/context"
-	logi "github.com/hopeio/lemon/utils/log"
+	contexti "github.com/hopeio/tiga/utils/context"
+	logi "github.com/hopeio/tiga/utils/log"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gorm.io/gorm/logger"

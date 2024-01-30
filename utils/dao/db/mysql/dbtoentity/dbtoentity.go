@@ -2,8 +2,8 @@ package dbtoentity
 
 import (
 	"database/sql"
-	dbi "github.com/hopeio/lemon/utils/dao/db"
-	"github.com/hopeio/lemon/utils/dao/db/mysql"
+	dbi "github.com/hopeio/tiga/utils/dao/db"
+	"github.com/hopeio/tiga/utils/dao/db/mysql"
 )
 
 func MysqlConvert(db *sql.DB, filename string) {

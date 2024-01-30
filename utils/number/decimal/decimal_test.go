@@ -2,7 +2,7 @@ package decimal
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/utils/number"
+	"github.com/hopeio/tiga/utils/number"
 	"gorm.io/gorm"
 	"log"
 	"math/big"

@@ -1,9 +1,9 @@
 package conf_center
 
 import (
-	"github.com/hopeio/lemon/initialize/conf_center/http"
-	"github.com/hopeio/lemon/initialize/conf_center/local"
-	"github.com/hopeio/lemon/initialize/conf_center/nacos"
+	"github.com/hopeio/tiga/initialize/conf_center/http"
+	"github.com/hopeio/tiga/initialize/conf_center/local"
+	"github.com/hopeio/tiga/initialize/conf_center/nacos"
 )
 
 type ConfigType string

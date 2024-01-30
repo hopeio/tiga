@@ -3,9 +3,9 @@ package tnsq
 import (
 	"encoding/json"
 	"fmt"
-	reflecti "github.com/hopeio/lemon/utils/reflect"
+	reflecti "github.com/hopeio/tiga/utils/reflect"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 	"github.com/nsqio/go-nsq"
 )
 

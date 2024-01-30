@@ -3,8 +3,8 @@ package local
 import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
-	"github.com/hopeio/lemon/utils/configor/local"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/configor/local"
+	"github.com/hopeio/tiga/utils/log"
 	"os"
 	"time"
 )

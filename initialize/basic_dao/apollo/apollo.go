@@ -1,8 +1,8 @@
 package apollo
 
 import (
-	"github.com/hopeio/lemon/utils/configor/apollo"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/configor/apollo"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 type ApolloConfig apollo.Config

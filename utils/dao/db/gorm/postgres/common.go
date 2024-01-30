@@ -1,9 +1,9 @@
 package postgres
 
 import (
-	dbi "github.com/hopeio/lemon/utils/dao/db"
-	dbconst "github.com/hopeio/lemon/utils/dao/db/const"
-	gormi "github.com/hopeio/lemon/utils/dao/db/gorm"
+	dbi "github.com/hopeio/tiga/utils/dao/db"
+	dbconst "github.com/hopeio/tiga/utils/dao/db/const"
+	gormi "github.com/hopeio/tiga/utils/dao/db/gorm"
 	"gorm.io/gorm"
 )
 

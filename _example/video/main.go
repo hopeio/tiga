@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/hopeio/lemon/_example/protobuf/user"
-	"github.com/hopeio/lemon/utils/log"
-	grpci "github.com/hopeio/lemon/utils/net/http/grpc"
+	"github.com/hopeio/tiga/_example/protobuf/user"
+	"github.com/hopeio/tiga/utils/log"
+	grpci "github.com/hopeio/tiga/utils/net/http/grpc"
 	"golang.org/x/net/context"
 )
 

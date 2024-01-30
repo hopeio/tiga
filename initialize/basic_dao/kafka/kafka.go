@@ -2,7 +2,7 @@ package kafka
 
 import (
 	"github.com/IBM/sarama"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 type KafkaConfig struct {

@@ -1,7 +1,7 @@
 package descriptor
 
 import (
-	"github.com/hopeio/lemon/protobuf/utils/openapiconfig"
+	"github.com/hopeio/tiga/protobuf/utils/openapiconfig"
 	"testing"
 
 	"google.golang.org/protobuf/compiler/protogen"

@@ -1,5 +1,5 @@
-lemon=$(go list -m -f {{.Dir}}  github.com/hopeio/lemon)
-lemon=${lemon//\\/\/}
+tiga=$(go list -m -f {{.Dir}}  github.com/hopeio/tiga)
+tiga=${tiga//\\/\/}
 # 复制proto文件
 echo "copy proto dependencies ..."
 ## 依赖地址
@@ -12,7 +12,7 @@ protopatchDir=${protopatchDir//\\/\/}
 gqlDir=$(go list -m -f {{.Dir}} github.com/danielvladco/go-proto-gql)
 gqlDir=${gqlDir//\\/\/}
 
-protoDir=$lemon/protobuf/_proto
+protoDir=$tiga/protobuf/_proto
 
 ## googleapis
 cd $protoDir

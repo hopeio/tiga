@@ -3,9 +3,9 @@
 package clause
 
 import (
-	"github.com/hopeio/lemon/utils/dao/db/querytypes"
-	"github.com/hopeio/lemon/utils/definition/request"
-	request2 "github.com/hopeio/lemon/utils/definition/request"
+	"github.com/hopeio/tiga/utils/dao/db/querytypes"
+	"github.com/hopeio/tiga/utils/definition/request"
+	request2 "github.com/hopeio/tiga/utils/definition/request"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 )

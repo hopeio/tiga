@@ -5,7 +5,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 var CommonTemp = template.New("all")

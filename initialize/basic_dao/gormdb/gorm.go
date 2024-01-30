@@ -1,9 +1,9 @@
 package gormdb
 
 import (
-	"github.com/hopeio/lemon/initialize"
-	gormi "github.com/hopeio/lemon/utils/dao/db/gorm"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/initialize"
+	gormi "github.com/hopeio/tiga/utils/dao/db/gorm"
+	"github.com/hopeio/tiga/utils/log"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"gorm.io/gorm/logger"

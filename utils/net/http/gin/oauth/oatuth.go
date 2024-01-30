@@ -8,7 +8,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/sessions"
-	"github.com/hopeio/lemon/utils/verification/auth/oauth/provider"
+	"github.com/hopeio/tiga/utils/verification/auth/oauth/provider"
 	"github.com/markbates/goth"
 )
 

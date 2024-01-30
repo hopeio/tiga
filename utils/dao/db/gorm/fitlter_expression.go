@@ -1,7 +1,7 @@
 package gormi
 
 import (
-	dbi "github.com/hopeio/lemon/utils/dao/db"
+	dbi "github.com/hopeio/tiga/utils/dao/db"
 	"gorm.io/gorm"
 	"strings"
 )

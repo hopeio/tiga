@@ -1,0 +1,15 @@
+syntax = "proto3";
+package errorcode;
+
+import "tiga/protobuf/errorcode/enum.proto";
+import "tiga/protobuf/utils/patch/go.proto";
+
+option java_package = "xyz.hoper.tiga.protobuf.errorcode";
+option go_package = "github.com/hopeio/tiga/protobuf/errorcode";
+
+
+
+message ErrRep {
+    ErrCode code = 1 [(go.field) = {tags:'json:"code"'}];
+    string message = 2;
+}

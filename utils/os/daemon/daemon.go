@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 var d bool

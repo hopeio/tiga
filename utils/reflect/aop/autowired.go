@@ -5,7 +5,7 @@ import (
 	"reflect"
 	"strconv"
 
-	"github.com/hopeio/lemon/utils/mock"
+	"github.com/hopeio/tiga/utils/mock"
 )
 
 func Autowired(v interface{}) {

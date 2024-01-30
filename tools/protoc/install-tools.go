@@ -14,10 +14,10 @@ import (
 )
 
 //go:generate go install google.golang.org/protobuf/cmd/protoc-gen-go
-//go:generate protoc -I../../protobuf/_proto --go_out=paths=source_relative:../../.. ../../protobuf/_proto/lemon/protobuf/utils/patch/*.proto
-//go:generate protoc -I../../protobuf/_proto --go_out=paths=source_relative:../../.. ../../protobuf/_proto/lemon/protobuf/utils/apiconfig/*.proto
-//go:generate protoc -I../../protobuf/_proto --go_out=paths=source_relative:../../.. ../../protobuf/_proto/lemon/protobuf/utils/openapiconfig/*.proto
-//go:generate protoc -I../../protobuf/_proto --go_out=paths=source_relative:../../.. ../../protobuf/_proto/lemon/protobuf/utils/enum/*.proto
+//go:generate protoc -I../../protobuf/_proto --go_out=paths=source_relative:../../.. ../../protobuf/_proto/tiga/protobuf/utils/patch/*.proto
+//go:generate protoc -I../../protobuf/_proto --go_out=paths=source_relative:../../.. ../../protobuf/_proto/tiga/protobuf/utils/apiconfig/*.proto
+//go:generate protoc -I../../protobuf/_proto --go_out=paths=source_relative:../../.. ../../protobuf/_proto/tiga/protobuf/utils/openapiconfig/*.proto
+//go:generate protoc -I../../protobuf/_proto --go_out=paths=source_relative:../../.. ../../protobuf/_proto/tiga/protobuf/utils/enum/*.proto
 //go:generate go install ./protoc-gen-enum
 //go:generate go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
 //go:generate go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2

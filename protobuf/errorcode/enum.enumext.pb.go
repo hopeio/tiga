@@ -2,7 +2,7 @@ package errorcode
 
 import (
 	errors "errors"
-	strings "github.com/hopeio/lemon/utils/strings"
+	strings "github.com/hopeio/tiga/utils/strings"
 	io "io"
 )
 

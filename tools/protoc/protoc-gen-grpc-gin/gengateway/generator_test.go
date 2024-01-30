@@ -1,7 +1,7 @@
 package gengateway
 
 import (
-	"github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/descriptor"
+	"github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/descriptor"
 	"testing"
 
 	"google.golang.org/protobuf/proto"

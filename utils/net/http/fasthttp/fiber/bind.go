@@ -2,7 +2,7 @@ package fiber_build
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"github.com/hopeio/lemon/utils/net/http/request/binding"
+	"github.com/hopeio/tiga/utils/net/http/request/binding"
 )
 
 func Bind(c *fiber.Ctx, obj interface{}) error {

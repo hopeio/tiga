@@ -1,7 +1,7 @@
 package rtree
 
 import (
-	"github.com/hopeio/lemon/utils/struct/tree/rtree/base"
+	"github.com/hopeio/tiga/utils/struct/tree/rtree/base"
 	"math"
 	"sync"
 )

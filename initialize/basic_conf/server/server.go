@@ -1,6 +1,6 @@
 package server
 
-import "github.com/hopeio/lemon/server"
+import "github.com/hopeio/tiga/server"
 
 type ServerConfig server.ServerConfig
 

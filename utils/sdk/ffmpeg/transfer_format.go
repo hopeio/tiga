@@ -3,8 +3,8 @@ package ffmpeg
 import (
 	"bytes"
 	"fmt"
-	fs2 "github.com/hopeio/lemon/utils/io/fs"
-	osi "github.com/hopeio/lemon/utils/os"
+	fs2 "github.com/hopeio/tiga/utils/io/fs"
+	osi "github.com/hopeio/tiga/utils/os"
 	"log"
 	"os"
 )

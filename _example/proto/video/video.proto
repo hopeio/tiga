@@ -2,15 +2,15 @@ syntax = "proto3";
 package video;
 
 import "user/user.proto";
-import "lemon/protobuf/utils/patch/go.proto";
+import "tiga/protobuf/utils/patch/go.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/wrappers.proto";
 import "danielvladco/protobuf/graphql.proto";
 
-option java_package = "lemon.hopeio.protobuf.video";
-option go_package = "github.com/hopeio/lemon/_example/protobuf/video";
+option java_package = "tiga.hopeio.protobuf.video";
+option go_package = "github.com/hopeio/tiga/_example/protobuf/video";
 
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {

@@ -1,7 +1,7 @@
 package base
 
 import (
-	"github.com/hopeio/lemon/utils/struct/queue"
+	"github.com/hopeio/tiga/utils/struct/queue"
 )
 
 type queueItem struct {

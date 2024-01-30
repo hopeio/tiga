@@ -3,7 +3,7 @@ package httprule
 import (
 	"flag"
 	"fmt"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 	"reflect"
 	"testing"
 )

@@ -2,8 +2,8 @@ package descriptor
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/protobuf/utils/openapiconfig"
-	"github.com/hopeio/lemon/utils/encoding/yaml"
+	"github.com/hopeio/tiga/protobuf/utils/openapiconfig"
+	"github.com/hopeio/tiga/utils/encoding/yaml"
 	"io/ioutil"
 
 	"google.golang.org/protobuf/encoding/protojson"

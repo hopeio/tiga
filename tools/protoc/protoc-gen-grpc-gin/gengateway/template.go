@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	descriptor2 "github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/descriptor"
-	"github.com/hopeio/lemon/utils/log"
+	descriptor2 "github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/descriptor"
+	"github.com/hopeio/tiga/utils/log"
 	"strings"
 	"text/template"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/utilities"
-	"github.com/hopeio/lemon/utils/strings"
+	"github.com/hopeio/tiga/utils/strings"
 )
 
 type param struct {

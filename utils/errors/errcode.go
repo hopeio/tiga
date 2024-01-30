@@ -2,8 +2,8 @@ package errorsi
 
 import (
 	"github.com/gin-gonic/gin/render"
-	"github.com/hopeio/lemon/utils/log"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	"github.com/hopeio/tiga/utils/log"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"net/http"

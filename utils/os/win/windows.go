@@ -2,19 +2,11 @@ package win
 
 import (
 	"fmt"
+	"github.com/gonutz/w32/v2"
 	"github.com/lxn/win"
+	"golang.org/x/sys/windows"
 	"syscall"
 	"unsafe"
-)
-
-var (
-	user32DLL       = syscall.MustLoadDLL("User32.dll")
-	procEnumWindows = user32DLL.MustFindProc("EnumWindows")
-	findWindow      = user32DLL.MustFindProc("FindWindowW")
-	getClassName    = user32DLL.MustFindProc("GetClassNameW")
-	setForeground   = user32DLL.MustFindProc("SetForegroundWindow")
-	getWindowRect   = user32DLL.MustFindProc("GetWindowRect")
-	getWindowTextW  = user32DLL.MustFindProc("GetWindowTextW")
 )
 
 func StringToCharPtr(str string) *uint8 {
@@ -32,15 +24,11 @@ func AddElementFunc(hWnd win.HWND, hWndList *[]win.HWND) uintptr {
 func GetDesktopWindowHWND() []win.HWND {
 	var hWndList []win.HWND
 	hL := &hWndList
-	_, _, err := syscall.Syscall(procEnumWindows.Addr(), 2, uintptr(syscall.NewCallback(AddElementFunc)), uintptr(unsafe.Pointer(hL)), 0)
+	_, _, err := syscall.Syscall(procEnumWindows.Addr(), 2, syscall.NewCallback(AddElementFunc), uintptr(unsafe.Pointer(hL)), 0)
 	if err != 0 {
 		fmt.Println(err)
 	}
 	return hWndList
-}
-
-type rect struct {
-	left, top, right, bottom int32
 }
 
 func FindWindow(title, processName string) win.HWND {
@@ -67,23 +55,40 @@ func FindWindow(title, processName string) win.HWND {
 	}
 	return win.HWND(hwnd)
 }
-func GetClassName(hwnd win.HWND) string {
-	var buffer [256]uint16
-	getClassName.Call(uintptr(hwnd), uintptr(unsafe.Pointer(&buffer[0])), uintptr(len(buffer)))
-	return syscall.UTF16ToString(buffer[:])
+
+func findProcess(name string) uint32 {
+
+	processIDs, ok := w32.EnumProcesses(make([]uint32, 256))
+	if !ok {
+		return 0
+	}
+
+	for i := 0; i < len(processIDs); i++ {
+		if processIDs[i] != 0 {
+			if name == getProcName(processIDs[i]) {
+				return processIDs[i]
+			}
+		}
+	}
+
+	return 0
 }
 
-func GetWindowTextW(hwnd win.HWND) string {
-	var buffer [256]uint16
-	getWindowTextW.Call(uintptr(hwnd), uintptr(unsafe.Pointer(&buffer[0])), uintptr(len(buffer)))
-	return syscall.UTF16ToString(buffer[:])
-}
+func getProcName(pid uint32) string {
 
-func GetWindowRect(hwnd win.HWND) rect {
-	var r rect
-	getWindowRect.Call(uintptr(hwnd), uintptr(unsafe.Pointer(&r)))
-	return r
-}
-func SetForeground(hwnd win.HWND) {
-	setForeground.Call(uintptr(hwnd))
+	hProcess := w32.OpenProcess(
+		windows.PROCESS_VM_READ|windows.PROCESS_QUERY_INFORMATION,
+		false,
+		pid,
+	)
+
+	if hProcess == 0 {
+		return ""
+	}
+
+	defer func() {
+		w32.CloseHandle(hProcess)
+	}()
+
+	return w32.GetModuleFileName(w32.HMODULE(hProcess))
 }

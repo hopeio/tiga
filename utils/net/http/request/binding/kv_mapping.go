@@ -2,7 +2,7 @@ package binding
 
 import (
 	"fmt"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"reflect"
 
 	"github.com/gofiber/fiber/v2"

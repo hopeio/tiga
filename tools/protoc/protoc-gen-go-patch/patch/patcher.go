@@ -3,7 +3,7 @@ package patch
 import (
 	"bytes"
 	"fmt"
-	"github.com/hopeio/lemon/tools/protoc/protoc-gen-go-patch/patch/ident"
+	"github.com/hopeio/tiga/tools/protoc/protoc-gen-go-patch/patch/ident"
 	"go/ast"
 	"go/format"
 	"go/parser"
@@ -14,7 +14,7 @@ import (
 	"regexp"
 	"strings"
 
-	gopb "github.com/hopeio/lemon/protobuf/utils/patch"
+	gopb "github.com/hopeio/tiga/protobuf/utils/patch"
 	"golang.org/x/tools/go/ast/astutil"
 
 	"google.golang.org/protobuf/compiler/protogen"

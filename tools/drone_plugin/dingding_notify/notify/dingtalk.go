@@ -2,7 +2,7 @@ package notify
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/utils/sdk/dingding"
+	"github.com/hopeio/tiga/utils/sdk/dingding"
 	"github.com/urfave/cli/v2"
 	"time"
 )

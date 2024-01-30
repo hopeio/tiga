@@ -1,6 +1,6 @@
 package controller
 
-import "github.com/hopeio/lemon/utils/errors/multierr"
+import "github.com/hopeio/tiga/utils/errors/multierr"
 
 func ReTry(times int, f func() error) error {
 	var errs multierr.MultiError

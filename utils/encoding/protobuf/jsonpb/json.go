@@ -1,13 +1,13 @@
 package jsonpb
 
 import (
-	"github.com/hopeio/lemon/utils/encoding/json"
+	"github.com/hopeio/tiga/utils/encoding/json"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 	"io"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/hopeio/lemon/protobuf/response"
-	httpi "github.com/hopeio/lemon/utils/net/http"
+	"github.com/hopeio/tiga/protobuf/response"
+	httpi "github.com/hopeio/tiga/utils/net/http"
 )
 
 var JsonPb = &JSONPb{}

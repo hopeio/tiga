@@ -3,8 +3,8 @@ package gjson
 
 import (
 	"encoding/json"
-	"github.com/hopeio/lemon/utils/encoding/json/pretty"
-	"github.com/hopeio/lemon/utils/strings/match"
+	"github.com/hopeio/tiga/utils/encoding/json/pretty"
+	"github.com/hopeio/tiga/utils/strings/match"
 	"reflect"
 	"strconv"
 	"strings"

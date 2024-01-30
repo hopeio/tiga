@@ -2,7 +2,7 @@ package etcd
 
 import (
 	"context"
-	"github.com/hopeio/lemon/initialize"
+	"github.com/hopeio/tiga/initialize"
 	clientv3 "go.etcd.io/etcd/client/v3"
 )
 

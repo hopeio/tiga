@@ -1,7 +1,7 @@
 package slices
 
 import (
-	constraints2 "github.com/hopeio/lemon/utils/definition/constraints"
+	constraints2 "github.com/hopeio/tiga/utils/definition/constraints"
 	"golang.org/x/exp/constraints"
 )
 

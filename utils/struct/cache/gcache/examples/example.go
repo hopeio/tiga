@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/hopeio/lemon/utils/struct/cache/gcache"
+	"github.com/hopeio/tiga/utils/struct/cache/gcache"
 )
 
 func main() {

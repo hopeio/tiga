@@ -2,7 +2,7 @@ package gini
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/hopeio/lemon/utils/verification/validator"
+	"github.com/hopeio/tiga/utils/verification/validator"
 )
 
 func Http(conf *Config, ginHandle func(engine *gin.Engine)) *gin.Engine {

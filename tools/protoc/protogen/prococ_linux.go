@@ -1,7 +1,7 @@
 package main
 
 import (
-	execi "github.com/hopeio/lemon/utils/os/exec"
+	execi "github.com/hopeio/tiga/utils/os/exec"
 	"strings"
 )
 

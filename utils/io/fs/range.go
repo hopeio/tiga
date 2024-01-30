@@ -1,7 +1,7 @@
 package fs
 
 import (
-	"github.com/hopeio/lemon/utils/errors/multierr"
+	"github.com/hopeio/tiga/utils/errors/multierr"
 	"io/fs"
 	"os"
 	"path/filepath"

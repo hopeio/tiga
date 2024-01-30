@@ -3,10 +3,10 @@ package oauth
 import (
 	"context"
 	"github.com/gin-gonic/gin"
-	"github.com/hopeio/lemon/protobuf/oauth"
-	"github.com/hopeio/lemon/protobuf/response"
-	httpi "github.com/hopeio/lemon/utils/net/http"
-	"github.com/hopeio/lemon/utils/net/http/request/binding"
+	"github.com/hopeio/tiga/protobuf/oauth"
+	"github.com/hopeio/tiga/protobuf/response"
+	httpi "github.com/hopeio/tiga/utils/net/http"
+	"github.com/hopeio/tiga/utils/net/http/request/binding"
 
 	"google.golang.org/grpc/metadata"
 )

@@ -9,7 +9,7 @@ import (
 
 	"github.com/go-openapi/spec"
 	"github.com/go-openapi/swag"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 var Doc *spec.Swagger

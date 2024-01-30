@@ -1,7 +1,7 @@
 package heap
 
 import (
-	_interface "github.com/hopeio/lemon/utils/definition/constraints"
+	_interface "github.com/hopeio/tiga/utils/definition/constraints"
 	"golang.org/x/exp/constraints"
 )
 

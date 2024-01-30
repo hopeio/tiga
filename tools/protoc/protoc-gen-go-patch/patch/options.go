@@ -1,7 +1,7 @@
 package patch
 
 import (
-	gopb "github.com/hopeio/lemon/protobuf/utils/patch"
+	gopb "github.com/hopeio/tiga/protobuf/utils/patch"
 	"google.golang.org/protobuf/compiler/protogen"
 	"google.golang.org/protobuf/proto"
 )

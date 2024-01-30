@@ -2,7 +2,7 @@ package stringsi
 
 import (
 	"bytes"
-	"github.com/hopeio/lemon/utils/slices"
+	"github.com/hopeio/tiga/utils/slices"
 	"math/rand"
 	"strings"
 	"unicode"

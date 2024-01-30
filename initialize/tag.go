@@ -1,8 +1,8 @@
 package initialize
 
 import (
-	reflecti "github.com/hopeio/lemon/utils/reflect"
-	"github.com/hopeio/lemon/utils/reflect/structtag"
+	reflecti "github.com/hopeio/tiga/utils/reflect"
+	"github.com/hopeio/tiga/utils/reflect/structtag"
 	"github.com/spf13/pflag"
 	"os"
 	"reflect"

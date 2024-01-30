@@ -4,7 +4,7 @@ import (
 	"os/exec"
 	"time"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 func Format(t time.Time) string {

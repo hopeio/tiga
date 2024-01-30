@@ -2,16 +2,16 @@ gopath=/mnt/d/SDK/gopath
 protoc=/mnt/d/tools/protoc-22.3-linux-x86_64
 
 cd $(dirname $0) && pwd
-lemon=$(cd ../..;pwd)
+tiga_dir=$(cd ../..;pwd)
 
 goproxy=https://goproxy.io,https://goproxy.cn,direct
 goimage=golang:1.20
 
 
 # install tools
-docker run --rm -e GOPROXY=$goproxy -v $gopath:/go -v $lemon:/work -w /work/tools/protoc $goimage bash ./install-tools.sh
+docker run --rm -e GOPROXY=$goproxy -v $gopath:/go -v $tiga_dir:/work -w /work/tools/protoc $goimage bash ./install-tools.sh
 
-dockerTmpDir=$lemon/tools/protoc/_docker
+dockerTmpDir=$tiga_dir/tools/protoc/_docker
 mkdir $dockerTmpDir
 cp $gopath/bin/protoc-gen-enum $dockerTmpDir/
 cp $gopath/bin/protoc-gen-go $dockerTmpDir/
@@ -25,10 +25,10 @@ cp $gopath/bin/protoc-gen-gql $dockerTmpDir/
 cp $gopath/bin/protoc-gen-gogql $dockerTmpDir/
 cp $gopath/bin/gqlgen $dockerTmpDir/
 cp $gopath/bin/protogen $dockerTmpDir/
-cp -r $lemon/protobuf/_proto $dockerTmpDir/_proto
+cp -r $tiga_dir/protobuf/_proto $dockerTmpDir/_proto
 cp -r $protoc $dockerTmpDir/protoc
 
 cd $dockerTmpDir
-docker build -t jybl/goprotoc -f $lemon/tools/protoc/Dockerfile $dockerTmpDir
+docker build -t jybl/goprotoc -f $tiga_dir/tools/protoc/Dockerfile $dockerTmpDir
 rm -r $dockerTmpDir
 docker push jybl/goprotoc

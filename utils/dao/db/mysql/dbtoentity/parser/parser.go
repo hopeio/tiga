@@ -2,8 +2,8 @@ package parser
 
 import (
 	"github.com/blastrain/vitess-sqlparser/sqlparser"
-	dbi "github.com/hopeio/lemon/utils/dao/db"
-	"github.com/hopeio/lemon/utils/dao/db/mysql"
+	dbi "github.com/hopeio/tiga/utils/dao/db"
+	"github.com/hopeio/tiga/utils/dao/db/mysql"
 )
 
 func MysqlConvertByTable(sql string) {

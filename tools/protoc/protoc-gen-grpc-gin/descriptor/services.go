@@ -2,8 +2,8 @@ package descriptor
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/httprule"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/httprule"
+	"github.com/hopeio/tiga/utils/log"
 	"strings"
 
 	options "google.golang.org/genproto/googleapis/api/annotations"

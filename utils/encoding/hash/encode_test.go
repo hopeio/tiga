@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 )
 
 type Foo struct {

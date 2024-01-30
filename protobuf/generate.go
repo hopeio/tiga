@@ -1,8 +1,8 @@
 package main
 
 import (
-	execi "github.com/hopeio/lemon/utils/os/exec"
-	_go "github.com/hopeio/lemon/utils/sdk/go"
+	execi "github.com/hopeio/tiga/utils/os/exec"
+	_go "github.com/hopeio/tiga/utils/sdk/go"
 	"log"
 	"os"
 	"strings"
@@ -11,7 +11,7 @@ import (
 //go:generate mockgen -destination ../protobuf/user/user.mock.go -package user -source ../protobuf/user/user.service_grpc.pb.go UserServiceServer
 
 var (
-	liblemonDir, proto   string
+	libtigaDir, proto    string
 	pwd, gopath, include string
 )
 
@@ -22,8 +22,8 @@ func init() {
 	}
 
 	pwd, _ = os.Getwd()
-	liblemonDir = _go.GetDepDir(Deplemon)
-	proto = liblemonDir + "/protobuf/_proto"
+	libtigaDir = _go.GetDepDir(Deptiga)
+	proto = libtigaDir + "/protobuf/_proto"
 	//libGatewayDir := _go.GetDepDir(DepGrpcGateway)
 	//libGoogleDir := _go.GetDepDir(DepGoogleapis)
 
@@ -32,7 +32,7 @@ func init() {
 
 func main() {
 	//single("/content/moment.model.proto")
-	generate(proto + "/lemon/protobuf")
+	generate(proto + "/tiga/protobuf")
 	//gengql()
 	os.Chdir(pwd)
 }
@@ -45,7 +45,7 @@ const (
 	goListDir      = `go list -m -f {{.Dir}} `
 	goListDep      = `go list -m -f {{.Path}}@{{.Version}} `
 	DepGoogleapis  = "github.com/googleapis/googleapis@v0.0.0-20220520010701-4c6f5836a32f"
-	Deplemon       = "github.com/hopeio/lemon"
+	Deptiga        = "github.com/hopeio/tiga"
 	DepGrpcGateway = "github.com/grpc-ecosystem/grpc-gateway/v2"
 	DepProtopatch  = "github.com/alta/protopatch"
 )
@@ -63,13 +63,13 @@ func generate(dir string) {
 			generate(dir + "/" + fileInfos[i].Name())
 		}
 		if strings.HasSuffix(fileInfos[i].Name(), "enum.proto") {
-			arg := "protoc " + include + " " + dir + "/" + fileInfos[i].Name() + " --" + enumOut + ":" + liblemonDir + "/.."
+			arg := "protoc " + include + " " + dir + "/" + fileInfos[i].Name() + " --" + enumOut + ":" + libtigaDir + "/.."
 			execi.Run(arg)
 		}
 	}
 
 	for _, plugin := range model {
-		arg := "protoc " + include + " " + dir + "/*.proto --" + plugin + ":" + liblemonDir + "/.."
+		arg := "protoc " + include + " " + dir + "/*.proto --" + plugin + ":" + libtigaDir + "/.."
 		execi.Run(arg)
 	}
 

@@ -2,8 +2,8 @@ package listener
 
 import (
 	"context"
-	"github.com/hopeio/lemon/utils/scheduler/rate"
-	"github.com/hopeio/lemon/utils/scheduler/tiny_engine"
+	"github.com/hopeio/tiga/utils/scheduler/rate"
+	"github.com/hopeio/tiga/utils/scheduler/tiny_engine"
 	"time"
 )
 

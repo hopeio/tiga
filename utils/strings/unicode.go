@@ -1,7 +1,7 @@
 package stringsi
 
 import (
-	"github.com/hopeio/lemon/utils/slices"
+	"github.com/hopeio/tiga/utils/slices"
 	"unicode"
 	"unicode/utf16"
 	"unicode/utf8"

@@ -14,8 +14,8 @@ import (
 	"sync"
 	"time"
 
-	httpi "github.com/hopeio/lemon/utils/net/http"
-	"github.com/hopeio/lemon/utils/strings"
+	httpi "github.com/hopeio/tiga/utils/net/http"
+	"github.com/hopeio/tiga/utils/strings"
 )
 
 // 不是并发安全的

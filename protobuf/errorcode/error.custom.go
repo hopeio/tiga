@@ -1,9 +1,9 @@
 package errorcode
 
 import (
-	errorsi "github.com/hopeio/lemon/utils/errors"
-	"github.com/hopeio/lemon/utils/log"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	errorsi "github.com/hopeio/tiga/utils/errors"
+	"github.com/hopeio/tiga/utils/log"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"strconv"

@@ -1,7 +1,7 @@
 package server
 
 import (
-	gini "github.com/hopeio/lemon/utils/net/http/gin"
+	gini "github.com/hopeio/tiga/utils/net/http/gin"
 	"github.com/rs/cors"
 	"net/http"
 	"time"

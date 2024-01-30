@@ -1,7 +1,7 @@
 package descriptor
 
 import (
-	httprule2 "github.com/hopeio/lemon/tools/protoc/protoc-gen-grpc-gin/httprule"
+	httprule2 "github.com/hopeio/tiga/tools/protoc/protoc-gen-grpc-gin/httprule"
 	"reflect"
 	"testing"
 

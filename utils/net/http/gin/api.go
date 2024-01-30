@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hopeio/lemon/utils/net/http/api/apidoc"
-	"github.com/hopeio/lemon/utils/net/http/gin/handler"
+	"github.com/hopeio/tiga/utils/net/http/api/apidoc"
+	"github.com/hopeio/tiga/utils/net/http/gin/handler"
 )
 
 func OpenApi(mux *gin.Engine, filePath string) {

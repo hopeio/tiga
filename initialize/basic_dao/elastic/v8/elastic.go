@@ -2,8 +2,8 @@ package v8
 
 import (
 	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/hopeio/lemon/utils/log"
-	"github.com/hopeio/lemon/utils/net/http/auth"
+	"github.com/hopeio/tiga/utils/log"
+	"github.com/hopeio/tiga/utils/net/http/auth"
 	"net/http"
 )
 

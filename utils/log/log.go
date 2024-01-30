@@ -2,9 +2,9 @@ package log
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/utils/log/output"
-	neti "github.com/hopeio/lemon/utils/net"
-	"github.com/hopeio/lemon/utils/slices"
+	"github.com/hopeio/tiga/utils/log/output"
+	neti "github.com/hopeio/tiga/utils/net"
+	"github.com/hopeio/tiga/utils/slices"
 	"go.uber.org/multierr"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

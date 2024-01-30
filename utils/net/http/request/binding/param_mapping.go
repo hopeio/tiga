@@ -1,7 +1,7 @@
 package binding
 
 import (
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"reflect"
 
 	"github.com/gin-gonic/gin"

@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/hopeio/lemon/utils/number"
-	stringsi "github.com/hopeio/lemon/utils/strings"
+	"github.com/hopeio/tiga/utils/number"
+	stringsi "github.com/hopeio/tiga/utils/strings"
 	"net/http"
 	"net/url"
 	"os"

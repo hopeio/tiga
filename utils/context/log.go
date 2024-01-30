@@ -1,8 +1,8 @@
 package contexti
 
 import (
-	"github.com/hopeio/lemon/protobuf/errorcode"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/protobuf/errorcode"
+	"github.com/hopeio/tiga/utils/log"
 	"go.uber.org/zap"
 )
 

@@ -3,7 +3,7 @@ package httpi
 import (
 	"fmt"
 	"github.com/gin-gonic/gin/render"
-	"github.com/hopeio/lemon/protobuf/errorcode"
+	"github.com/hopeio/tiga/protobuf/errorcode"
 	"io"
 	"net/http"
 	"time"

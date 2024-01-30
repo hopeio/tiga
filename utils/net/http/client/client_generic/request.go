@@ -1,7 +1,7 @@
 package client_generic
 
 import (
-	"github.com/hopeio/lemon/utils/net/http/client"
+	"github.com/hopeio/tiga/utils/net/http/client"
 	"net/http"
 	"time"
 )

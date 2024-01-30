@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	patch2 "github.com/hopeio/lemon/tools/protoc/protoc-gen-go-patch/patch"
+	patch2 "github.com/hopeio/tiga/tools/protoc/protoc-gen-go-patch/patch"
 	"io"
 	"log"
 	"os"

@@ -8,12 +8,12 @@ import (
 	"encoding"
 	"errors"
 	"fmt"
-	"github.com/hopeio/lemon/utils/errors/multierr"
+	"github.com/hopeio/tiga/utils/errors/multierr"
 
 	"reflect"
 	"strings"
 
-	reflecti "github.com/hopeio/lemon/utils/reflect"
+	reflecti "github.com/hopeio/tiga/utils/reflect"
 )
 
 // NewDecoder returns a new Decoder.

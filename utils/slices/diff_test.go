@@ -1,7 +1,7 @@
 package slices
 
 import (
-	"github.com/hopeio/lemon/utils/definition/constraints"
+	"github.com/hopeio/tiga/utils/definition/constraints"
 	"log"
 	"testing"
 )

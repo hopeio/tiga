@@ -2,8 +2,8 @@ package descriptor
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/protobuf/utils/openapiconfig"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/protobuf/utils/openapiconfig"
+	"github.com/hopeio/tiga/utils/log"
 	"strings"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"

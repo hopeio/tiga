@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/initialize"
+	"github.com/hopeio/tiga/initialize"
 )
 
 type TestConfig struct {

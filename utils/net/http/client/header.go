@@ -1,6 +1,6 @@
 package client
 
-import httpi "github.com/hopeio/lemon/utils/net/http"
+import httpi "github.com/hopeio/tiga/utils/net/http"
 
 type Header []string
 

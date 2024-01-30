@@ -1,17 +1,17 @@
 package main
 
 import (
-	"github.com/hopeio/lemon/utils/log"
-	osi "github.com/hopeio/lemon/utils/os"
+	"github.com/hopeio/tiga/utils/log"
+	osi "github.com/hopeio/tiga/utils/os"
 	"os"
 )
 
 // 提供给使用框架的人安装所需环境
 func main() {
-	libDir, _ := osi.CmdLog("go list -m -f {{.Dir}}  github.com/hopeio/lemon")
+	libDir, _ := osi.CmdLog("go list -m -f {{.Dir}}  github.com/hopeio/tiga")
 	os.Chdir(libDir)
 	osi.CmdLog("go install google.golang.org/protobuf/cmd/protoc-gen-go")
-	protoccmd := "protoc -I" + libDir + "/protobuf/_proto --go_out=paths=source_relative:" + libDir + "/.. " + libDir + "/protobuf/_proto/lemon/protobuf/utils/"
+	protoccmd := "protoc -I" + libDir + "/protobuf/_proto --go_out=paths=source_relative:" + libDir + "/.. " + libDir + "/protobuf/_proto/tiga/protobuf/utils/"
 	osi.CmdLog(protoccmd + "patch/*.proto")
 	osi.CmdLog(protoccmd + "apiconfig/*.proto")
 	osi.CmdLog(protoccmd + "openapiconfig/*.proto")

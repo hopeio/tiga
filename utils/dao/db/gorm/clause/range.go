@@ -1,9 +1,9 @@
 package clause
 
 import (
-	dbi "github.com/hopeio/lemon/utils/dao/db"
-	_type "github.com/hopeio/lemon/utils/dao/db/querytypes"
-	"github.com/hopeio/lemon/utils/definition/request"
+	dbi "github.com/hopeio/tiga/utils/dao/db"
+	_type "github.com/hopeio/tiga/utils/dao/db/querytypes"
+	"github.com/hopeio/tiga/utils/definition/request"
 	"gorm.io/gorm/clause"
 )
 

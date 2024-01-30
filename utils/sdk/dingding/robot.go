@@ -6,7 +6,7 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	"github.com/hopeio/lemon/utils/net/http/client"
+	"github.com/hopeio/tiga/utils/net/http/client"
 	"net/url"
 	"strconv"
 	"strings"

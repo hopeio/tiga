@@ -2,7 +2,7 @@ package local_test
 
 import (
 	"encoding/json"
-	"github.com/hopeio/lemon/utils/configor/local"
+	"github.com/hopeio/tiga/utils/configor/local"
 	"io/ioutil"
 	"os"
 	"strings"

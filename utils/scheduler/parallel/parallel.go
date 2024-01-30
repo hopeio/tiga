@@ -1,8 +1,8 @@
 package parallel
 
 import (
-	"github.com/hopeio/lemon/utils/definition/constraints"
-	"github.com/hopeio/lemon/utils/errors/multierr"
+	"github.com/hopeio/tiga/utils/definition/constraints"
+	"github.com/hopeio/tiga/utils/errors/multierr"
 	"sync"
 )
 

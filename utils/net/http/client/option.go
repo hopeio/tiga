@@ -1,7 +1,7 @@
 package client
 
 import (
-	httpi "github.com/hopeio/lemon/utils/net/http"
+	httpi "github.com/hopeio/tiga/utils/net/http"
 	"net/http"
 )
 

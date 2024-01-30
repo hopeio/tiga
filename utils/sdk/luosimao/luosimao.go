@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/hopeio/lemon/utils/net/http/client"
+	"github.com/hopeio/tiga/utils/net/http/client"
 )
 
 var Error = errors.New("人机识别验证失败")

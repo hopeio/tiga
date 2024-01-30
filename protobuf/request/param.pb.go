@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.20.1
-// source: lemon/protobuf/request/param.proto
+// source: tiga/protobuf/request/param.proto
 
 package request
 
@@ -32,7 +32,7 @@ type Page struct {
 func (x *Page) Reset() {
 	*x = Page{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_request_param_proto_msgTypes[0]
+		mi := &file_tiga_protobuf_request_param_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -45,7 +45,7 @@ func (x *Page) String() string {
 func (*Page) ProtoMessage() {}
 
 func (x *Page) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_request_param_proto_msgTypes[0]
+	mi := &file_tiga_protobuf_request_param_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +58,7 @@ func (x *Page) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Page.ProtoReflect.Descriptor instead.
 func (*Page) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_request_param_proto_rawDescGZIP(), []int{0}
+	return file_tiga_protobuf_request_param_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Page) GetPageNo() uint32 {
@@ -86,7 +86,7 @@ type Id struct {
 func (x *Id) Reset() {
 	*x = Id{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_request_param_proto_msgTypes[1]
+		mi := &file_tiga_protobuf_request_param_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -99,7 +99,7 @@ func (x *Id) String() string {
 func (*Id) ProtoMessage() {}
 
 func (x *Id) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_request_param_proto_msgTypes[1]
+	mi := &file_tiga_protobuf_request_param_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -112,7 +112,7 @@ func (x *Id) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Id.ProtoReflect.Descriptor instead.
 func (*Id) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_request_param_proto_rawDescGZIP(), []int{1}
+	return file_tiga_protobuf_request_param_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Id) GetId() uint64 {
@@ -133,7 +133,7 @@ type IdStr struct {
 func (x *IdStr) Reset() {
 	*x = IdStr{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_request_param_proto_msgTypes[2]
+		mi := &file_tiga_protobuf_request_param_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -146,7 +146,7 @@ func (x *IdStr) String() string {
 func (*IdStr) ProtoMessage() {}
 
 func (x *IdStr) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_request_param_proto_msgTypes[2]
+	mi := &file_tiga_protobuf_request_param_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -159,7 +159,7 @@ func (x *IdStr) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IdStr.ProtoReflect.Descriptor instead.
 func (*IdStr) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_request_param_proto_rawDescGZIP(), []int{2}
+	return file_tiga_protobuf_request_param_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *IdStr) GetIdStr() string {
@@ -180,7 +180,7 @@ type Cursor struct {
 func (x *Cursor) Reset() {
 	*x = Cursor{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_request_param_proto_msgTypes[3]
+		mi := &file_tiga_protobuf_request_param_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -193,7 +193,7 @@ func (x *Cursor) String() string {
 func (*Cursor) ProtoMessage() {}
 
 func (x *Cursor) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_request_param_proto_msgTypes[3]
+	mi := &file_tiga_protobuf_request_param_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -206,7 +206,7 @@ func (x *Cursor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Cursor.ProtoReflect.Descriptor instead.
 func (*Cursor) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_request_param_proto_rawDescGZIP(), []int{3}
+	return file_tiga_protobuf_request_param_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Cursor) GetCursor() uint64 {
@@ -227,7 +227,7 @@ type CursorStr struct {
 func (x *CursorStr) Reset() {
 	*x = CursorStr{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_lemon_protobuf_request_param_proto_msgTypes[4]
+		mi := &file_tiga_protobuf_request_param_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -240,7 +240,7 @@ func (x *CursorStr) String() string {
 func (*CursorStr) ProtoMessage() {}
 
 func (x *CursorStr) ProtoReflect() protoreflect.Message {
-	mi := &file_lemon_protobuf_request_param_proto_msgTypes[4]
+	mi := &file_tiga_protobuf_request_param_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -253,7 +253,7 @@ func (x *CursorStr) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CursorStr.ProtoReflect.Descriptor instead.
 func (*CursorStr) Descriptor() ([]byte, []int) {
-	return file_lemon_protobuf_request_param_proto_rawDescGZIP(), []int{4}
+	return file_tiga_protobuf_request_param_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *CursorStr) GetCursor() string {
@@ -263,9 +263,9 @@ func (x *CursorStr) GetCursor() string {
 	return ""
 }
 
-var File_lemon_protobuf_request_param_proto protoreflect.FileDescriptor
+var File_tiga_protobuf_request_param_proto protoreflect.FileDescriptor
 
-var file_lemon_protobuf_request_param_proto_rawDesc = []byte{
+var file_tiga_protobuf_request_param_proto_rawDesc = []byte{
 	0x0a, 0x24, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x72, 0x61, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2f, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2f, 0x70, 0x61, 0x72, 0x61, 0x6d,
 	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x07, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x22,
@@ -289,26 +289,26 @@ var file_lemon_protobuf_request_param_proto_rawDesc = []byte{
 }
 
 var (
-	file_lemon_protobuf_request_param_proto_rawDescOnce sync.Once
-	file_lemon_protobuf_request_param_proto_rawDescData = file_lemon_protobuf_request_param_proto_rawDesc
+	file_tiga_protobuf_request_param_proto_rawDescOnce sync.Once
+	file_tiga_protobuf_request_param_proto_rawDescData = file_tiga_protobuf_request_param_proto_rawDesc
 )
 
-func file_lemon_protobuf_request_param_proto_rawDescGZIP() []byte {
-	file_lemon_protobuf_request_param_proto_rawDescOnce.Do(func() {
-		file_lemon_protobuf_request_param_proto_rawDescData = protoimpl.X.CompressGZIP(file_lemon_protobuf_request_param_proto_rawDescData)
+func file_tiga_protobuf_request_param_proto_rawDescGZIP() []byte {
+	file_tiga_protobuf_request_param_proto_rawDescOnce.Do(func() {
+		file_tiga_protobuf_request_param_proto_rawDescData = protoimpl.X.CompressGZIP(file_tiga_protobuf_request_param_proto_rawDescData)
 	})
-	return file_lemon_protobuf_request_param_proto_rawDescData
+	return file_tiga_protobuf_request_param_proto_rawDescData
 }
 
-var file_lemon_protobuf_request_param_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-var file_lemon_protobuf_request_param_proto_goTypes = []interface{}{
+var file_tiga_protobuf_request_param_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_tiga_protobuf_request_param_proto_goTypes = []interface{}{
 	(*Page)(nil),      // 0: request.Page
 	(*Id)(nil),        // 1: request.Id
 	(*IdStr)(nil),     // 2: request.IdStr
 	(*Cursor)(nil),    // 3: request.Cursor
 	(*CursorStr)(nil), // 4: request.CursorStr
 }
-var file_lemon_protobuf_request_param_proto_depIdxs = []int32{
+var file_tiga_protobuf_request_param_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -316,13 +316,13 @@ var file_lemon_protobuf_request_param_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_lemon_protobuf_request_param_proto_init() }
-func file_lemon_protobuf_request_param_proto_init() {
-	if File_lemon_protobuf_request_param_proto != nil {
+func init() { file_tiga_protobuf_request_param_proto_init() }
+func file_tiga_protobuf_request_param_proto_init() {
+	if File_tiga_protobuf_request_param_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_lemon_protobuf_request_param_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_request_param_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Page); i {
 			case 0:
 				return &v.state
@@ -334,7 +334,7 @@ func file_lemon_protobuf_request_param_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_request_param_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_request_param_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Id); i {
 			case 0:
 				return &v.state
@@ -346,7 +346,7 @@ func file_lemon_protobuf_request_param_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_request_param_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_request_param_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*IdStr); i {
 			case 0:
 				return &v.state
@@ -358,7 +358,7 @@ func file_lemon_protobuf_request_param_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_request_param_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_request_param_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*Cursor); i {
 			case 0:
 				return &v.state
@@ -370,7 +370,7 @@ func file_lemon_protobuf_request_param_proto_init() {
 				return nil
 			}
 		}
-		file_lemon_protobuf_request_param_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_tiga_protobuf_request_param_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*CursorStr); i {
 			case 0:
 				return &v.state
@@ -387,18 +387,18 @@ func file_lemon_protobuf_request_param_proto_init() {
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_lemon_protobuf_request_param_proto_rawDesc,
+			RawDescriptor: file_tiga_protobuf_request_param_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_lemon_protobuf_request_param_proto_goTypes,
-		DependencyIndexes: file_lemon_protobuf_request_param_proto_depIdxs,
-		MessageInfos:      file_lemon_protobuf_request_param_proto_msgTypes,
+		GoTypes:           file_tiga_protobuf_request_param_proto_goTypes,
+		DependencyIndexes: file_tiga_protobuf_request_param_proto_depIdxs,
+		MessageInfos:      file_tiga_protobuf_request_param_proto_msgTypes,
 	}.Build()
-	File_lemon_protobuf_request_param_proto = out.File
-	file_lemon_protobuf_request_param_proto_rawDesc = nil
-	file_lemon_protobuf_request_param_proto_goTypes = nil
-	file_lemon_protobuf_request_param_proto_depIdxs = nil
+	File_tiga_protobuf_request_param_proto = out.File
+	file_tiga_protobuf_request_param_proto_rawDesc = nil
+	file_tiga_protobuf_request_param_proto_goTypes = nil
+	file_tiga_protobuf_request_param_proto_depIdxs = nil
 }

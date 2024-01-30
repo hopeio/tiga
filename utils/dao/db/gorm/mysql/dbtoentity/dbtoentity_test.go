@@ -2,9 +2,9 @@ package dbtoentity
 
 import (
 	"fmt"
-	"github.com/hopeio/lemon/initialize"
-	initmysql "github.com/hopeio/lemon/initialize/basic_dao/gormdb/mysql"
-	dbi "github.com/hopeio/lemon/utils/dao/db"
+	"github.com/hopeio/tiga/initialize"
+	initmysql "github.com/hopeio/tiga/initialize/basic_dao/gormdb/mysql"
+	dbi "github.com/hopeio/tiga/utils/dao/db"
 	"go/ast"
 	"go/format"
 	"go/parser"

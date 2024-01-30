@@ -2,13 +2,13 @@
 // versions:
 // 	protoc-gen-go v1.28.1
 // 	protoc        v3.20.1
-// source: lemon/protobuf/errorcode/enum.proto
+// source: tiga/protobuf/errorcode/enum.proto
 
 package errorcode
 
 import (
-	_ "github.com/hopeio/lemon/protobuf/utils/enum"
-	_ "github.com/hopeio/lemon/protobuf/utils/patch"
+	_ "github.com/hopeio/tiga/protobuf/utils/enum"
+	_ "github.com/hopeio/tiga/protobuf/utils/patch"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -127,11 +127,11 @@ func (x ErrCode) OrigString() string {
 }
 
 func (ErrCode) Descriptor() protoreflect.EnumDescriptor {
-	return file_lemon_protobuf_errorcode_enum_proto_enumTypes[0].Descriptor()
+	return file_tiga_protobuf_errorcode_enum_proto_enumTypes[0].Descriptor()
 }
 
 func (ErrCode) Type() protoreflect.EnumType {
-	return &file_lemon_protobuf_errorcode_enum_proto_enumTypes[0]
+	return &file_tiga_protobuf_errorcode_enum_proto_enumTypes[0]
 }
 
 func (x ErrCode) Number() protoreflect.EnumNumber {
@@ -140,12 +140,12 @@ func (x ErrCode) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ErrCode.Descriptor instead.
 func (ErrCode) EnumDescriptor() ([]byte, []int) {
-	return file_lemon_protobuf_errorcode_enum_proto_rawDescGZIP(), []int{0}
+	return file_tiga_protobuf_errorcode_enum_proto_rawDescGZIP(), []int{0}
 }
 
-var File_lemon_protobuf_errorcode_enum_proto protoreflect.FileDescriptor
+var File_tiga_protobuf_errorcode_enum_proto protoreflect.FileDescriptor
 
-var file_lemon_protobuf_errorcode_enum_proto_rawDesc = []byte{
+var file_tiga_protobuf_errorcode_enum_proto_rawDesc = []byte{
 	0x0a, 0x25, 0x70, 0x61, 0x6e, 0x64, 0x6f, 0x72, 0x61, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62,
 	0x75, 0x66, 0x2f, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x63, 0x6f, 0x64, 0x65, 0x2f, 0x65, 0x6e, 0x75,
 	0x6d, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12, 0x09, 0x65, 0x72, 0x72, 0x6f, 0x72, 0x63, 0x6f,
@@ -228,22 +228,22 @@ var file_lemon_protobuf_errorcode_enum_proto_rawDesc = []byte{
 }
 
 var (
-	file_lemon_protobuf_errorcode_enum_proto_rawDescOnce sync.Once
-	file_lemon_protobuf_errorcode_enum_proto_rawDescData = file_lemon_protobuf_errorcode_enum_proto_rawDesc
+	file_tiga_protobuf_errorcode_enum_proto_rawDescOnce sync.Once
+	file_tiga_protobuf_errorcode_enum_proto_rawDescData = file_tiga_protobuf_errorcode_enum_proto_rawDesc
 )
 
-func file_lemon_protobuf_errorcode_enum_proto_rawDescGZIP() []byte {
-	file_lemon_protobuf_errorcode_enum_proto_rawDescOnce.Do(func() {
-		file_lemon_protobuf_errorcode_enum_proto_rawDescData = protoimpl.X.CompressGZIP(file_lemon_protobuf_errorcode_enum_proto_rawDescData)
+func file_tiga_protobuf_errorcode_enum_proto_rawDescGZIP() []byte {
+	file_tiga_protobuf_errorcode_enum_proto_rawDescOnce.Do(func() {
+		file_tiga_protobuf_errorcode_enum_proto_rawDescData = protoimpl.X.CompressGZIP(file_tiga_protobuf_errorcode_enum_proto_rawDescData)
 	})
-	return file_lemon_protobuf_errorcode_enum_proto_rawDescData
+	return file_tiga_protobuf_errorcode_enum_proto_rawDescData
 }
 
-var file_lemon_protobuf_errorcode_enum_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_lemon_protobuf_errorcode_enum_proto_goTypes = []interface{}{
+var file_tiga_protobuf_errorcode_enum_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_tiga_protobuf_errorcode_enum_proto_goTypes = []interface{}{
 	(ErrCode)(0), // 0: errorcode.ErrCode
 }
-var file_lemon_protobuf_errorcode_enum_proto_depIdxs = []int32{
+var file_tiga_protobuf_errorcode_enum_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
 	0, // [0:0] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -251,27 +251,27 @@ var file_lemon_protobuf_errorcode_enum_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_lemon_protobuf_errorcode_enum_proto_init() }
-func file_lemon_protobuf_errorcode_enum_proto_init() {
-	if File_lemon_protobuf_errorcode_enum_proto != nil {
+func init() { file_tiga_protobuf_errorcode_enum_proto_init() }
+func file_tiga_protobuf_errorcode_enum_proto_init() {
+	if File_tiga_protobuf_errorcode_enum_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_lemon_protobuf_errorcode_enum_proto_rawDesc,
+			RawDescriptor: file_tiga_protobuf_errorcode_enum_proto_rawDesc,
 			NumEnums:      1,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_lemon_protobuf_errorcode_enum_proto_goTypes,
-		DependencyIndexes: file_lemon_protobuf_errorcode_enum_proto_depIdxs,
-		EnumInfos:         file_lemon_protobuf_errorcode_enum_proto_enumTypes,
+		GoTypes:           file_tiga_protobuf_errorcode_enum_proto_goTypes,
+		DependencyIndexes: file_tiga_protobuf_errorcode_enum_proto_depIdxs,
+		EnumInfos:         file_tiga_protobuf_errorcode_enum_proto_enumTypes,
 	}.Build()
-	File_lemon_protobuf_errorcode_enum_proto = out.File
-	file_lemon_protobuf_errorcode_enum_proto_rawDesc = nil
-	file_lemon_protobuf_errorcode_enum_proto_goTypes = nil
-	file_lemon_protobuf_errorcode_enum_proto_depIdxs = nil
+	File_tiga_protobuf_errorcode_enum_proto = out.File
+	file_tiga_protobuf_errorcode_enum_proto_rawDesc = nil
+	file_tiga_protobuf_errorcode_enum_proto_goTypes = nil
+	file_tiga_protobuf_errorcode_enum_proto_depIdxs = nil
 }

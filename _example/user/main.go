@@ -1,16 +1,16 @@
 package main
 
 import (
-	"github.com/hopeio/lemon/_example/user/api"
-	"github.com/hopeio/lemon/_example/user/conf"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/_example/user/api"
+	"github.com/hopeio/tiga/_example/user/conf"
+	"github.com/hopeio/tiga/utils/log"
 	"go.opencensus.io/examples/exporter"
 	"go.opencensus.io/plugin/ocgrpc"
 	"go.opencensus.io/stats/view"
 	"google.golang.org/grpc"
 	"time"
 
-	"github.com/hopeio/lemon/server"
+	"github.com/hopeio/tiga/server"
 )
 
 func main() {

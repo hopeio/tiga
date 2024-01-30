@@ -1,13 +1,13 @@
 cd $(dirname $0) && pwd
-lemon=$(go list -m -f {{.Dir}}  github.com/hopeio/lemon)
-lemon=${lemon//\\/\/}
-protoDir=$lemon/protobuf/_proto
+tiga=$(go list -m -f {{.Dir}}  github.com/hopeio/tiga)
+tiga=${tiga//\\/\/}
+protoDir=$tiga/protobuf/_proto
 
 # 安装
-cd $lemon/tools/protoc
+cd $tiga/tools/protoc
 echo "开始安装"
 go install google.golang.org/protobuf/cmd/protoc-gen-go
-protoc -I$protoDir --go_out=paths=source_relative:$lemon/.. $protoDir/lemon/protobuf/utils/**/*.proto
+protoc -I$protoDir --go_out=paths=source_relative:$tiga/.. $protoDir/tiga/protobuf/utils/**/*.proto
 go install ./protoc-gen-enum
 go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
 go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2

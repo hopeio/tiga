@@ -1,12 +1,12 @@
-# lemon
+# tiga
 
 一个开箱即用，高度集成的微服务组件库,可以快速开发集grpc,http,graphql的云原生微服务
 ### quick start
-`go get github.com/hopeio/lemon@main`
+`go get github.com/hopeio/tiga@main`
 #### install env tools
 `install protoc`
-`go get github.com/hopeio/lemon/tools/protoc@main`
-`go run $(go list -m -f {{.Dir}}  github.com/hopeio/lemon)/tools/protoc/install-env.go`
+`go get github.com/hopeio/tiga/tools/protoc@main`
+`go run $(go list -m -f {{.Dir}}  github.com/hopeio/tiga)/tools/protoc/install-env.go`
 #### generate protobuf
 `protogen go -e -w (-q) (-v) -p $proto_path -g $proto_output_path`
 #### use docker
@@ -85,8 +85,8 @@ func main() {
 如果还有Dao要初始化
 ```go
 import(
-    "github.com/hopeio/lemon/initialize/basic_dao/gormdb/postgres"
-    initredis "github.com/hopeio/lemon/initialize/basic_dao/redis"
+    "github.com/hopeio/tiga/initialize/basic_dao/gormdb/postgres"
+    initredis "github.com/hopeio/tiga/initialize/basic_dao/redis"
 )
 // dao dao.
 type dao struct {
@@ -121,7 +121,7 @@ defer initialize.Start(Conf, nil)()
 ![context](_readme/assets/context.webp)
 
 ## server
-lemon服务器，各种服务接口的保留，集成支持，一个服务暴露grpc,http,graphql接口
+tiga服务器，各种服务接口的保留，集成支持，一个服务暴露grpc,http,graphql接口
 - 集成opencensus实现调用链路跟踪记录，配合context及utils-log 实现完整的请求链路日志记录
 - 集成prometheus及pprof实现性能监控及性能问题排查
 - 支持框架自生成的由gin提供支持的grpc转http，也支持原生的grpc-gateway
@@ -131,18 +131,18 @@ lemon服务器，各种服务接口的保留，集成支持，一个服务暴露
 package main
 
 import (
-	"github.com/hopeio/lemon/utils/net/http/gin/handler"
+	"github.com/hopeio/tiga/utils/net/http/gin/handler"
 	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/hopeio/lemon/server"
-	"github.com/hopeio/lemon/initialize"
+	"github.com/hopeio/tiga/server"
+	"github.com/hopeio/tiga/initialize"
 	"user/protobuf/user"
 	uconf "user/conf"
 	udao "user/dao"
 	userservice "user/service"
-	"github.com/hopeio/lemon/utils/log"
+	"github.com/hopeio/tiga/utils/log"
 
 	"go.opencensus.io/examples/exporter"
 	"go.opencensus.io/plugin/ocgrpc"
@@ -197,7 +197,7 @@ func main() {
   - go/dart 生成go/dart文件，E.g: protogen go -p xxx -g xxx
   - -p proto dir
   - -g generate dir
-  - (-d) 指定lemon proto dir,如项目引用本项目或使用jybl/protogen image 可省略
+  - (-d) 指定tiga proto dir,如项目引用本项目或使用jybl/protogen image 可省略
   - -e 是否使用enum扩展插件
   - -w 是否使用grpc-gateway插件
   - -v 是否使用validators插件
@@ -215,18 +215,18 @@ func main() {
 `tools/protoc/docker_build.sh`
 ```
 ### upgrade go
-`docker build -t jybl/goprotoc -f $lemon_dir/tools/protoc/Dockerfile-upgrade .`
+`docker build -t jybl/goprotoc -f $tiga_dir/tools/protoc/Dockerfile-upgrade .`
 ### template
 user.model.proto
 ```protobuf
 syntax = "proto3";
 package user;
 import "user/user.enum.proto";
-import "lemon/protobuf/utils/patch/go.proto";
+import "tiga/protobuf/utils/patch/go.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 
 option java_package = "xyz.hoper.protobuf.user";
-option go_package = "github.com/hopeio/lemon/protobuf/user";
+option go_package = "github.com/hopeio/tiga/protobuf/user";
 // 用户
 message User {
   uint64 id = 1 [(go.field) = {tags:'gorm:"primaryKey;"'}];
@@ -241,13 +241,13 @@ user.enum.proto
 ```protobuf
 syntax = "proto3";
 package user;
-import "lemon/protobuf/utils/enum/enum.proto";
-import "lemon/protobuf/utils/patch/go.proto";
+import "tiga/protobuf/utils/enum/enum.proto";
+import "tiga/protobuf/utils/patch/go.proto";
 
 option (enum.enum_gqlgen_all) = true;
 
 option java_package = "xyz.hoper.protobuf.user";
-option go_package = "github.com/hopeio/lemon/protobuf/user";
+option go_package = "github.com/hopeio/tiga/protobuf/user";
 
 option (enum.enum_prefix_all) = false;
 option (go.file) = {no_enum_prefix:true};
@@ -271,12 +271,12 @@ import "user/user.enum.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "google/api/annotations.proto";
-import "lemon/protobuf/utils/empty/empty.proto";
-import "lemon/protobuf/utils/response/response.proto";
-import "lemon/protobuf/utils/request/param.proto";
-import "lemon/protobuf/utils/proto/gogo/graphql.proto";
-import "lemon/protobuf/utils/oauth/oauth.proto";
-import "lemon/protobuf/utils/patch/go.proto";
+import "tiga/protobuf/utils/empty/empty.proto";
+import "tiga/protobuf/utils/response/response.proto";
+import "tiga/protobuf/utils/request/param.proto";
+import "tiga/protobuf/utils/proto/gogo/graphql.proto";
+import "tiga/protobuf/utils/oauth/oauth.proto";
+import "tiga/protobuf/utils/patch/go.proto";
 import "google/protobuf/wrappers.proto";
 option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
   info: {
@@ -306,8 +306,8 @@ service UserService {
 ```
 ```sh
 # 安装执行
-`go get github.com/hopeio/lemon/tools/protoc@main`
-`go run $(go list -m -f {{.Dir}}  github.com/hopeio/lemon)/tools/protoc/install-env.go`
+`go get github.com/hopeio/tiga/tools/protoc@main`
+`go run $(go list -m -f {{.Dir}}  github.com/hopeio/tiga)/tools/protoc/install-env.go`
 `protogen go -p $proto_path -g $proto_output_path`
 ```
 ### docker

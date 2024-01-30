@@ -3,9 +3,9 @@ package fs
 import (
 	"crypto/md5"
 	"encoding/hex"
-	"github.com/hopeio/lemon/utils/crypto"
-	"github.com/hopeio/lemon/utils/log"
-	"github.com/hopeio/lemon/utils/slices"
+	"github.com/hopeio/tiga/utils/crypto"
+	"github.com/hopeio/tiga/utils/log"
+	"github.com/hopeio/tiga/utils/slices"
 	"io"
 	"os"
 	stdpath "path"

@@ -1,6 +1,6 @@
 package client_generic
 
-import "github.com/hopeio/lemon/utils/net/http/client"
+import "github.com/hopeio/tiga/utils/net/http/client"
 
 type ResponseInterface[T any] interface {
 	client.ResponseBodyCheck

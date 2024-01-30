@@ -3,14 +3,14 @@ package fs
 import (
 	"errors"
 	"fmt"
-	"github.com/hopeio/lemon/utils/io/fs/path"
+	"github.com/hopeio/tiga/utils/io/fs/path"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
 	"sort"
 
-	runtimei "github.com/hopeio/lemon/utils/runtime"
+	runtimei "github.com/hopeio/tiga/utils/runtime"
 )
 
 type Dir string
