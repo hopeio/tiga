@@ -9,20 +9,31 @@ import (
 func TestWindows(t *testing.T) {
 	/*	w32.EnumWindows(func(w w32.HWND) bool {
 			name, _ := w32.GetClassName(w)
-			fmt.Println(w32.GetWindowText(w), name)
+			fmt.Println(w32.GetWindowText(w), name, w)
+			lvHwnds := ListViews(w)
+			if len(lvHwnds) > 0 {
+				logsCount := GetLVItemRowCount(lvHwnds[IDLV_LOGS])
+				fmt.Println("count:", logsCount)
+			}
+
 			return true
 		})
 	*/
-	processIDs, ok := w32.EnumProcesses(make([]uint32, 1024))
-	if !ok {
-		return
-	}
-
-	for i := 0; i < len(processIDs); i++ {
-		if processIDs[i] != 0 {
-			fmt.Println(getProcName(processIDs[i]))
+	mainHwnd := w32.FindWindow("#32770", "Internet Download Manager 6.36")
+	lvHwnds := ListViews(mainHwnd)
+	logsCount := GetLVItemRowCount(lvHwnds[0])
+	fmt.Println(logsCount)
+	fmt.Println(GetLVItem(lvHwnds[0], 0, 1))
+	/*	processIDs, ok := w32.EnumProcesses(make([]uint32, 1024))
+		if !ok {
+			return
 		}
-	}
+
+		for i := 0; i < len(processIDs); i++ {
+			if processIDs[i] != 0 {
+				fmt.Println(GetProcName(processIDs[i]))
+			}
+		}*/
 
 	/*	mainFormTitle := "任务管理器"
 		mainFormClass := "TaskManagerWindow"

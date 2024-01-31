@@ -31,8 +31,8 @@ var (
 	procLockResource       = modkernel32.NewProc("LockResource")
 	procLoadResource       = modkernel32.NewProc("LoadResource")
 	procGetLastError       = modkernel32.NewProc("GetLastError")
-	// procOpenProcess                = modkernel32.NewProc("OpenProcess")
-	// procTerminateProcess           = modkernel32.NewProc("TerminateProcess")
+	//procOpenProcess                = modkernel32.NewProc("OpenProcess")
+	procTerminateProcess           = modkernel32.NewProc("TerminateProcess")
 	procCloseHandle                = modkernel32.NewProc("CloseHandle")
 	procCreateToolhelp32Snapshot   = modkernel32.NewProc("CreateToolhelp32Snapshot")
 	procModule32First              = modkernel32.NewProc("Module32FirstW")
@@ -51,6 +51,10 @@ var (
 	procQueryPerformanceCounter    = modkernel32.NewProc("QueryPerformanceCounter")
 	procQueryPerformanceFrequency  = modkernel32.NewProc("QueryPerformanceFrequency")
 	process32Next                  = modkernel32.NewProc("Process32Next")
+
+	procQueryFullProcessImageNameW = modkernel32.NewProc("QueryFullProcessImageNameW")
+
+	procQueryDosDeviceW = modkernel32.NewProc("QueryDosDeviceW")
 )
 
 func GetModuleHandle(modulename string) w32.HINSTANCE {

@@ -5,6 +5,7 @@ import (
 	"github.com/gonutz/w32/v2"
 	"github.com/lxn/win"
 	"golang.org/x/sys/windows"
+	"path/filepath"
 	"syscall"
 	"unsafe"
 )
@@ -65,7 +66,7 @@ func findProcess(name string) uint32 {
 
 	for i := 0; i < len(processIDs); i++ {
 		if processIDs[i] != 0 {
-			if name == getProcName(processIDs[i]) {
+			if name == GetProcName(processIDs[i]) {
 				return processIDs[i]
 			}
 		}
@@ -74,21 +75,42 @@ func findProcess(name string) uint32 {
 	return 0
 }
 
-func getProcName(pid uint32) string {
+func GetProcName(pid uint32) string {
+	if pid == 0 {
+		return "System Idle Process"
+	}
+	if pid == 4 {
+		return "System"
+	}
 
-	hProcess := w32.OpenProcess(
+	hProcess, err := windows.OpenProcess(
 		windows.PROCESS_VM_READ|windows.PROCESS_QUERY_INFORMATION,
 		false,
 		pid,
 	)
-
-	if hProcess == 0 {
-		return ""
+	if err != nil {
+		fmt.Println(err)
 	}
+	defer windows.CloseHandle(hProcess)
 
-	defer func() {
-		w32.CloseHandle(hProcess)
-	}()
+	buf := make([]uint16, syscall.MAX_LONG_PATH)
+	size := uint32(syscall.MAX_LONG_PATH)
+	if err := procQueryFullProcessImageNameW.Find(); err == nil { // Vista+
+		ret, _, err := procQueryFullProcessImageNameW.Call(
+			uintptr(hProcess),
+			uintptr(0),
+			uintptr(unsafe.Pointer(&buf[0])),
+			uintptr(unsafe.Pointer(&size)))
+		if ret == 0 {
+			fmt.Println(err)
+		}
+		return filepath.Base(windows.UTF16ToString(buf[:]))
+	}
+	// XP fallback
+	ret, _, err := procGetProcessImageFileNameW.Call(uintptr(hProcess), uintptr(unsafe.Pointer(&buf[0])), uintptr(size))
+	if ret == 0 {
+		fmt.Println(err)
+	}
+	return filepath.Base(ConvertDOSPath(windows.UTF16ToString(buf[:])))
 
-	return w32.GetModuleFileName(w32.HMODULE(hProcess))
 }

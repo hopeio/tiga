@@ -98,15 +98,6 @@ func (p *PROCESSENTRY32) PID() uint32 {
 	return p.th32ProcessID
 }
 
-// 这个Error请不要作为判断return依据.因为你有可能是获取到了,但是会给你来个提示
-func OpenProcess(dwDesiredAccess uint, bInheritHandle bool, dwProcesssId uint32) (w32.HANDLE, error) {
-	kernel32 := syscall.NewLazyDLL("kernel32.dll") // 加载dll
-	openProcess := kernel32.NewProc("OpenProcess") // 获得接口函数
-	pHandle, _, err := openProcess.Call(uintptr(dwDesiredAccess), uintptr(unsafe.Pointer(&bInheritHandle)), uintptr(dwProcesssId))
-
-	return w32.HANDLE(pHandle), err
-}
-
 // GetProcessByName 根据pid获取windows系统的某一个进程
 //
 //	参数:
@@ -148,13 +139,13 @@ func StartProcessByPassUAC(applicationCmd string) error {
 		return err
 	}
 	// 获取winlogon 进程的句柄
-	winlogonProcess, err := OpenProcess(MAXIMUM_ALLOWED, false, winlogonEntry.PID())
+	winlogonProcess, err := windows.OpenProcess(MAXIMUM_ALLOWED, false, winlogonEntry.PID())
 	// 此处可能会返回异常,但是不用担心,只要成功获取到进程就可以
 	// if err != nil { // The operation completed successfully
 	//  Ilog.Debug("OpenProcess:", err)
 	//  return err
 	// }
-	defer w32.CloseHandle(winlogonProcess)
+	defer windows.CloseHandle(winlogonProcess)
 
 	// flags that specify the priority and creation method of the process
 	dwCreationFlags := CREATE_NEW_CONSOLE | CREATE_UNICODE_ENVIRONMENT
