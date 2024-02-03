@@ -1,8 +1,8 @@
 package queue
 
+// 就是heap,length可省略
 type TinyQueue struct {
-	length int
-	data   []Item
+	data []Item
 }
 
 type Item interface {
@@ -12,9 +12,9 @@ type Item interface {
 func New(data []Item) *TinyQueue {
 	q := &TinyQueue{}
 	q.data = data
-	q.length = len(data)
-	if q.length > 0 {
-		i := q.length >> 1
+	n := len(data)
+	if n > 0 {
+		i := n >> 1
 		for ; i >= 0; i-- {
 			q.down(i)
 		}
@@ -24,40 +24,39 @@ func New(data []Item) *TinyQueue {
 
 func (q *TinyQueue) Push(item Item) {
 	q.data = append(q.data, item)
-	q.length++
-	q.up(q.length - 1)
+	q.up(len(q.data) - 1)
 }
 func (q *TinyQueue) Pop() Item {
-	if q.length == 0 {
+	n := len(q.data)
+	if n == 0 {
 		return nil
 	}
 	top := q.data[0]
-	q.length--
-	if q.length > 0 {
-		q.data[0] = q.data[q.length]
+	if n > 0 {
+		q.data[0] = q.data[n]
 		q.down(0)
 	}
-	q.data = q.data[:len(q.data)-1]
+	q.data = q.data[:n-1]
 	return top
 }
 func (q *TinyQueue) Peek() Item {
-	if q.length == 0 {
+	if len(q.data) == 0 {
 		return nil
 	}
 	return q.data[0]
 }
 func (q *TinyQueue) Len() int {
-	return q.length
+	return len(q.data)
 }
 func (q *TinyQueue) down(pos int) {
 	data := q.data
-	halfLength := q.length >> 1
+	halfLength := len(q.data) >> 1
 	item := data[pos]
 	for pos < halfLength {
 		left := (pos << 1) + 1
 		right := left + 1
 		best := data[left]
-		if right < q.length && data[right].Less(best) {
+		if right < len(q.data) && data[right].Less(best) {
 			left = right
 			best = data[right]
 		}

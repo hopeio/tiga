@@ -1,60 +1,60 @@
 package queue
 
-type Queue interface {
+type Queue[T any] interface {
 	// 获取当前链表长度。
 	Len() int
 	// 获取当前链表容量。
 	Capacity() int
 	// 获取当前链表头结点。
-	Front() *Node
+	Front() *Node[T]
 	// 获取当前链表尾结点。
-	Rear() *Node
+	Rear() *Node[T]
 	// 入列。
-	Enqueue(value interface{}) bool
+	Enqueue(value T) bool
 	// 出列。
-	Dequeue() interface{}
+	Dequeue() T
 }
 
-type RingQueue struct {
+type RingQueue[T any] struct {
 	head, tail int
 	len        int
-	buf        []interface{}
+	buf        []T
 }
 
-func NewRingQueue(capacity int) *RingQueue {
-	nodes := make([]interface{}, capacity, capacity)
-	return &RingQueue{
+func NewRingQueue[T any](capacity int) *RingQueue[T] {
+	nodes := make([]T, capacity)
+	return &RingQueue[T]{
 		head: -1,
 		tail: -1,
 		buf:  nodes,
 	}
 }
 
-func (q *RingQueue) Length() int {
+func (q *RingQueue[T]) Length() int {
 	return q.len
 }
 
-func (q *RingQueue) Capacity() int {
+func (q *RingQueue[T]) Capacity() int {
 	return len(q.buf)
 }
 
-func (q *RingQueue) Front() interface{} {
+func (q *RingQueue[T]) Front() T {
 	if q.len == 0 {
-		return nil
+		return *new(T)
 	}
 
 	return q.buf[q.head]
 }
 
-func (q *RingQueue) Tail() interface{} {
+func (q *RingQueue[T]) Tail() T {
 	if q.len == 0 {
-		return nil
+		return *new(T)
 	}
 
 	return q.buf[q.tail]
 }
 
-func (q *RingQueue) Enqueue(value interface{}) bool {
+func (q *RingQueue[T]) Enqueue(value T) bool {
 	if q.IsFull() || value == nil {
 		return false
 	}
@@ -73,13 +73,13 @@ func (q *RingQueue) Enqueue(value interface{}) bool {
 	return true
 }
 
-func (q *RingQueue) Dequeue() interface{} {
+func (q *RingQueue[T]) Dequeue() T {
 	if q.len == 0 {
-		return nil
+		return *new(T)
 	}
 
 	result := q.buf[q.head]
-	q.buf[q.head] = nil
+	q.buf[q.head] = *new(T)
 	q.head++
 	q.len--
 	if q.head == len(q.buf) {
@@ -90,13 +90,13 @@ func (q *RingQueue) Dequeue() interface{} {
 }
 
 // IsFull checks if the ring buffer is full
-func (q *RingQueue) IsFull() bool {
+func (q *RingQueue[T]) IsFull() bool {
 	return q.len == len(q.buf)
 }
 
 // LookAll reads all elements from ring buffer
 // this method doesn't consume all elements
-func (q *RingQueue) LookAll() []interface{} {
+func (q *RingQueue[T]) LookAll() []interface{} {
 	all := make([]interface{}, q.len)
 	if q.len == 0 {
 		return all
