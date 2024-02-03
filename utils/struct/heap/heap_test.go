@@ -12,7 +12,7 @@ func (h heap) Less(i, j int) bool {
 	return h[i] < h[j]
 }
 
-func TestHeap(t *testing.T) {
+func TestNewHeap(t *testing.T) {
 	var arr heap
 	for i := 0; i < 10; i++ {
 		arr = append(arr, rand.Intn(10000))
@@ -43,7 +43,7 @@ func (f Foos) Less(i, j int) bool {
 	return f[i].A < f[j].A
 }
 
-func TestHeap2(t *testing.T) {
+func TestPushHeap(t *testing.T) {
 	var arr Foos
 	heap := NewHeap(arr)
 	heap.Push(Foo{10, 10})

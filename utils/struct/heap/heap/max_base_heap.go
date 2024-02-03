@@ -13,7 +13,7 @@ func NewMaxBaseHeap[T constraints.Ordered](l int) MaxBaseHeap[T] {
 }
 
 func NewMaxBaseHeapFromArray[T constraints.Ordered](arr []T) MaxBaseHeap[T] {
-	heap := newBaseHeapFromArray[T](arr, _interface.GreaterFunc[T])
+	heap := NewBaseHeapFromArray[T](arr, _interface.GreaterFunc[T])
 	return MaxBaseHeap[T](heap)
 }
 

@@ -5,67 +5,59 @@ import (
 	"golang.org/x/exp/constraints"
 )
 
-type Heap[T _interface.OrderKey[V], V constraints.Ordered] []T
+type Heap[T _interface.OrderKey[V], V constraints.Ordered] struct {
+	entry []T
+	less  _interface.CompareFunc[V]
+}
 
-func NewHeap[T _interface.OrderKey[V], V constraints.Ordered](l int) Heap[T, V] {
+func NewHeap[T _interface.OrderKey[V], V constraints.Ordered](l int, less _interface.CompareFunc[V]) *Heap[T, V] {
 	heap := make([]T, 0, l)
-	return heap
+	return &Heap[T, V]{heap, less}
 }
 
 func NewHeapFromArray[T _interface.OrderKey[V], V constraints.Ordered](arr []T, less _interface.CompareFunc[V]) Heap[T, V] {
-	heap := Heap[T, V](arr)
+	heap := Heap[T, V]{arr, less}
 	for i := 1; i < len(arr); i++ {
-		heap.up(i, less)
+		Up(heap.entry, i, less)
 	}
-	return arr
+	return heap
 }
 
-func (h Heap[T, V]) init(less _interface.CompareFunc[V]) {
-	// heapify
-	n := len(h)
-	for i := n/2 - 1; i >= 0; i-- {
-		h.down(i, n, less)
-	}
+func (heap *Heap[T, V]) Init() {
+	HeapInit(heap.entry, heap.less)
 }
 
-func (h *Heap[T, V]) push(x T, less _interface.CompareFunc[V]) {
-	hh := *h
-	*h = append(hh, x)
-	h.up(len(hh), less)
+func (heap *Heap[T, V]) Push(x T) {
+	heap.entry = append(heap.entry, x)
+	Up(heap.entry, len(heap.entry)-1, heap.less)
 }
 
-func (h *Heap[T, V]) pop(less _interface.CompareFunc[V]) T {
-	hh := *h
-	n := len(hh) - 1
-	item := hh[0]
-	hh[0], hh[n] = hh[n], hh[0]
-	h.down(0, n, less)
-	*h = hh[:n]
+func (heap *Heap[T, V]) Pop() T {
+	n := len(heap.entry) - 1
+	item := heap.entry[0]
+	heap.entry[0], heap.entry[n] = heap.entry[n], heap.entry[0]
+	Down(heap.entry, 0, n, heap.less)
+	heap.entry = heap.entry[:n]
 	return item
 }
 
-func (h *Heap[T, V]) remove(i int, less _interface.CompareFunc[V]) T {
-	hh := *h
-	n := len(hh) - 1
-	item := hh[i]
+func (heap *Heap[T, V]) First() T {
+	return heap.entry[0]
+}
+
+func (heap *Heap[T, V]) Last() T {
+	return heap.entry[len(heap.entry)-1]
+}
+
+func (heap *Heap[T, V]) Remove(i int) T {
+	n := len(heap.entry) - 1
+	item := heap.entry[i]
 	if n != i {
-		hh[i], hh[n] = hh[n], hh[i]
-		if !h.down(i, n, less) {
-			h.up(i, less)
+		heap.entry[i], heap.entry[n] = heap.entry[n], heap.entry[i]
+		if !Down(heap.entry, i, n, heap.less) {
+			Up(heap.entry, i, heap.less)
 		}
 	}
-	*h = hh[:n]
+	heap.entry = heap.entry[:n]
 	return item
-}
-
-func (h Heap[T, V]) down(i0, n int, less _interface.CompareFunc[V]) bool {
-	return Down(h, i0, n, less)
-}
-
-func (h Heap[T, V]) up(j int, less _interface.CompareFunc[V]) {
-	Up(h, j, less)
-}
-
-func (h Heap[T, V]) fix(i int, less _interface.CompareFunc[V]) {
-	Fix(h, i, less)
 }

@@ -12,7 +12,7 @@ func TestWindows(t *testing.T) {
 			fmt.Println(w32.GetWindowText(w), name, w)
 			lvHwnds := ListViews(w)
 			if len(lvHwnds) > 0 {
-				logsCount := GetLVItemRowCount(lvHwnds[IDLV_LOGS])
+				logsCount := GetLVItemRowCount(lvHwnds[0])
 				fmt.Println("count:", logsCount)
 			}
 

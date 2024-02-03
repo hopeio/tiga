@@ -141,7 +141,7 @@ func GetList(hwnd w32.HWND, columns []int) [][]string {
 	for row := 0; row < int(rowCount); row++ {
 		item.IItem = int32(row)
 		var columnStrs []string
-		for column := range columns {
+		for _, column := range columns {
 			item.ISubItem = int32(column)
 			_, ok := WriteProcessMemory(hProcess, lpLvItem, uintptr(unsafe.Pointer(item)), unsafe.Sizeof(w32.LVITEM{}))
 			if !ok {
