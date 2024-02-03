@@ -1,13 +1,16 @@
 package osi
 
 import (
+	"fmt"
 	stringsi "github.com/hopeio/tiga/utils/strings"
 	"log"
 	"os"
 	"os/exec"
+	"os/signal"
 	"runtime"
 	"strconv"
 	"strings"
+	"syscall"
 )
 
 func Cmd(s string) (string, error) {
@@ -125,4 +128,23 @@ func CmdInDir(s, dir string) (string, error) {
 		buf = buf[:lastIndex]
 	}
 	return stringsi.BytesToString(buf), nil
+}
+
+func WaitShutdown() {
+	// Set up signal handling.
+	signals := make(chan os.Signal, 1)
+	signal.Notify(signals, syscall.SIGINT, syscall.SIGTERM, syscall.SIGHUP, syscall.SIGQUIT)
+
+	done := make(chan bool, 1)
+	go func() {
+		sig := <-signals
+		fmt.Println("")
+		fmt.Println("Disconnection requested via Ctrl+C", sig)
+		done <- true
+	}()
+
+	fmt.Println("Press Ctrl+C to disconnect.")
+	<-done
+
+	os.Exit(0)
 }
