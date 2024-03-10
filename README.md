@@ -108,8 +108,8 @@ func (d *dao) Init() {
 	d.StdDB, _ = db.DB()
 }
 func main() {
-//配置初始化应该在第一位
-defer initialize.Start(Conf, nil)()
+
+defer initialize.Start(Conf, dao)()
 }
 ```
 原生集成了redis,gormdb(mysql,postgressql,sqlite),kafka,pebbledb,apollo,badgerdb,etcd,elasticsearch,nsq,ristretto,viper等，并且非常简单的支持自定义扩展,不局限于Dao对象，任何对象都支持根据配置自动注入生成
@@ -122,7 +122,7 @@ defer initialize.Start(Conf, nil)()
 
 ## server
 tiga服务器，各种服务接口的保留，集成支持，一个服务暴露grpc,http,graphql接口
-- 集成opencensus实现调用链路跟踪记录，配合context及utils-log 实现完整的请求链路日志记录
+- 集成opencensus实现调用链路跟踪记录，配合context及utils/log 实现完整的请求链路日志记录
 - 集成prometheus及pprof实现性能监控及性能问题排查
 - 支持框架自生成的由gin提供支持的grpc转http，也支持原生的grpc-gateway
 ![server](_readme/assets/server.webp)
