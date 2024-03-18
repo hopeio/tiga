@@ -45,28 +45,28 @@ func (gc *globalConfig) UnmarshalAndSet(bytes []byte) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	gc.Lock()
 	for k, v := range tmp {
 		gc.confMap[strings.ToUpper(k)] = v
 	}
 
 	gc.inject()
+	gc.Unlock()
 }
 
 // 注入配置及生成DAO
 func (gc *globalConfig) inject() {
-	gc.Lock()
 	if gc.conf != nil {
 		setConfig(reflect.ValueOf(gc.conf).Elem(), gc.confMap)
 		gc.conf.Init()
-
 	}
-
-	if gc.dao != nil {
-		gc.closeDao()
+	// 不进行二次注入,无法确定业务中是否仍然使用,除非每次加锁,或者说每次业务中都交给一个零时变量?需要规范去控制
+	if !gc.initialized && gc.dao != nil {
+		// gc.closeDao()
 		setDao(reflect.ValueOf(gc.dao).Elem(), gc.confMap)
 		gc.dao.Init()
 	}
-	gc.Unlock()
+
 	log.Debugf("Configuration:  %#v", gc.conf)
 }
 

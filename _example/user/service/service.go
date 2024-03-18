@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	gormi "github.com/hopeio/tiga/utils/dao/db/gorm"
 	"google.golang.org/protobuf/types/known/wrapperspb"
 
 	"github.com/hopeio/tiga/_example/protobuf/user"
@@ -35,7 +36,7 @@ func (u *UserService) Signup(ctx context.Context, req *user.SignupReq) (*wrapper
 		Status:    user.UserStatusInActive,
 	}
 
-	db := ctxi.NewDB(conf.Dao.GORMDB.DB)
+	db := gormi.NewTraceDB(conf.Dao.GORMDB.DB, ctxi.TraceID)
 	err := db.Create(&user).Error
 	if err != nil {
 		return nil, ctxi.ErrorLog(errorcode.DBError.Message("新建出错"), err, "UserService.Creat")

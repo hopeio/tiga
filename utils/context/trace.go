@@ -2,15 +2,13 @@ package contexti
 
 import (
 	"context"
-	logi "github.com/hopeio/tiga/utils/log"
-	"go.uber.org/zap"
 )
 
-func TraceId(ctx context.Context) zap.Field {
+func TraceId(ctx context.Context) string {
 	if traceId, ok := ctx.Value(traceIdKey{}).(string); ok {
-		zap.String(logi.TraceId, traceId)
+		return traceId
 	}
-	return zap.String(logi.TraceId, "unknown")
+	return "unknown"
 }
 
 type traceIdKey struct{}

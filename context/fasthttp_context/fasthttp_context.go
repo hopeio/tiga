@@ -3,20 +3,18 @@ package fasthttp_context
 import (
 	"context"
 	contexti "github.com/hopeio/tiga/context"
-	contexti2 "github.com/hopeio/tiga/utils/context"
 	httpi "github.com/hopeio/tiga/utils/net/http"
 	fasthttpi "github.com/hopeio/tiga/utils/net/http/fasthttp"
 	stringsi "github.com/hopeio/tiga/utils/strings"
 	"github.com/valyala/fasthttp"
 )
 
-type Context = contexti.Context[fasthttp.Request]
+type Context = contexti.RequestContext[fasthttp.Request]
 
-func ContextWithRequest(ctx context.Context, r *fasthttp.Request) *Context {
-	ctxi := contexti2.NewCtx[fasthttp.Request](ctx)
-	c := &Context{RequestContext: ctxi}
-	setWithReq(c, r)
-	return c
+func ContextFromRequest(ctx context.Context, r *fasthttp.Request) *Context {
+	ctxi := contexti.NewContext[fasthttp.Request](ctx)
+	setWithReq(ctxi, r)
+	return ctxi
 }
 
 func setWithReq(c *Context, r *fasthttp.Request) {
@@ -26,8 +24,8 @@ func setWithReq(c *Context, r *fasthttp.Request) {
 	c.Internal = stringsi.BytesToString(r.Header.Peek(httpi.GrpcInternal))
 }
 
-func Device(r *fasthttp.RequestHeader) *contexti2.DeviceInfo {
-	return contexti2.Device(stringsi.BytesToString(r.Peek(httpi.HeaderDeviceInfo)),
+func Device(r *fasthttp.RequestHeader) *contexti.DeviceInfo {
+	return contexti.Device(stringsi.BytesToString(r.Peek(httpi.HeaderDeviceInfo)),
 		stringsi.BytesToString(r.Peek(httpi.HeaderArea)),
 		stringsi.BytesToString(r.Peek(httpi.HeaderLocation)),
 		stringsi.BytesToString(r.Peek(httpi.HeaderUserAgent)),

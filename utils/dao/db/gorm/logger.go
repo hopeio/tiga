@@ -3,7 +3,6 @@ package gormi
 import (
 	"context"
 	"fmt"
-	contexti "github.com/hopeio/tiga/utils/context"
 	logi "github.com/hopeio/tiga/utils/log"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -92,6 +91,6 @@ func (l *SQLLogger) Trace(ctx context.Context, begin time.Time, fc func() (strin
 	sqlField := zap.String("sql", sql)
 	rowsField := zap.Int64("rows", rows)
 	caller := zap.String("caller", utils.FileWithLineNum())
-	fields := []zap.Field{elapsedms, sqlField, rowsField, caller, contexti.TraceId(ctx), field}
+	fields := []zap.Field{elapsedms, sqlField, rowsField, caller, logi.TraceIdField(ctx), field}
 	l.Check(zapcore.Level(4-level), msg).Write(fields...)
 }

@@ -67,6 +67,13 @@ type duplicateFile struct {
 
 // 去除目录中重复的文件,默认保留参数靠前目录中的文件
 func DirDeDuplicate(dirs ...string) error {
+	return DirDuplicateHandle(func(path1, path2 string) error {
+		log.Debugf("exists: %s,remove:%s", path1, path2)
+		return os.Remove(path2)
+	}, dirs...)
+}
+
+func DirDuplicateHandle(callback func(path1, path2 string) error, dirs ...string) error {
 	fileSizeMap := make(map[int64][]*duplicateFile)
 	for _, tmpDir := range dirs {
 		err := RangeFile(tmpDir, func(dir string, entry os.DirEntry) error {
@@ -88,12 +95,7 @@ func DirDeDuplicate(dirs ...string) error {
 						}
 					}
 					if file.md5 == entryMd5 {
-						log.Debugf("exists: %s,remove:%s", file.path, path)
-						err = os.Remove(path)
-						if err != nil {
-							return err
-						}
-						return nil
+						return callback(file.path, path)
 					}
 				}
 			}
@@ -107,8 +109,7 @@ func DirDeDuplicate(dirs ...string) error {
 	return nil
 }
 
-// 去除两个目录中重复的文件,默认保留第一个目录中的文件
-func TwoDirDeDuplicate(dir1, dir2 string) error {
+func TwoDirDuplicateHandle(dir1, dir2 string, callback func(path1, path2 string) error) error {
 	fileSizeMap := make(map[int64][]*duplicateFile)
 	err := RangeFile(dir1, func(dir string, entry os.DirEntry) error {
 		info, _ := entry.Info()
@@ -136,16 +137,19 @@ func TwoDirDeDuplicate(dir1, dir2 string) error {
 					}
 				}
 				if file.md5 == entryMd5 {
-					log.Debug("remove:", path)
-					err = os.Remove(path)
-					if err != nil {
-						return err
-					}
-					return nil
+					return callback(file.path, path)
 				}
 			}
 		}
 		return nil
+	})
+}
+
+// 去除两个目录中重复的文件,默认保留第一个目录中的文件
+func TwoDirDeDuplicate(dir1, dir2 string) error {
+	return TwoDirDuplicateHandle(dir1, dir2, func(path1, path2 string) error {
+		log.Debug("remove:", path2)
+		return os.Remove(path2)
 	})
 }
 
