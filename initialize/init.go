@@ -108,15 +108,12 @@ type globalConfig struct {
 	sync.RWMutex
 }
 
-func Start(conf Config, dao Dao, notinit ...string) func(deferCalls ...func()) {
+func Start(conf Config, dao Dao, notinit ...string) func() {
 	//逃逸到堆上了
 	GlobalConfig.setConfDao(conf, dao)
 	GlobalConfig.LoadConfig(notinit...)
 	GlobalConfig.initialized = true
-	return func(deferCalls ...func()) {
-		for _, f := range deferCalls {
-			f()
-		}
+	return func() {
 		for _, f := range GlobalConfig.deferCalls {
 			f()
 		}
