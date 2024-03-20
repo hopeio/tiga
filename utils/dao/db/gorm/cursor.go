@@ -1,7 +1,8 @@
-package crawler
+package gormi
 
 import (
 	"context"
+	"github.com/hopeio/tiga/utils/scheduler/crawler"
 	"gorm.io/gorm"
 )
 
@@ -26,9 +27,9 @@ func EndCallback(db *gorm.DB, mod string) {
 	db.Exec(`UPDATE cursor SET cursor = '' WHERE typpe = '` + mod + `'`)
 }
 
-func EndCallbackReq(db *gorm.DB, mod string) *Request {
-	return &Request{
-		TaskFunc: func(ctx context.Context) ([]*Request, error) {
+func EndCallbackReq(db *gorm.DB, mod string) *crawler.Request {
+	return &crawler.Request{
+		TaskFunc: func(ctx context.Context) ([]*crawler.Request, error) {
 			EndCallback(db, mod)
 			return nil, nil
 		},

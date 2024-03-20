@@ -66,14 +66,14 @@ type duplicateFile struct {
 }
 
 // 去除目录中重复的文件,默认保留参数靠前目录中的文件
-func DirDeDuplicate(dirs ...string) error {
-	return DirDuplicateHandle(func(path1, path2 string) error {
+func DirsDeDuplicate(dirs ...string) error {
+	return DirsDuplicateHandle(func(path1, path2 string) error {
 		log.Debugf("exists: %s,remove:%s", path1, path2)
 		return os.Remove(path2)
 	}, dirs...)
 }
 
-func DirDuplicateHandle(callback func(path1, path2 string) error, dirs ...string) error {
+func DirsDuplicateHandle(callback func(path1, path2 string) error, dirs ...string) error {
 	fileSizeMap := make(map[int64][]*duplicateFile)
 	for _, tmpDir := range dirs {
 		err := RangeFile(tmpDir, func(dir string, entry os.DirEntry) error {
@@ -109,6 +109,47 @@ func DirDuplicateHandle(callback func(path1, path2 string) error, dirs ...string
 	return nil
 }
 
+// DirsRangeDuplicateHandle
+// rangeCallback 返回值为错误和是否继续
+func DirsRangeDuplicateHandle(rangeCallback func(dir string, entry os.DirEntry) (error, bool), duplicateCallback func(path1, path2 string) error, dirs ...string) error {
+	fileSizeMap := make(map[int64][]*duplicateFile)
+	for _, tmpDir := range dirs {
+		err := RangeFile(tmpDir, func(dir string, entry os.DirEntry) error {
+			if err, goon := rangeCallback(dir, entry); !goon {
+				return err
+			}
+
+			info, _ := entry.Info()
+			path := dir + PathSeparator + entry.Name()
+			duplicateFiles, ok := fileSizeMap[info.Size()]
+			var entryMd5 string
+			if ok {
+				var err error
+				entryMd5, err = Md5(path)
+				if err != nil {
+					return err
+				}
+				for _, file := range duplicateFiles {
+					if file.md5 == "" {
+						file.md5, err = Md5(file.path)
+						if err != nil {
+							return err
+						}
+					}
+					if file.md5 == entryMd5 {
+						return duplicateCallback(file.path, path)
+					}
+				}
+			}
+			fileSizeMap[info.Size()] = append(fileSizeMap[info.Size()], &duplicateFile{path: path, md5: entryMd5})
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
 func TwoDirDuplicateHandle(dir1, dir2 string, callback func(path1, path2 string) error) error {
 	fileSizeMap := make(map[int64][]*duplicateFile)
 	err := RangeFile(dir1, func(dir string, entry os.DirEntry) error {

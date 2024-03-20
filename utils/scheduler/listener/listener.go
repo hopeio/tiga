@@ -3,14 +3,15 @@ package listener
 import (
 	"context"
 	"github.com/hopeio/tiga/utils/scheduler/rate"
-	"github.com/hopeio/tiga/utils/scheduler/tiny_engine"
 	"time"
 )
+
+type TaskFunc = func(context.Context)
 
 type TimerTask struct {
 	times         uint
 	firstExecuted bool
-	do            tiny_engine.TaskFunc
+	do            TaskFunc
 }
 
 func NewTimerTask() *TimerTask {
@@ -21,7 +22,7 @@ func (task *TimerTask) Times() uint {
 	return task.times
 }
 
-func (task *TimerTask) Run(ctx context.Context, interval time.Duration, do tiny_engine.TaskFunc) {
+func (task *TimerTask) Run(ctx context.Context, interval time.Duration, do TaskFunc) {
 	task.do = do
 	timer := time.NewTicker(interval)
 	if !task.firstExecuted {
@@ -41,7 +42,7 @@ func (task *TimerTask) Run(ctx context.Context, interval time.Duration, do tiny_
 	}
 }
 
-func (task *TimerTask) RandRun(ctx context.Context, minInterval, maxInterval time.Duration, do tiny_engine.TaskFunc) {
+func (task *TimerTask) RandRun(ctx context.Context, minInterval, maxInterval time.Duration, do TaskFunc) {
 	task.do = do
 	timer := rate.NewRandSpeedLimiter(minInterval, maxInterval)
 	ch := timer.Channel()
