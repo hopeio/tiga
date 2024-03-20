@@ -17,7 +17,7 @@ func TestEngine(t *testing.T) {
 	engine.Run()
 }
 
-func taskSourceFunc(e *Engine[int, Prop, Prop]) {
+func taskSourceFunc(e *Engine[int]) {
 	var id int
 	for {
 		id++
@@ -28,28 +28,26 @@ func taskSourceFunc(e *Engine[int, Prop, Prop]) {
 	}
 }
 
-func genTask(id int) *Task[int, Prop] {
-	return &Task[int, Prop]{
+func genTask(id int) *Task[int] {
+	return &Task[int]{
 		TaskMeta: TaskMeta[int]{Key: id},
-		TaskFunc: func(ctx context.Context) ([]*Task[int, Prop], error) {
+		TaskFunc: func(ctx context.Context) ([]*Task[int], error) {
 			fmt.Println("task1:", id)
-			return []*Task[int, Prop]{genTask2(id + 2)}, nil
+			return []*Task[int]{genTask2(id + 2)}, nil
 		},
-		errs:  nil,
-		Props: Prop{},
+		errs: nil,
 	}
 }
 
-func genTask2(id int) *Task[int, Prop] {
-	return &Task[int, Prop]{
+func genTask2(id int) *Task[int] {
+	return &Task[int]{
 		TaskMeta: TaskMeta[int]{Key: id},
-		TaskFunc: func(ctx context.Context) ([]*Task[int, Prop], error) {
+		TaskFunc: func(ctx context.Context) ([]*Task[int], error) {
 			fmt.Println("task2:", id)
 			time.Sleep(time.Millisecond * 200)
 			return nil, nil
 		},
-		errs:  nil,
-		Props: Prop{},
+		errs: nil,
 	}
 }
 
@@ -69,18 +67,17 @@ func TestEngineConcurrencyRun(t *testing.T) {
 	}
 }
 
-func genTask3(typ string, id int) *Task[int, Prop] {
-	return &Task[int, Prop]{
+func genTask3(typ string, id int) *Task[int] {
+	return &Task[int]{
 		TaskMeta: TaskMeta[int]{Key: id},
-		TaskFunc: func(ctx context.Context) ([]*Task[int, Prop], error) {
+		TaskFunc: func(ctx context.Context) ([]*Task[int], error) {
 			fmt.Println("task:", typ, id)
-			var tasks []*Task[int, Prop]
+			var tasks []*Task[int]
 			for i := 0; i < 5; i++ {
 				tasks = append(tasks, genTask2(id+(i+1)*2))
 			}
 			return tasks, nil
 		},
-		errs:  nil,
-		Props: Prop{},
+		errs: nil,
 	}
 }

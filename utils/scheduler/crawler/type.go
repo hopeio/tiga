@@ -5,12 +5,9 @@ import (
 	"github.com/hopeio/tiga/utils/scheduler/engine"
 )
 
-type Prop struct {
-}
-
-type Request = engine.Task[string, Prop]
+type Request = engine.Task[string]
 type TaskMeta = engine.TaskMeta[string]
-type TaskFunc = engine.TaskFunc[string, Prop]
+type TaskFunc = engine.TaskFunc[string]
 
 func NewRequest(key string, kind engine.Kind, taskFunc TaskFunc) *Request {
 	return &Request{
@@ -22,11 +19,11 @@ func NewRequest(key string, kind engine.Kind, taskFunc TaskFunc) *Request {
 	}
 }
 
-type Config = engine.Config[string, Prop, Prop]
-type Engine = engine.Engine[string, Prop, Prop]
+type Config = engine.Config[string]
+type Engine = engine.Engine[string]
 
-func NewEngine(workerCount uint) *engine.Engine[string, Prop, Prop] {
-	return engine.NewEngine[string, Prop, Prop](workerCount)
+func NewEngine(workerCount uint) *engine.Engine[string] {
+	return engine.NewEngine[string](workerCount)
 }
 
 type HandleFunc func(ctx context.Context, url string) ([]*Request, error)

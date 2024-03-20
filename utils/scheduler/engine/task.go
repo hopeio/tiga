@@ -39,16 +39,16 @@ func (t *TaskMeta[KEY]) SetPriority(priority int) {
 	t.Priority = priority
 }
 
-func (r *TaskMeta[KEY]) SetKind(k Kind) {
-	r.Kind = k
+func (t *TaskMeta[KEY]) SetKind(k Kind) {
+	t.Kind = k
 }
 
-func (r *TaskMeta[KEY]) SetKey(key KEY) {
-	r.Key = key
+func (t *TaskMeta[KEY]) SetKey(key KEY) {
+	t.Key = key
 }
 
-func (r *TaskMeta[KEY]) Id() uint64 {
-	return r.id
+func (t *TaskMeta[KEY]) Id() uint64 {
+	return t.id
 }
 
 type TaskStatistics struct {
@@ -56,21 +56,24 @@ type TaskStatistics struct {
 	errTimes  int
 }
 
-type Task[KEY comparable, P any] struct {
+type Task[KEY comparable] struct {
 	ctx context.Context
 	TaskMeta[KEY]
-	TaskFunc[KEY, P]
-	errs  []error
-	Props P
+	TaskFunc[KEY]
+	errs []error
 }
 
-func (t *Task[KEY, P]) Errs() []error {
+func (t *Task[KEY]) Errs() []error {
 	return t.errs
 }
 
-type Tasks[KEY comparable, P any] []*Task[KEY, P]
+type TaskInterface[KEY comparable] interface {
+	Do(ctx context.Context) ([]*Task[KEY], error)
+}
 
-func (tasks Tasks[KEY, T]) Less(i, j int) bool {
+type Tasks[KEY comparable] []*Task[KEY]
+
+func (tasks Tasks[KEY]) Less(i, j int) bool {
 	return tasks[i].Priority > tasks[j].Priority
 }
 
@@ -78,8 +81,12 @@ func (tasks Tasks[KEY, T]) Less(i, j int) bool {
 
 type ErrHandle func(context.Context, error)
 
-type TaskFunc[KEY comparable, P any] func(ctx context.Context) ([]*Task[KEY, P], error)
+type TaskFunc[KEY comparable] func(ctx context.Context) ([]*Task[KEY], error)
 
-func emptyTaskFunc[KEY comparable, P any](ctx context.Context) ([]*Task[KEY, P], error) {
+func (t TaskFunc[KEY]) Do(ctx context.Context) ([]*Task[KEY], error) {
+	return t(ctx)
+}
+
+func emptyTaskFunc[KEY comparable](ctx context.Context) ([]*Task[KEY], error) {
 	return nil, nil
 }

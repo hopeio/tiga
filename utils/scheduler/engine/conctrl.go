@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
+func (e *Engine[KEY]) Run(tasks ...*Task[KEY]) {
 	e.lock.Lock()
 	if e.isRunning {
 		if len(tasks) > 0 {
@@ -37,8 +37,8 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 			timer := time.NewTimer(5 * time.Second)
 			defer timer.Stop()
 			var emptyTimes uint
-			var readyTaskCh chan *Task[KEY, T]
-			var readyTask *Task[KEY, T]
+			var readyTaskCh chan *Task[KEY]
+			var readyTask *Task[KEY]
 		loop:
 			for {
 				if e.workerReadyList.Len() > 0 && len(e.taskReadyHeap) > 0 {
@@ -104,11 +104,11 @@ func (e *Engine[KEY, T, W]) Run(tasks ...*Task[KEY, T]) {
 	log.Infof("任务结束,total:%d,done:%d,failed:%d", e.taskTotalCount, e.taskDoneCount, e.taskFailedCount)
 }
 
-func (e *Engine[KEY, T, W]) newWorker(readyTask *Task[KEY, T]) {
+func (e *Engine[KEY]) newWorker(readyTask *Task[KEY]) {
 	atomic.AddUint64(&e.currentWorkerCount, 1)
 	//id := c.currentWorkerCount
-	taskChan := make(chan *Task[KEY, T])
-	worker := &Worker[KEY, T, W]{Id: uint(e.currentWorkerCount), taskCh: taskChan}
+	taskChan := make(chan *Task[KEY])
+	worker := &Worker[KEY]{Id: uint(e.currentWorkerCount), taskCh: taskChan}
 	go func() {
 		defer func() {
 			if r := recover(); r != nil {
@@ -138,7 +138,7 @@ func (e *Engine[KEY, T, W]) newWorker(readyTask *Task[KEY, T]) {
 	e.workers = append(e.workers, worker)
 }
 
-func (e *Engine[KEY, T, W]) addWorker() {
+func (e *Engine[KEY]) addWorker() {
 	if e.currentWorkerCount != 0 {
 		return
 	}
@@ -162,11 +162,11 @@ func (e *Engine[KEY, T, W]) addWorker() {
 
 }
 
-func (e *Engine[KEY, T, W]) AddNoPriorityTasks(tasks ...*Task[KEY, T]) {
+func (e *Engine[KEY]) AddNoPriorityTasks(tasks ...*Task[KEY]) {
 	e.AddTasks(0, tasks...)
 }
 
-func (e *Engine[KEY, T, W]) AddTasks(generation int, tasks ...*Task[KEY, T]) {
+func (e *Engine[KEY]) AddTasks(generation int, tasks ...*Task[KEY]) {
 	l := len(tasks)
 	atomic.AddUint64(&e.taskTotalCount, uint64(l))
 	e.wg.Add(l)
@@ -183,27 +183,27 @@ func (e *Engine[KEY, T, W]) AddTasks(generation int, tasks ...*Task[KEY, T]) {
 	}
 }
 
-func (e *Engine[KEY, T, W]) AsyncAddTasks(generation int, tasks ...*Task[KEY, T]) {
+func (e *Engine[KEY]) AsyncAddTasks(generation int, tasks ...*Task[KEY]) {
 	if len(tasks) > 0 {
 		go e.AddTasks(generation, tasks...)
 	}
 }
 
-func (e *Engine[KEY, T, W]) AddWorker(num int) {
+func (e *Engine[KEY]) AddWorker(num int) {
 	atomic.AddUint64(&e.limitWorkerCount, uint64(num))
 }
 
-func (e *Engine[KEY, T, W]) NewFixedWorker(interval time.Duration) int {
-	taskChan := make(chan *Task[KEY, T])
-	worker := &Worker[KEY, T, W]{Id: uint(e.currentWorkerCount), taskCh: taskChan}
+func (e *Engine[KEY]) NewFixedWorker(interval time.Duration) int {
+	taskChan := make(chan *Task[KEY])
+	worker := &Worker[KEY]{Id: uint(e.currentWorkerCount), taskCh: taskChan}
 	e.fixedWorkers = append(e.fixedWorkers, worker)
 	e.newFixedWorker(worker, interval)
 	return len(e.fixedWorkers) - 1
 }
 
-func (e *Engine[KEY, T, W]) newFixedWorker(worker *Worker[KEY, T, W], interval time.Duration) {
+func (e *Engine[KEY]) newFixedWorker(worker *Worker[KEY], interval time.Duration) {
 	go func() {
-		var task *Task[KEY, T]
+		var task *Task[KEY]
 		defer func() {
 			if r := recover(); r != nil {
 				log.Error(r)
@@ -230,7 +230,7 @@ func (e *Engine[KEY, T, W]) newFixedWorker(worker *Worker[KEY, T, W], interval t
 	}()
 }
 
-func (e *Engine[KEY, T, W]) AddFixedTasks(workerId int, generation int, tasks ...*Task[KEY, T]) error {
+func (e *Engine[KEY]) AddFixedTasks(workerId int, generation int, tasks ...*Task[KEY]) error {
 
 	if workerId > len(e.fixedWorkers)-1 {
 		return fmt.Errorf("不存在workId为%d的worker,请调用NewFixedWorker添加", workerId)
@@ -252,12 +252,12 @@ func (e *Engine[KEY, T, W]) AddFixedTasks(workerId int, generation int, tasks ..
 	return nil
 }
 
-func (e *Engine[KEY, T, W]) RunSingleWorker(tasks ...*Task[KEY, T]) {
+func (e *Engine[KEY]) RunSingleWorker(tasks ...*Task[KEY]) {
 	e.limitWorkerCount = 1
 	e.Run(tasks...)
 }
 
-func (e *Engine[KEY, T, W]) Stop() {
+func (e *Engine[KEY]) Stop() {
 	e.cancel()
 	close(e.workerChan)
 	close(e.taskChan)
@@ -288,7 +288,7 @@ func (e *Engine[KEY, T, W]) Stop() {
 	}
 }
 
-func (e *Engine[KEY, T, W]) ExecTask(worker *Worker[KEY, T, W], task *Task[KEY, T]) {
+func (e *Engine[KEY]) ExecTask(worker *Worker[KEY], task *Task[KEY]) {
 	worker.isExecuting = true
 	worker.currentTask = task
 	if task != nil {
@@ -306,7 +306,7 @@ func (e *Engine[KEY, T, W]) ExecTask(worker *Worker[KEY, T, W], task *Task[KEY, 
 	worker.isExecuting = false
 }
 
-func (e *Engine[KEY, T, W]) execTask(task *Task[KEY, T]) bool {
+func (e *Engine[KEY]) execTask(task *Task[KEY]) bool {
 
 	zeroKey := *new(KEY)
 	if task.Key != zeroKey {
@@ -323,7 +323,7 @@ func (e *Engine[KEY, T, W]) execTask(task *Task[KEY, T]) bool {
 		e.rateLimiter.Wait(task.ctx)
 	}
 
-	var kindHandler *KindHandler[KEY, T]
+	var kindHandler *KindHandler[KEY]
 	if e.kindHandlers != nil && int(task.Kind) < len(e.kindHandlers) {
 		kindHandler = e.kindHandlers[task.Kind]
 	}
@@ -341,7 +341,7 @@ func (e *Engine[KEY, T, W]) execTask(task *Task[KEY, T]) bool {
 		}
 	}
 
-	tasks, err := task.TaskFunc(task.ctx)
+	tasks, err := task.TaskFunc.Do(task.ctx)
 	if err != nil {
 		task.errTimes++
 		task.errs = append(task.errs, err)
@@ -365,19 +365,19 @@ func (e *Engine[KEY, T, W]) execTask(task *Task[KEY, T]) bool {
 	return true
 }
 
-func (e *Engine[KEY, T, W]) Cancel() {
+func (e *Engine[KEY]) Cancel() {
 	log.Info("任务取消")
 	e.cancel()
 	synci.WaitGroupStopWait(&e.wg)
 
 }
 
-func (e *Engine[KEY, T, W]) CancelAfter(interval time.Duration) *Engine[KEY, T, W] {
+func (e *Engine[KEY]) CancelAfter(interval time.Duration) *Engine[KEY] {
 	time.AfterFunc(interval, e.Cancel)
 	return e
 }
 
-func (e *Engine[KEY, T, W]) StopAfter(interval time.Duration) *Engine[KEY, T, W] {
+func (e *Engine[KEY]) StopAfter(interval time.Duration) *Engine[KEY] {
 	time.AfterFunc(interval, e.Stop)
 	return e
 }

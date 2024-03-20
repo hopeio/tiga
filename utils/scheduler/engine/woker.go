@@ -12,15 +12,14 @@ const (
 	fixedType
 )
 
-type Worker[KEY comparable, T, W any] struct {
+type Worker[KEY comparable] struct {
 	Id          uint
 	Type        Type
 	Kind        Kind
-	taskCh      chan *Task[KEY, T]
-	currentTask *Task[KEY, T]
+	taskCh      chan *Task[KEY]
+	currentTask *Task[KEY]
 	isExecuting bool
 	ctx         context.Context
-	Props       W
 }
 
 // WorkStatistics worker统计数据
