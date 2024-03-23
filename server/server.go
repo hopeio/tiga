@@ -66,7 +66,7 @@ func (s *Server) Serve() {
 			}
 		}()
 
-		ctx, span := http_context.ContextFromRequest(r, openTracing)
+		ctx, span := http_context.ContextFromRequestResponse(r, w, openTracing)
 		if span != nil {
 			defer span.End()
 		}

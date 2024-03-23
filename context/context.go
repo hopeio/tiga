@@ -12,13 +12,13 @@ import (
 	"time"
 )
 
-func GetPool[REQ any]() sync.Pool {
+func GetPool[REQ, RES any]() sync.Pool {
 	return sync.Pool{New: func() any {
-		return new(RequestContext[REQ])
+		return new(RequestContext[REQ, RES])
 	}}
 }
 
-type RequestContext[REQ any] struct {
+type RequestContext[REQ, RES any] struct {
 	context.Context
 	TraceID string
 
@@ -30,14 +30,15 @@ type RequestContext[REQ any] struct {
 	*DeviceInfo
 
 	request.RequestAt
-	Request *REQ
+	Request  REQ
+	Response RES
 	grpc.ServerTransportStream
 
 	Internal string
 	Values   map[string]any
 }
 
-func (c *RequestContext[REQ]) StartSpan(name string, o ...trace.StartOption) (*RequestContext[REQ], *trace.Span) {
+func (c *RequestContext[REQ, RES]) StartSpan(name string, o ...trace.StartOption) (*RequestContext[REQ, RES], *trace.Span) {
 	ctx, span := trace.StartSpan(c.Context, name, append(o, trace.WithSampler(trace.AlwaysSample()),
 		trace.WithSpanKind(trace.SpanKindServer))...)
 	c.Context = ctx
@@ -57,15 +58,15 @@ func methodFamily(m string) string {
 
 type ctxKey struct{}
 
-func (c *RequestContext[REQ]) ContextWrapper() context.Context {
+func (c *RequestContext[REQ, RES]) ContextWrapper() context.Context {
 	return context.WithValue(context.Background(), ctxKey{}, c)
 }
 
-func ContextFromContext[REQ any](ctx context.Context) *RequestContext[REQ] {
+func ContextFromContext[REQ, RES any](ctx context.Context) *RequestContext[REQ, RES] {
 	ctxi := ctx.Value(ctxKey{})
-	c, ok := ctxi.(*RequestContext[REQ])
+	c, ok := ctxi.(*RequestContext[REQ, RES])
 	if !ok {
-		c = NewContext[REQ](ctx)
+		c = NewContext[REQ, RES](ctx)
 	}
 	if c.ServerTransportStream == nil {
 		c.ServerTransportStream = grpc.ServerTransportStreamFromContext(ctx)
@@ -73,18 +74,18 @@ func ContextFromContext[REQ any](ctx context.Context) *RequestContext[REQ] {
 	return c
 }
 
-func (c *RequestContext[REQ]) WithContext(ctx context.Context) {
+func (c *RequestContext[REQ, W]) WithContext(ctx context.Context) {
 	c.Context = ctx
 }
 
-func NewContext[REQ any](ctx context.Context) *RequestContext[REQ] {
+func NewContext[REQ, RES any](ctx context.Context) *RequestContext[REQ, RES] {
 	span := trace.FromContext(ctx)
 	now := time.Now()
 	traceId := span.SpanContext().TraceID.String()
 	if traceId == "" {
 		traceId = uuid.New().String()
 	}
-	return &RequestContext[REQ]{
+	return &RequestContext[REQ, RES]{
 		Context: ctx,
 		TraceID: traceId,
 		RequestAt: request.RequestAt{
@@ -96,7 +97,7 @@ func NewContext[REQ any](ctx context.Context) *RequestContext[REQ] {
 	}
 }
 
-func (c *RequestContext[REQ]) reset(ctx context.Context) *RequestContext[REQ] {
+func (c *RequestContext[REQ, W]) reset(ctx context.Context) *RequestContext[REQ, W] {
 	span := trace.FromContext(ctx)
 	now := time.Now()
 	traceId := span.SpanContext().TraceID.String()
@@ -110,7 +111,7 @@ func (c *RequestContext[REQ]) reset(ctx context.Context) *RequestContext[REQ] {
 	return c
 }
 
-func (c *RequestContext[REQ]) Method() string {
+func (c *RequestContext[REQ, W]) Method() string {
 	if c.ServerTransportStream != nil {
 		return c.ServerTransportStream.Method()
 	}

@@ -9,10 +9,10 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
-type Context = contexti.RequestContext[fasthttp.Request]
+type Context = contexti.RequestContext[*fasthttp.Request, *fasthttp.Response]
 
-func ContextFromRequest(ctx context.Context, r *fasthttp.Request) *Context {
-	ctxi := contexti.NewContext[fasthttp.Request](ctx)
+func ContextFromRequestResponse(ctx context.Context, r *fasthttp.Request) *Context {
+	ctxi := contexti.NewContext[*fasthttp.Request, *fasthttp.Response](ctx)
 	setWithReq(ctxi, r)
 	return ctxi
 }

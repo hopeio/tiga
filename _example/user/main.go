@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/hopeio/tiga/_example/user/api"
 	"github.com/hopeio/tiga/_example/user/conf"
+	"github.com/hopeio/tiga/initialize"
 	"github.com/hopeio/tiga/utils/log"
 	"go.opencensus.io/examples/exporter"
 	"go.opencensus.io/plugin/ocgrpc"
@@ -14,7 +15,7 @@ import (
 )
 
 func main() {
-	//defer initialize.Start(conf.Conf, conf.Dao)()
+	defer initialize.Start(conf.Conf, conf.Dao)()
 	view.RegisterExporter(&exporter.PrintExporter{})
 	view.SetReportingPeriod(time.Second)
 	// GinRegister the view to collect gRPC client stats.

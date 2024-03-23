@@ -12,13 +12,13 @@ import (
 	"runtime"
 )
 
-type Context = contexti.RequestContext[http.Request]
+type Context = contexti.RequestContext[*http.Request, http.ResponseWriter]
 
 func ContextFromContext(ctx context.Context) *Context {
-	return contexti.ContextFromContext[http.Request](ctx)
+	return contexti.ContextFromContext[*http.Request, http.ResponseWriter](ctx)
 }
 
-func ContextFromRequest(r *http.Request, tracing bool) (*Context, *trace.Span) {
+func ContextFromRequestResponse(r *http.Request, w http.ResponseWriter, tracing bool) (*Context, *trace.Span) {
 	var span *trace.Span
 	ctx := context.Background()
 	if r != nil {
@@ -67,12 +67,13 @@ func ContextFromRequest(r *http.Request, tracing bool) (*Context, *trace.Span) {
 		}
 	}
 
-	ctxi := contexti.NewContext[http.Request](ctx)
+	ctxi := contexti.NewContext[*http.Request, http.ResponseWriter](ctx)
+	ctxi.Response = w
 	setWithHttpReq(ctxi, r)
 	return ctxi, span
 }
 
-func setWithHttpReq(c *contexti.RequestContext[http.Request], r *http.Request) {
+func setWithHttpReq(c *contexti.RequestContext[*http.Request, http.ResponseWriter], r *http.Request) {
 	if r == nil {
 		return
 	}
@@ -88,11 +89,13 @@ func DeviceFromHeader(r http.Header) *contexti.DeviceInfo {
 		r.Get(httpi.HeaderUserAgent), r.Get(httpi.HeaderXForwardedFor))
 }
 
-type HttpContext contexti.RequestContext[http.Request]
+type HttpContext contexti.RequestContext[*http.Request, http.ResponseWriter]
 
 func (c *HttpContext) SetHeader(md metadata.MD) error {
 	for k, v := range md {
-		c.Request.Header[k] = v
+		if len(v) > 0 {
+			c.Response.Header().Set(k, v[0])
+		}
 	}
 	if c.ServerTransportStream != nil {
 		err := c.ServerTransportStream.SetHeader(md)
@@ -105,7 +108,9 @@ func (c *HttpContext) SetHeader(md metadata.MD) error {
 
 func (c *HttpContext) SendHeader(md metadata.MD) error {
 	for k, v := range md {
-		c.Request.Header[k] = v
+		if len(v) > 0 {
+			c.Response.Header().Set(k, v[0])
+		}
 	}
 	if c.ServerTransportStream != nil {
 		err := c.ServerTransportStream.SendHeader(md)
@@ -117,8 +122,7 @@ func (c *HttpContext) SendHeader(md metadata.MD) error {
 }
 
 func (c *HttpContext) WriteHeader(k, v string) error {
-	c.Request.Header[k] = []string{v}
-
+	c.Response.Header().Set(k, v)
 	if c.ServerTransportStream != nil {
 		err := c.ServerTransportStream.SendHeader(metadata.MD{k: []string{v}})
 		if err != nil {
@@ -129,8 +133,7 @@ func (c *HttpContext) WriteHeader(k, v string) error {
 }
 
 func (c *HttpContext) SetCookie(v string) error {
-	c.Request.Header[httpi.HeaderSetCookie] = []string{v}
-
+	c.Response.Header().Set(httpi.HeaderSetCookie, v)
 	if c.ServerTransportStream != nil {
 		err := c.ServerTransportStream.SendHeader(metadata.MD{httpi.HeaderSetCookie: []string{v}})
 		if err != nil {
