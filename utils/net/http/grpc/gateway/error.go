@@ -127,12 +127,10 @@ func outgoingHeaderMatcher(key string) (string, bool) {
 	return "", false
 }
 
-func headerMatcher() []string {
-	return []string{httpi.HeaderSetCookie}
-}
+var headerMatcher = []string{httpi.HeaderSetCookie}
 
 func handleForwardResponseServerMetadata(w http.ResponseWriter, md metadata.MD) {
-	for _, k := range headerMatcher() {
+	for _, k := range headerMatcher {
 		if vs, ok := md[k]; ok {
 			for _, v := range vs {
 				w.Header().Add(k, v)

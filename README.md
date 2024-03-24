@@ -271,10 +271,9 @@ import "user/user.enum.proto";
 import "protoc-gen-openapiv2/options/annotations.proto";
 import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "google/api/annotations.proto";
-import "tiga/protobuf/utils/empty/empty.proto";
 import "tiga/protobuf/utils/response/response.proto";
 import "tiga/protobuf/utils/request/param.proto";
-import "tiga/protobuf/utils/proto/gogo/graphql.proto";
+import "danielvladco/protobuf/graphql.proto";
 import "tiga/protobuf/utils/oauth/oauth.proto";
 import "tiga/protobuf/utils/patch/go.proto";
 import "google/protobuf/wrappers.proto";
@@ -290,7 +289,7 @@ service UserService {
     description: "用户相关接口"
   };
     //获取用户信息
-  rpc Info (request.Object) returns (User) {
+  rpc Info (request.Id) returns (User) {
     option (google.api.http) = {
       get: "/api/v1/user/{id}"
     };
@@ -299,7 +298,7 @@ service UserService {
       summary : "获取用户信息"
       description : "根据Id获取用户信息接口"
     };
-    option (gogo.graphql_operation) = Query;
+    option (danielvladco.protobuf.graphql.rpc) = {type: QUERY};
   }
 
 }

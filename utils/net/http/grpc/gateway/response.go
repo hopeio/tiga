@@ -14,7 +14,6 @@ import (
 	httpi "github.com/hopeio/tiga/utils/net/http"
 	"github.com/hopeio/tiga/utils/net/http/grpc/reconn"
 	"google.golang.org/grpc/grpclog"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 )
@@ -75,9 +74,6 @@ type responseBody interface {
 
 func ForwardResponseMessage(ctx *gin.Context, md runtime.ServerMetadata, message proto.Message) {
 
-	if md.HeaderMD == nil {
-		md.HeaderMD = metadata.MD(ctx.Request.Header)
-	}
 	handleForwardResponseServerMetadata(ctx.Writer, md.HeaderMD)
 	handleForwardResponseTrailerHeader(ctx.Writer, md.TrailerMD)
 
