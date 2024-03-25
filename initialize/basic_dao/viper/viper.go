@@ -3,7 +3,6 @@ package viper
 import (
 	initialize2 "github.com/hopeio/tiga/initialize"
 	"github.com/hopeio/tiga/utils/log"
-	reflecti "github.com/hopeio/tiga/utils/reflect"
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
 )
@@ -18,45 +17,50 @@ type Config struct {
 }
 
 func (conf *Config) Init() {
-
+	conf.build(viper.GetViper())
 }
 
 func (conf *Config) Build() *viper.Viper {
-	iconf := initialize2.GlobalConfig.Config()
-	if exist := reflecti.CopyFieldValueByType(iconf, conf); !exist {
-		return nil
-	}
-	var runtimeViper = viper.GetViper()
 
 	if conf.ConfigType == "" {
 		conf.ConfigType = "toml"
 	}
+	var runtimeViper = viper.New()
+	conf.build(runtimeViper)
+	return runtimeViper
+}
+
+func (conf *Config) build(runtimeViper *viper.Viper) {
 
 	runtimeViper.SetConfigType(conf.ConfigType) // because there is no file extension in a stream of bytes, supported extensions are "json", "toml", "yaml", "yml", "properties", "props", "prop", "Env", "dotenv"
 	if conf.Remote {
-		runtimeViper.AddRemoteProvider(conf.Provider, conf.Endpoint, initialize2.InitKey)
+		err := runtimeViper.AddRemoteProvider(conf.Provider, conf.Endpoint, initialize2.InitKey)
+		if err != nil {
+			log.Fatal(err)
+		}
 		// read from remote Config the first time.
-		err := runtimeViper.ReadRemoteConfig()
+		err = runtimeViper.ReadRemoteConfig()
 		if err != nil {
 			log.Error(err)
 		}
 		if conf.Watch {
-			runtimeViper.WatchRemoteConfig()
+			err = runtimeViper.WatchRemoteConfig()
+			if err != nil {
+				log.Fatal(err)
+			}
 		}
 
 	} else {
 		runtimeViper.AddConfigPath(conf.Path)
-		runtimeViper.ReadInConfig()
+		err := runtimeViper.ReadInConfig()
+		if err != nil {
+			log.Fatal(err)
+		}
 		if conf.Watch {
 			runtimeViper.WatchConfig()
 		}
 	}
 
-	// unmarshal Config
-	cCopy := iconf
-	//dCopy := init.dao
-	runtimeViper.Unmarshal(cCopy)
-	log.Debug(cCopy)
 	// open a goroutine to watch remote changes forever
 	//这段实现不够优雅
 	/*	go func() {
@@ -78,7 +82,6 @@ func (conf *Config) Build() *viper.Viper {
 			log.Debug(cCopy)
 		}
 	}()*/
-	return runtimeViper
 }
 
 type Viper struct {

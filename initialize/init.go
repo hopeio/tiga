@@ -3,9 +3,10 @@ package initialize
 import (
 	"fmt"
 	"github.com/hopeio/tiga/initialize/conf_center"
-	ilocal "github.com/hopeio/tiga/initialize/conf_center/local"
-	"github.com/hopeio/tiga/utils/configor/local"
+	"github.com/hopeio/tiga/initialize/conf_center/local"
+	configorlocal "github.com/hopeio/tiga/utils/configor/local"
 	"github.com/hopeio/tiga/utils/errors/multierr"
+	"github.com/hopeio/tiga/utils/reflect/mtos"
 	"os"
 	"reflect"
 	"strings"
@@ -17,19 +18,16 @@ import (
 // 约定大于配置
 var (
 	GlobalConfig = &globalConfig{
-		BasicConfig: BasicConfig{Module: "tiga-app", Env: DEVELOPMENT, ConfUrl: "./config.toml"},
+		BasicConfig: BasicConfig{Module: "tiga-app", Env: "dev", ConfUrl: "./config.toml"},
 		confMap:     map[string]interface{}{},
-		RWMutex:     sync.RWMutex{},
+		lock:        sync.RWMutex{},
 	}
 )
 
 type Env string
 
 const (
-	DEVELOPMENT = "dev"
-	TEST        = "test"
-	PRODUCT     = "prod"
-	InitKey     = "initialize"
+	InitKey = "initialize"
 )
 
 // ConfigCenterConfig
@@ -46,7 +44,8 @@ type BasicConfig struct {
 	// 模块名
 	Module string `flag:"name:mod;short:m;default:;usage:模块名" env:"name:MODULE"`
 	// environment
-	Env string `flag:"name:env;short:e;default:dev;usage:环境" env:"name:ENV"`
+	Env   string `flag:"name:env;short:e;default:dev;usage:环境" env:"name:ENV"`
+	Debug bool   `flag:"name:debug;short:d;default:debug;usage:是否测试" env:"name:DEBUG"`
 	// 配置文件路径
 	ConfUrl string `flag:"name:conf;short:c;default:config.toml;usage:配置文件路径,默认./config.toml或./config/config.toml" env:"name:CONFIG"`
 	// 代理, socks5://localhost:1080
@@ -90,7 +89,8 @@ LogLevel = "debug"
 ```*/
 type FileConfig struct {
 	// 模块名
-	Module          string `flag:"name:mod;short:m;default:;usage:模块名" env:"name:MODULE"`
+	Module          string
+	Env             string
 	Dev, Test, Prod *ConfigCenterConfig
 }
 
@@ -105,7 +105,7 @@ type globalConfig struct {
 	//closes     []any
 	deferCalls  []func()
 	initialized bool
-	sync.RWMutex
+	lock        sync.RWMutex
 }
 
 func Start(conf Config, dao Dao, notinit ...string) func() {
@@ -121,47 +121,59 @@ func Start(conf Config, dao Dao, notinit ...string) func() {
 }
 
 func (gc *globalConfig) LoadConfig(notinject ...string) {
-	onceConfig := FileConfig{}
+
 	if _, err := os.Stat(gc.ConfUrl); os.IsNotExist(err) {
-		log.Fatalf("配置错误: 请确保可执行文件和配置文件在同一目录下或在config目录下或指定配置文件")
+		log.Fatalf("配置路径错误: 请确保可执行文件和配置文件在同一目录下或在config目录下或指定配置文件")
 	}
-	err := local.Load(&onceConfig, gc.ConfUrl)
+	data, err := os.ReadFile(gc.ConfUrl)
 	if err != nil {
-		log.Fatalf("配置错误: %v", err)
+		log.Fatalf("读取配置错误: %v", err)
 	}
+	onceConfig := map[string]any{}
+	err = unmarshalConfig(gc.ConfigCenterConfig.Format, data, &onceConfig)
+	if err != nil {
+		log.Fatalf("解析配置错误: %v", err)
+	}
+
+	for k, v := range onceConfig {
+		onceConfig[strings.ToUpper(k)] = v
+	}
+
 	fmt.Printf("Load config from: %s\n", gc.ConfUrl)
 
-	gc.Module = onceConfig.Module
+	if gc.Module == "" {
+		gc.Module = onceConfig["MOUDLE"].(string)
+	}
+	if gc.Env == "" {
+		gc.Env = onceConfig["ENV"].(string)
+	}
 
-	value := reflect.ValueOf(&onceConfig).Elem()
-	typ := reflect.TypeOf(&onceConfig).Elem()
+	if configCenter, ok := onceConfig[strings.ToUpper(gc.Env)]; ok {
+		config := &mtos.DecoderConfig{
+			Metadata: nil,
+			Squash:   true,
+			Result:   &gc.ConfigCenterConfig,
+		}
 
-	tmpTyp := reflect.TypeOf(&ConfigCenterConfig{})
-	for i := 0; i < typ.NumField(); i++ {
-		if typ.Field(i).Type == tmpTyp && strings.ToUpper(typ.Field(i).Name) == strings.ToUpper(gc.Env) {
-			/*tmpConfig = value.Field(i).Interface().(*nacos.Config)
-			//真·深度复制
-			data,_:=json.Marshal(tmpConfig)
-			if err:=json.Unmarshal(data,gc.ConfigCenterConfig);err!=nil{
-				log.Fatal(err)
-			}*/
-			fieldValue := value.Field(i)
-			if fieldValue.IsValid() && !fieldValue.IsNil() {
-				gc.ConfigCenterConfig = *fieldValue.Interface().(*ConfigCenterConfig)
-			} else {
-				// 单配置文件
-				gc.ConfigCenterConfig = ConfigCenterConfig{
-					ConfigCenterConfig: conf_center.ConfigCenterConfig{
-						ConfigType: conf_center.ConfigTypeLocal,
-						Local: &ilocal.Local{
-							Config:     local.Config{},
-							ReloadType: ilocal.ReloadTypeFsNotify,
-							ConfigPath: gc.ConfUrl,
-						},
-					},
-				}
-			}
-			break
+		decoder, err := mtos.NewDecoder(config)
+		if err != nil {
+			log.Fatalf("解析配置中心错误: %v", err)
+		}
+		err = decoder.Decode(configCenter)
+		if err != nil {
+			log.Fatalf("解析配置中心错误: %v", err)
+		}
+	} else {
+		// 单配置文件
+		gc.ConfigCenterConfig = ConfigCenterConfig{
+			ConfigCenterConfig: conf_center.ConfigCenterConfig{
+				ConfigType: conf_center.ConfigTypeLocal,
+				Local: &local.Local{
+					Config:     configorlocal.Config{},
+					ReloadType: local.ReloadTypeFsNotify,
+					ConfigPath: gc.ConfUrl,
+				},
+			},
 		}
 	}
 
@@ -174,7 +186,7 @@ func (gc *globalConfig) LoadConfig(notinject ...string) {
 
 	gc.applyEnvConfig()
 	gc.applyFlagConfig()
-	cfgcenter := gc.ConfigCenterConfig.ConfigCenter(gc.Env != PRODUCT)
+	cfgcenter := gc.ConfigCenterConfig.ConfigCenter(gc.Debug)
 
 	err = cfgcenter.HandleConfig(gc.UnmarshalAndSet)
 	if err != nil {
@@ -193,6 +205,8 @@ func (gc *globalConfig) setConfDao(conf Config, dao Dao) {
 }
 
 func (gc *globalConfig) RegisterDeferFunc(deferf ...func()) {
+	gc.lock.Lock()
+	defer gc.lock.Unlock()
 	gc.deferCalls = append(gc.deferCalls, deferf...)
 }
 

@@ -1,10 +1,14 @@
 package initialize
 
 import (
+	"encoding/json"
+	"errors"
 	"github.com/hopeio/tiga/utils/log"
 	"github.com/hopeio/tiga/utils/reflect/mtos"
 	"github.com/hopeio/tiga/utils/slices"
 	"github.com/pelletier/go-toml"
+	"gopkg.in/yaml.v3"
+	"io"
 	"reflect"
 	"strings"
 )
@@ -41,17 +45,59 @@ type dao struct {
 
 func (gc *globalConfig) UnmarshalAndSet(bytes []byte) {
 	tmp := map[string]any{}
-	err := toml.Unmarshal(bytes, &tmp)
+	err := unmarshalConfig(gc.ConfigCenterConfig.Format, bytes, &tmp)
 	if err != nil {
 		log.Fatal(err)
 	}
-	gc.Lock()
+	gc.lock.Lock()
 	for k, v := range tmp {
 		gc.confMap[strings.ToUpper(k)] = v
 	}
 
 	gc.inject()
-	gc.Unlock()
+	gc.lock.Unlock()
+}
+
+func unmarshalConfig(format string, data []byte, config interface{}) error {
+	switch {
+	case format == "yaml" || format == "yml":
+		return yaml.Unmarshal(data, config)
+	case format == "toml":
+		return toml.Unmarshal(data, config)
+	case format == "json":
+		return unmarshalJSON(data, config)
+	default:
+		if err := toml.Unmarshal(data, config); err == nil {
+			return nil
+		}
+
+		if err := unmarshalJSON(data, config); err == nil {
+			return nil
+		} else if strings.Contains(err.Error(), "json: unknown field") {
+			return err
+		}
+
+		yamlError := yaml.Unmarshal(data, config)
+
+		if yamlError == nil {
+			return nil
+		} else if yErr, ok := yamlError.(*yaml.TypeError); ok {
+			return yErr
+		}
+
+		return errors.New("failed to decode config")
+	}
+}
+
+func unmarshalJSON(data []byte, config interface{}) error {
+	reader := strings.NewReader(string(data))
+	decoder := json.NewDecoder(reader)
+
+	err := decoder.Decode(config)
+	if err != nil && err != io.EOF {
+		return err
+	}
+	return nil
 }
 
 // 注入配置及生成DAO

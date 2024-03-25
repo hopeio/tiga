@@ -1,7 +1,6 @@
 package gormdb
 
 import (
-	"github.com/hopeio/tiga/initialize"
 	gormi "github.com/hopeio/tiga/utils/dao/db/gorm"
 	"github.com/hopeio/tiga/utils/log"
 	"gorm.io/gorm"
@@ -73,10 +72,9 @@ func (conf *DatabaseConfig) Build(dialector gorm.Dialector) *gorm.DB {
 	}
 
 	// 日志
-	if initialize.GlobalConfig.Env != initialize.DEVELOPMENT {
-		db.Statement.Logger = &gormi.SQLLogger{Logger: log.Default.Logger,
-			Config: &conf.Gorm.Logger,
-		}
+
+	db.Statement.Logger = &gormi.SQLLogger{Logger: log.Default.Logger,
+		Config: &conf.Gorm.Logger,
 	}
 
 	if conf.Prometheus {

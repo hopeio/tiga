@@ -1,0 +1,43 @@
+Module = "hoper"
+# dev | test | prod
+Env = "dev"
+
+[dev]
+Format = "toml"
+configType = "local"
+Watch  = true
+NoInject = ["Apollo","Etcd", "Es"]
+
+[dev.local]
+Debug = true
+ConfigPath = "local.toml"
+ReloadType = "fsnotify"
+
+[dev.http]
+Interval = 100
+Url = "http://localhost:6666/local.toml"
+
+
+[test]
+Format = "json"
+configType = "nacos"
+Watch  = true
+NoInject = ["Apollo","Etcd", "Es"]
+
+[test.nacos]
+DataId = "pro"
+Group = "DEFAULT_GROUP"
+
+[[test.nacos.ServerConfigs]]
+Scheme = "http"
+IpAddr = "localhost"
+Port = 9000
+GrpcPort = 10000
+
+[test.nacos.ClientConfig]
+NamespaceId = ""
+username = "nacos"
+password = "123456"
+LogLevel = "debug"
+
+[prod]

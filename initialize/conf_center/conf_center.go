@@ -19,6 +19,8 @@ type ConfigCenter interface {
 }
 
 type ConfigCenterConfig struct {
+	// 配置格式
+	Format string `flag:"name:format;default:toml;usage:配置格式" comment:"toml,json,yaml,yml"`
 	// 配置类型
 	ConfigType string `flag:"name:conf_type;default:local;usage:配置类型"`
 	// 是否监听配置文件
@@ -31,6 +33,9 @@ type ConfigCenterConfig struct {
 }
 
 func (c *ConfigCenterConfig) ConfigCenter(debug bool) ConfigCenter {
+	if c.Format == "" {
+		c.Format = "toml"
+	}
 	if c.ConfigType == ConfigTypeHttp && c.Http != nil {
 		return c.Http
 	}

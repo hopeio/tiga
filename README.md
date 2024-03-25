@@ -56,16 +56,13 @@ LogLevel = "debug"
 
 ```
 ```go
+import(
+  "github.com/hopeio/tiga/initialize/basic_conf/server"
+)
 type config struct {
 	//自定义的配置
 	Customize serverConfig
-	Server    initialize.ServerConfig
-	Mail      initialize.MailConfig
-	GORMDB    initialize.DatabaseConfig
-	Redis     initialize.RedisConfig
-	Cache     initialize.CacheConfig
-	Log       initialize.LogConfig
-	Viper     *viper.Viper
+	Server    server.ServerConfig
 }
 
 var Conf = &config{}
@@ -94,7 +91,7 @@ type dao struct {
 	GORMDB   *postgres.DB
 	StdDB    *sql.DB
 	// RedisPool Redis连接池
-	Redis *redis.Client
+	Redis *initredis.Client
 }
 
 
