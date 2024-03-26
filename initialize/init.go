@@ -18,7 +18,7 @@ import (
 // 约定大于配置
 var (
 	GlobalConfig = &globalConfig{
-		BasicConfig: BasicConfig{Module: "tiga-app", Env: "dev", ConfUrl: "./config.toml"},
+		BasicConfig: BasicConfig{Module: "tiga-app", Env: "", ConfUrl: "./config.toml"},
 		confMap:     map[string]interface{}{},
 		lock:        sync.RWMutex{},
 	}
@@ -42,7 +42,7 @@ type ConfigCenterConfig struct {
 // zh: 基本配置，包含模块名
 type BasicConfig struct {
 	// 模块名
-	Module string `flag:"name:mod;short:m;default:;usage:模块名" env:"name:MODULE"`
+	Module string `flag:"name:mod;short:m;default:tiga-app;usage:模块名" env:"name:MODULE"`
 	// environment
 	Env   string `flag:"name:env;short:e;default:dev;usage:环境" env:"name:ENV"`
 	Debug bool   `flag:"name:debug;short:d;default:debug;usage:是否测试" env:"name:DEBUG"`
@@ -56,6 +56,7 @@ type BasicConfig struct {
 // 配置文件映射结构体,每个启动都有一个必要的配置文件,用于初始化基本配置及配置中心配置,
 /*```toml
 Module = "user"
+Env = "dev" // 支持自定义
 
 [dev]
 configType = "local"
@@ -108,10 +109,10 @@ type globalConfig struct {
 	lock        sync.RWMutex
 }
 
-func Start(conf Config, dao Dao, notinit ...string) func() {
+func Start(conf Config, dao Dao) func() {
 	//逃逸到堆上了
 	GlobalConfig.setConfDao(conf, dao)
-	GlobalConfig.LoadConfig(notinit...)
+	GlobalConfig.LoadConfig()
 	GlobalConfig.initialized = true
 	return func() {
 		for _, f := range GlobalConfig.deferCalls {
@@ -120,7 +121,7 @@ func Start(conf Config, dao Dao, notinit ...string) func() {
 	}
 }
 
-func (gc *globalConfig) LoadConfig(notinject ...string) {
+func (gc *globalConfig) LoadConfig() {
 
 	if _, err := os.Stat(gc.ConfUrl); os.IsNotExist(err) {
 		log.Fatalf("配置路径错误: 请确保可执行文件和配置文件在同一目录下或在config目录下或指定配置文件")
@@ -141,11 +142,15 @@ func (gc *globalConfig) LoadConfig(notinject ...string) {
 
 	fmt.Printf("Load config from: %s\n", gc.ConfUrl)
 
-	if gc.Module == "" {
-		gc.Module = onceConfig["MOUDLE"].(string)
+	if gc.Module == "tiga-app" {
+		if module, ok := onceConfig["MODULE"]; ok {
+			gc.Module = module.(string)
+		}
 	}
 	if gc.Env == "" {
-		gc.Env = onceConfig["ENV"].(string)
+		if env, ok := onceConfig["ENV"]; ok {
+			gc.Env = env.(string)
+		}
 	}
 
 	if configCenter, ok := onceConfig[strings.ToUpper(gc.Env)]; ok {
@@ -179,9 +184,6 @@ func (gc *globalConfig) LoadConfig(notinject ...string) {
 
 	for i := range gc.ConfigCenterConfig.NoInject {
 		gc.ConfigCenterConfig.NoInject[i] = strings.ToUpper(gc.ConfigCenterConfig.NoInject[i])
-	}
-	for i := range notinject {
-		gc.ConfigCenterConfig.NoInject = append(gc.ConfigCenterConfig.NoInject, strings.ToUpper(notinject[i]))
 	}
 
 	gc.applyEnvConfig()

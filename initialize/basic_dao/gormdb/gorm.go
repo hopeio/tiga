@@ -72,7 +72,6 @@ func (conf *DatabaseConfig) Build(dialector gorm.Dialector) *gorm.DB {
 	}
 
 	// 日志
-
 	db.Statement.Logger = &gormi.SQLLogger{Logger: log.Default.Logger,
 		Config: &conf.Gorm.Logger,
 	}
